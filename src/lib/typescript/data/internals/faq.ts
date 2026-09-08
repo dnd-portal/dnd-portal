@@ -273,9 +273,9 @@ export const faqGroups = [modularBarbarianFaqGroup, modularBardFaqGroup, modular
 })) satisfies readonly FaqGroup[];
 
 function createPage(group: FaqGroup, question?: FaqQuestion) {
-		return createInternalPage({
+	return createInternalPage({
 			href: question ? `/faq/${group.slug}/${question.slug}` : `/faq/${group.slug}`,
-			label: question?.question ?? group.title,
+			label: question?.question ?? `${group.title} FAQ`,
 			title: `${website.name.short} - ${question?.question ?? `${group.title} FAQ`}`,
 			subTitle: question ? `${group.title} FAQ` : `${group.title} frequently asked questions`,
 			description: question?.shortAnswer ?? group.description,

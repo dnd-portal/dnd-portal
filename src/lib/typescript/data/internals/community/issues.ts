@@ -13,6 +13,81 @@ import { isResolvedIssue } from './_types_';
 
 const publicIssueItems: readonly PublicIssue[] = [
 	{
+		id: 'prelive-audit-did-not-recognize-faq-routes',
+		title: 'Pre-live audit did not recognize canonical FAQ routes',
+		summary:
+			'The route-shape validator treated valid /faq/<group>/ and /faq/<group>/<question>/ links as unknown after the FAQ registry became fully modular.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Added strict validation for the supported FAQ route depths without broad route exclusions.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'stale-messenger-faq-compatibility-paths',
+		title: 'Stale Messenger FAQ compatibility paths survived migration',
+		summary:
+			'Legacy Messenger-specific FAQ aliases referenced paths that no longer existed after Messenger moved to the generic modular FAQ registry.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Removed the dead Messenger-only mapping and kept Messenger on the canonical generic FAQ path and registry.',
+		relatedPage: 'internals.classes.messenger.page',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'prelive-placeholder-detector-flagged-normal-prose',
+		title: 'Placeholder audit flagged normal “still needs” prose',
+		summary:
+			'The unfinished-content detector treated ordinary rules prose such as “the Rogue still needs...” as a placeholder.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Refined the matcher to retain explicit unfinished wording while allowing ordinary English uses of “still needs”.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-group-pages-rendered-ordinary-page-titles',
+		title: 'FAQ group pages rendered ordinary page titles',
+		summary:
+			'FAQ group PageData exposed a plain group label to SEO, causing group pages such as Classes FAQ to share titles with the ordinary Classes page.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'seo',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'FAQ group labels now include the FAQ context, producing distinct descriptive titles without route-specific special cases.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'repository-local-pnpm-store-was-not-ignored',
+		title: 'Repository-local pnpm store was not ignored',
+		summary:
+			'Local pnpm database artifacts could appear as repository changes under .pnpm-store.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Added a repository-local /.pnpm-store/ ignore rule; tracked project content was not present in that directory.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
 		id: 'faq-runtime-depended-on-editorial-markdown',
 		title: 'FAQ runtime depended on the editorial Markdown master',
 		summary:

@@ -47,18 +47,8 @@ export function getFaqItems(path: PagePath | null): readonly FaqItem[] {
 			[`What subclasses can a ${className} choose?`, `Subclasses expand the identity of a ${className} by adding a specialised feature path to the base class.`]
 		];
 
-		const faqPaths = className === 'Messenger'
-			? [
-				'internals.faq.messenger.whatIs',
-				'internals.faq.messenger.howToPlay',
-				'internals.faq.messenger.abilityScores',
-				'internals.faq.messenger.mainFeatures',
-				'internals.faq.messenger.subclasses'
-			] as const
-			: [];
-
 		return classQuestions.map(([question, answer], index) =>
-			item(question, path, answer, faqPaths[index] as LinkPath)
+			item(question, path, answer)
 		);
 	}
 

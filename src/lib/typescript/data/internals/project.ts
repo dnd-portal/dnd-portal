@@ -154,6 +154,24 @@ const changelogReleases = [
 				title: 'Documented the final FAQ architecture',
 				description:
 					'Documented attached and ownerless FAQ ownership, canonical data locations, runtime versus migration tooling, and the validation workflow.'
+			},
+			{
+				category: 'fixed',
+				title: 'Aligned pre-live audits with modular FAQ routes',
+				description:
+					'Updated route-shape, crawl-title, and unfinished-content validation so the normal and crawl audits understand the current FAQ architecture without masking invalid routes.'
+			},
+			{
+				category: 'changed',
+				title: 'Removed obsolete FAQ compatibility paths',
+				description:
+					'Removed the legacy Messenger-only FAQ path mapping now that Messenger uses the canonical generic FAQ registry.'
+			},
+			{
+				category: 'changed',
+				title: 'Ignored local package-store artifacts',
+				description:
+					'Added repository-local pnpm store hygiene so database artifacts from local package management are not treated as project files.'
 			}
 		]
 	},

@@ -180,6 +180,7 @@ function isKnownInternalRoute(href) {
 	return (
 		clean === '/' ||
 		clean === '/search' ||
+		/^\/faq(?:\/[a-z0-9-]+){0,2}$/.test(clean) ||
 		clean === '/classes' ||
 		clean === '/spells' ||
 		clean === '/discord' ||
@@ -259,7 +260,7 @@ function collectPlaceholderFindings() {
 		/TODO/i,
 		/FIXME/i,
 		/needs to be added/i,
-		/still needs/i,
+		/still needs(?: to be)? (?:added|implemented|content|data|description)/i,
 		/Use the equipment package/i,
 		/No .*description is available yet/i,
 		/No .*data has been added/i
@@ -310,13 +311,16 @@ function report(title, findings) {
 	return true;
 }
 
+const htmlEntityReplacements = {
+	quot: '"',
+	'#34': '"',
+	amp: '&',
+	lt: '<',
+	gt: '>'
+};
+
 function decodeHtmlEntities(value) {
-	return value
-		.replace(/&quot;/g, '"')
-		.replace(/&#34;/g, '"')
-		.replace(/&amp;/g, '&')
-		.replace(/&lt;/g, '<')
-		.replace(/&gt;/g, '>');
+	return value.replace(/&(quot|#34|amp|lt|gt);/g, (_, entity) => htmlEntityReplacements[entity]);
 }
 
 function getAttributeMap(tag) {
