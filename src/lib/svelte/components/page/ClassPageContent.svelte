@@ -12,10 +12,13 @@
 	} from '$lib/typescript/data/_index_';
 
 	import PageContentSection from './PageContentSection.svelte';
+	import Faq from './Faq.svelte';
 	import PageHeader from './PageHeader.svelte';
 	import ProgressionTable from './ProgressionTable.svelte';
 	import StartingEquipment from './StartingEquipment.svelte';
 	import TableOfContents from './TableOfContents.svelte';
+	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
+	import { getFaqGroup } from '$lib/typescript/data/internals/faq';
 
 	type ClassPageContentData = {
 		readonly startingEquipment: readonly EquipmentChoiceGroup[];
@@ -33,6 +36,15 @@
 	};
 
 	let { content }: { content: ClassPageContentData } = $props();
+	const currentPage = getCurrentPageContext();
+	let faqGroup = $derived(currentPage.path ? getFaqGroup(currentPage.path.split('.')[2] ?? '') : null);
+	let faqItems = $derived(faqGroup?.questions.map((question) => ({
+		question: question.question,
+		answer: question.shortAnswer,
+		reference: faqGroup.sourcePage ?? currentPage.path ?? '',
+		referenceLabel: faqGroup.title,
+		faqPath: `internals.faq.${faqGroup.slug}.${question.slug}`
+	})) ?? []);
 
 	let linkedSectionIds = $derived([
 		content.sections.identity.id,
@@ -86,6 +98,10 @@
 		{#each content.sections.referenceSections ?? [] as section}
 			<PageContentSection {section} />
 		{/each}
+
+		{#if faqItems.length}
+			<Faq items={faqItems} />
+		{/if}
 	</article>
 
 	<aside class="page-layout__toc">

@@ -10,4 +10,4 @@
 	const rogue = getData('internals.classes.rogue');
 </script>
 
-<ClassPageContent content={rogue.content} />
+<ClassPageContent content={rogue.content as any} />

@@ -112,6 +112,52 @@ const aiImageRegister = [
 
 const changelogReleases = [
 	{
+		version: '0.9.2',
+		date: '8 September 2026',
+		title: 'Complete structured FAQ architecture and repository cleanup',
+		description:
+			'Completed the FAQ data architecture pass, removed the production Markdown dependency, and cleaned the repository after migration.',
+		changes: [
+			{
+				category: 'content',
+				title: 'All FAQ groups use structured modular data',
+				description:
+					'Migrated all 60 FAQ groups and 300 FAQ articles into structured TypeScript modules while preserving canonical routes, Search, Related FAQ behaviour, and static prerendering.',
+				action: { label: 'Browse FAQ', path: 'internals.utility.faq' }
+			},
+			{
+				category: 'added',
+				title: 'Standalone FAQ groups',
+				description:
+					'Added ownerless FAQ support for Human, Elf, Astral Elf, and Fighting without inventing ordinary Species or Rules pages for topics that have no runtime page owner.'
+			},
+			{
+				category: 'removed',
+				title: 'Removed the production Markdown FAQ dependency',
+				description:
+					'Removed the production dependency on faqMasterReady and the FAQ Markdown master; the runtime FAQ registry is now fully modular.'
+			},
+			{
+				category: 'fixed',
+				title: 'Fixed rendered FAQ Markdown leaks',
+				description:
+					'Removed visible raw Markdown heading markers from rendered FAQ metadata and article output, with leak coverage in the FAQ validation workflow.'
+			},
+			{
+				category: 'changed',
+				title: 'Cleaned migration tooling and temporary repository output',
+				description:
+					'Moved Codex-only migration scripts, notes, reports, previews, and historical run artifacts into the ignored codex workspace and removed root-level process clutter.'
+			},
+			{
+				category: 'changed',
+				title: 'Documented the final FAQ architecture',
+				description:
+					'Documented attached and ownerless FAQ ownership, canonical data locations, runtime versus migration tooling, and the validation workflow.'
+			}
+		]
+	},
+	{
 		version: '0.9.1',
 		date: '5 September 2026',
 		title: 'Equipment structure, homepage polish, and mobile navigation fixes',

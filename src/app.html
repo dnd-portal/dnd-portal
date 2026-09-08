@@ -4,8 +4,23 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+
+		<!-- Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X1M5VW1SF"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+
+			gtag('js', new Date());
+			gtag('config', 'G-6X1M5VW1SF');
+		</script>
+
 		%sveltekit.head%
 	</head>
+
 	<body data-sveltekit-preload-data="hover" class="layout">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>

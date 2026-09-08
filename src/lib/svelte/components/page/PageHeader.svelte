@@ -9,6 +9,7 @@
 		InlineContent as InlineContentData,
 		InlineContentBlock
 	} from '$lib/typescript/data/_index_';
+	import type { Snippet } from 'svelte';
 
 	import InlineContent from './InlineContent.svelte';
 	import PageImage from './PageImage.svelte';
@@ -39,11 +40,24 @@
 		return isParagraphs(content) ? content : [content];
 	}
 
+	let {
+		description = 'long',
+		showHeaderSections = true,
+		descriptionText,
+		children
+	}: { description?: 'short' | 'long'; showHeaderSections?: boolean; descriptionText?: string; children?: Snippet } = $props();
 	let descriptionParagraphs = $derived(
-		getDescriptionParagraphs(
-			currentPage.data?.descriptions?.long,
-			currentPage.data?.description ?? ''
-		)
+		descriptionText
+			? getDescriptionParagraphs([{ type: 'text', text: descriptionText }], '')
+			: description === 'short'
+			? getDescriptionParagraphs(
+					currentPage.data?.descriptions?.short,
+					currentPage.data?.description ?? ''
+				  )
+			: getDescriptionParagraphs(
+					currentPage.data?.descriptions?.long,
+					currentPage.data?.description ?? ''
+				  )
 	);
 	let imageSet = $derived(
 		currentPage.data?.images?.header ?? currentPage.data?.images?.card
@@ -71,7 +85,7 @@
 				{/each}
 			</div>
 
-			{#if currentPage.data.header?.sections?.length}
+			{#if showHeaderSections && currentPage.data.header?.sections?.length}
 				<div class="page-header__sections">
 					{#each currentPage.data.header.sections as section}
 						<section
@@ -90,8 +104,10 @@
 					{/each}
 				</div>
 			{/if}
+
+			{@render children?.()}
 		</div>
 
-		<PageImage />
+		<PageImage presentation={description === 'short' ? 'class-header' : 'default'} />
 	</section>
 {/if}

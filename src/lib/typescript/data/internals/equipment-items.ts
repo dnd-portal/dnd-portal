@@ -5,7 +5,7 @@
 import {
 	pugilistEquipmentItems,
 	type PugilistEquipmentItem
-} from './classes/pugilist';
+} from './classes/pugilist/_index_';
 import type { InlineContent } from '$lib/typescript/pages/content-types';
 
 type EquipmentImage = {

@@ -1,0 +1,78 @@
+@use '../../core/colors' as colors;
+@use '../../core/sizes' as sizes;
+
+.wiki-faq-index {
+	&__section {
+		max-width: sizes.get(content, article-max-width);
+
+		h2 {
+			margin: 0;
+			color: colors.get-dark(text, headings);
+			font-size: 1.6rem;
+		}
+	}
+
+	&__grid {
+		margin-top: sizes.get(spacing, lg);
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+		gap: sizes.get(spacing, lg);
+	}
+
+	&__card {
+		min-width: 0;
+		padding: sizes.get(spacing, xl);
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: sizes.get(spacing, sm);
+
+		background-color: colors.get-dark(background, secondary);
+		border: 1px solid colors.get-dark(border, base);
+		border-radius: sizes.get(radius, lg);
+
+		transition:
+			background-color sizes.get(transition, base) ease,
+			border-color sizes.get(transition, base) ease;
+
+		&:hover {
+			background-color: colors.get-dark(background, hover);
+			border-color: colors.get-dark(border, interactive);
+		}
+
+		h3,
+		p {
+			margin: 0;
+		}
+
+		h3 {
+			font-size: 1.3rem;
+		}
+
+		h3 .link {
+			color: colors.get-dark(text, headings);
+			text-decoration: none;
+		}
+
+		p {
+			color: colors.get-dark(text, secondary);
+			line-height: 1.5;
+		}
+	}
+
+	&__count {
+		margin-top: auto !important;
+		color: colors.get-dark(text, tertiary) !important;
+		font-size: 0.9rem;
+	}
+
+	&__card > .link:last-child {
+		margin-top: sizes.get(spacing, sm);
+		color: colors.get-dark(text, links, base);
+		text-decoration: none;
+
+		&:hover {
+			color: colors.get-dark(text, links, hover);
+		}
+	}
+}

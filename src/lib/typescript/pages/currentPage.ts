@@ -269,6 +269,31 @@ export function getBreadcrumbItems(path: PagePath | null): readonly BreadcrumbIt
 		return [];
 	}
 
+	const faqPathParts = path.split('.');
+	const isFaqArticlePath =
+		faqPathParts[0] === 'internals' &&
+		faqPathParts[1] === 'faq' &&
+		faqPathParts.length === 4 &&
+		faqPathParts[3] !== 'page';
+
+	if (isFaqArticlePath) {
+		const groupPathString = `internals.faq.${faqPathParts[2]}.page`;
+		const groupValue = getValue(groupPathString);
+
+		if (isPageData(groupValue)) {
+			const groupPath = toPagePath(groupPathString, groupValue);
+			const faqIndexPath = getParentPath(groupPath);
+			const specialPaths = [homePagePath, faqIndexPath, groupPath, path].filter(
+				(item): item is PagePath => item !== null
+			);
+
+			return specialPaths.map((itemPath) => ({
+				path: itemPath,
+				label: getPageLabel(itemPath)
+			}));
+		}
+	}
+
 	const seen = new Set<PagePath>();
 	const items: BreadcrumbItem[] = [];
 	let currentPath: PagePath | null = path;

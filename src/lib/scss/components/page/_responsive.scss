@@ -23,6 +23,16 @@
 	}
 }
 
+@media (max-width: 900px) {
+	.class-overview { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+	.quick-links { grid-template-columns: 1fr 1fr; }
+	.class-information { padding: sizes.get(spacing, md); }
+	.class-information__list div { grid-template-columns: 1fr; gap: 2px; }
+}
+
 @media (max-width: 620px) {
 	.breadcrumbs {
 		align-items: flex-start;

@@ -11,14 +11,19 @@
 	} from '$lib/typescript/data/internals/rules/spellcasting/spells/spell-data';
 
 	import NotFound from '$lib/svelte/components/page/NotFound.svelte';
+	import Faq from '$lib/svelte/components/page/Faq.svelte';
 	import PageCard from '$lib/svelte/components/PageCard.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
 	import SpellBrowser from '$lib/svelte/components/page/SpellBrowser.svelte';
+	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
+	import { getFaqItems } from '$lib/typescript/pages/faq';
 
 	const slug = $derived(appPage.params.page ?? '');
 	const level = $derived(spellLevels.find((item) => item.slug === slug));
 	const spell = $derived(getSpellBySlug(slug));
 	const isSpellcastingOverview = $derived(slug === 'spellcasting');
+	const currentPage = getCurrentPageContext();
+	let faqItems = $derived(getFaqItems(currentPage.path));
 </script>
 
 {#if level}
@@ -26,6 +31,7 @@
 		<article class="wiki-article page-layout__article">
 			<PageHeader />
 			<SpellBrowser initialLevel={level.level as SpellLevel} showLevelFilter={false} />
+			{#if faqItems.length}<Faq items={faqItems} />{/if}
 		</article>
 	</div>
 {:else if isSpellcastingOverview}
@@ -42,6 +48,7 @@
 					<PageCard page="internals.rules.spellcasting.cantrips" density="compact" />
 				</div>
 			</section>
+			{#if faqItems.length}<Faq items={faqItems} />{/if}
 		</article>
 	</div>
 {:else if spell}
@@ -131,6 +138,8 @@
 				</div>
 			</section>
 		{/if}
+
+		{#if faqItems.length}<Faq items={faqItems} />{/if}
 	</article>
 {:else}
 	<NotFound />

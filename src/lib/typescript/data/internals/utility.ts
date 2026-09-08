@@ -1,18 +1,50 @@
 import * as core from '../core/_index_';
 import { createInternalPage } from './_helpers_';
+import type { PageContentSection, PageTableOfContentsSection } from '$lib/typescript/pages/content-types';
 
 const website = core.internals.website;
 const current = core.internals.utility;
 
+const faqSections = [
+	{
+		id: 'barbarian',
+		title: 'Barbarian FAQ',
+		blocks: [
+			{
+				type: 'card-grid',
+				groups: [
+					{
+						title: 'Common questions',
+						cards: [
+							{ page: 'internals.faq.barbarian.page', source: 'Barbarian FAQ' },
+							{ page: 'internals.faq.messenger.page', source: 'Messenger FAQ' }
+						]
+					}
+				]
+			}
+		]
+	}
+] as const satisfies readonly PageContentSection[];
+
+const faqTableOfContents: readonly PageTableOfContentsSection[] = faqSections.map(
+	({ id, title }) => ({ id, title })
+);
+
 export const utility = {
-	faq: createInternalPage({
+	faq: {
+		...createInternalPage({
 		href: current.faq.href,
 
 		title: `${website.name.short} - ${current.faq.name.normal}`,
 		subTitle: 'Frequently asked questions',
 		description: `Find answers to frequently asked questions about the
 			D&D Portal Wiki, its content, features, and development.`
-	}),
+		}),
+		content: {
+			sections: faqSections,
+			tableOfContents: faqTableOfContents
+		}
+	},
 
 	search: createInternalPage({
 		href: current.search.href,

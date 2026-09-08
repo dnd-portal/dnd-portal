@@ -3,7 +3,7 @@
 	Use: Detailed NPC reference pages.
 -->
 <script lang="ts">
-	import type { PugilistNpc } from '$lib/typescript/data/internals/classes/pugilist';
+ import type { PugilistNpc } from '$lib/typescript/data/internals/classes/pugilist/_index_';
 	import type {
 		InlineContent,
 		InlineContentNode,

@@ -14,6 +14,7 @@
 		ResponsiveImageData
 	} from '$lib/typescript/data/_index_';
 
+	let { presentation = 'default' }: { presentation?: 'default' | 'class-header' } = $props();
 	const currentPage = getCurrentPageContext();
 	let selectedGender = $state<ImageGender | null>(null);
 	let imageDialog = $state<HTMLDialogElement>();
@@ -54,6 +55,7 @@
 {#if image && imageSet}
 	<figure
 		class="page-image"
+		class:page-image--class-header={presentation === 'class-header'}
 		class:page-image--pending={selectedGender === null}
 	>
 		<div class="page-image__media">

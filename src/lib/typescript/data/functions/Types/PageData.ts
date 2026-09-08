@@ -15,6 +15,19 @@ export type ResponsiveImageData = {
 	readonly sources: Record<ImageSize, string>;
 };
 
+export type PageSourceMetadata = {
+	readonly label: string;
+	readonly value: string;
+	readonly icon?: string;
+};
+
+export type CampaignNote = {
+	readonly party: string;
+	readonly type: 'homebrew' | 'variant' | 'campaign-rule';
+	readonly title?: string;
+	readonly content: InlineContentBlock;
+};
+
 export type PageData = LinkData & {
 	readonly external: false;
 	readonly label?: string;
@@ -48,4 +61,6 @@ export type PageData = LinkData & {
 	};
 
 	readonly tags?: readonly string[];
+	readonly sourceMetadata?: readonly PageSourceMetadata[];
+	readonly campaignNotes?: readonly CampaignNote[];
 };
