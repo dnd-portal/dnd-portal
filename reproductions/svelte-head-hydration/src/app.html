@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+			window.__headReproRemovals = [];
+			new MutationObserver((mutations) => {
+				for (const mutation of mutations) {
+					for (const node of mutation.removedNodes) {
+						if (node.nodeType === Node.ELEMENT_NODE && (node.matches('link[rel="stylesheet"]') || node.querySelector('link[rel="stylesheet"]'))) {
+							window.__headReproRemovals.push({ node: node.outerHTML, stack: new Error().stack });
+							console.error('Removed stylesheet:', node.outerHTML);
+						}
+					}
+				}
+			}).observe(document.head, { childList: true, subtree: true });
+		</script>
+		%sveltekit.head%
+	</head>
+	<body>
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
