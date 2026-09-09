@@ -112,6 +112,33 @@ const aiImageRegister = [
 
 const changelogReleases = [
 	{
+		version: '0.9.3',
+		date: '9 September 2026',
+		title: 'Stabilized Svelte head hydration and restored structured metadata',
+		description:
+		'Fixed a device-specific hydration failure that could remove the global stylesheet, removed the temporary tracing instrumentation, and restored stable JSON-LD output.',
+		changes: [
+			{
+				category: 'fixed',
+				title: 'Fixed stylesheet loss during client hydration',
+				description:
+					'Replaced conditional Open Graph image dimension nodes in the root head with structurally stable meta elements, preventing Svelte hydration mismatch recovery from removing the generated global stylesheet.'
+			},
+			{
+				category: 'changed',
+				title: 'Restored structured JSON-LD metadata',
+				description:
+					'Restored the root JSON-LD script without adding a conditional branch around the script element, keeping structured metadata compatible with the stable head structure.'
+			},
+			{
+				category: 'removed',
+				title: 'Removed temporary hydration diagnostics',
+				description:
+					'Removed the temporary stylesheet-removal instrumentation and debug overlay after the production hydration issue was isolated and fixed.'
+			}
+		]
+	},
+	{
 		version: '0.9.2',
 		date: '8 September 2026',
 		title: 'Complete structured FAQ architecture and repository cleanup',

@@ -13,6 +13,21 @@ import { isResolvedIssue } from './_types_';
 
 const publicIssueItems: readonly PublicIssue[] = [
 	{
+		id: 'mobile-svelte-head-hydration-removed-stylesheet',
+		title: 'Mobile hydration could remove the global stylesheet',
+		summary:
+			'On one mobile device, SvelteKit hydration mismatch recovery inside conditional root-head metadata removed the generated global stylesheet after the page initially rendered correctly.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-09',
+		updatedAt: '2026-09-09',
+		resolution:
+			'Replaced the conditional Open Graph image width and height head nodes with unconditional meta elements whose content attributes may vary. Normal CSR and hydration remain enabled, and the temporary runtime tracing has been removed after verification.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.3'
+	},
+	{
 		id: 'prelive-audit-did-not-recognize-faq-routes',
 		title: 'Pre-live audit did not recognize canonical FAQ routes',
 		summary:
