@@ -12,8 +12,10 @@
 	} from '$lib/typescript/data/_index_';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getPageLabel } from '$lib/typescript/pages/currentPage';
+	import { getFaqItems } from '$lib/typescript/pages/faq';
 
 	import NotFound from '$lib/svelte/components/page/NotFound.svelte';
+	import Faq from '$lib/svelte/components/page/Faq.svelte';
 	import PageCard from '$lib/svelte/components/PageCard.svelte';
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
@@ -102,6 +104,7 @@
 	const currentPage = getCurrentPageContext();
 	let content = $derived(getRulePageContent(currentPage.data));
 	let childPagePaths = $derived(getChildPagePaths(currentPage.path));
+	let faqItems = $derived(getFaqItems(currentPage.path));
 </script>
 
 {#if currentPage.data}
@@ -125,6 +128,10 @@
 						{/each}
 					</div>
 				</section>
+			{/if}
+
+			{#if faqItems.length}
+				<Faq items={faqItems} />
 			{/if}
 		</article>
 

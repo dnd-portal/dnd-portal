@@ -122,6 +122,17 @@
 		opacity: 0;
 	}
 
+	&--class-header {
+		max-height: 330px;
+
+		.page-image__media {
+			aspect-ratio: 16 / 9;
+			max-height: 330px;
+
+			img { object-fit: contain; object-position: center; }
+		}
+	}
+
 	figcaption {
 		margin-top: sizes.get(spacing, sm);
 		color: colors.get-dark(text, tertiary);

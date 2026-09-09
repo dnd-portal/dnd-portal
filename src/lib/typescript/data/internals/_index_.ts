@@ -11,10 +11,12 @@ import { npcs } from './npcs';
 import { community } from './community/_index_';
 import { project } from './project';
 import { legal } from './legal';
+import { faq } from './faq';
 
 export const internals = {
 	website,
 	utility,
+	faq,
 
 	classes,
 	spells,

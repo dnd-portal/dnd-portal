@@ -69,6 +69,72 @@ Avoid:
 
 External links are also represented centrally where possible.
 
+## FAQ architecture
+
+FAQ content is structured TypeScript data aggregated by
+`src/lib/typescript/data/internals/faq.ts`. Every group has a canonical slug,
+question modules, and `/faq/<slug>/` routes. The FAQ route entry points are
+`src/routes/faq/+page.svelte` and `src/routes/faq/[...page]/+page.ts`.
+
+There are two supported ownership modes:
+
+- **Attached FAQ:** the group has a `sourcePage` pointing to a real runtime
+  page. Source-page lookup can attach the group to that page, while routes,
+  Search, Related FAQ, and prerendering remain generic.
+- **Ownerless FAQ:** the group has no ordinary page owner and omits
+  `sourcePage`. It still has normal FAQ routes, Search, Related FAQ, and
+  prerendering, but is deliberately excluded from source-page attachment.
+
+The ownerless groups are `human`, `elf`, `astral-elf`, and `fighting`. Their
+canonical storage is:
+
+```text
+src/lib/typescript/data/internals/faq-groups/<slug>/
+```
+
+Do not invent a runtime page or route solely to house an FAQ. Attached groups
+live beside their genuine owners: classes and subclasses under
+`src/lib/typescript/data/internals/classes/`, Rules pages under
+`src/lib/typescript/data/internals/rules/`, Species under
+`src/lib/typescript/data/internals/species/`, and analogous owner folders for
+Monsters, Spells, and Equipment.
+
+The final registry contains 60 modular groups and 300 structured questions.
+There are no Markdown-derived FAQ groups in production.
+
+## Data ownership and validation
+
+- Classes use modular owner folders under
+  `src/lib/typescript/data/internals/classes/`. Standard classes expose
+  `_index_.ts`, `page.ts`, `progression.ts`, and `features.ts` where the data
+  warrants that split. The compact BasicClass family uses `_index_.ts` plus
+  `data.ts`; a `faq/` folder exists only for groups with canonical FAQ data.
+- Rules data lives under `src/lib/typescript/data/internals/rules/`, including
+  the standalone `movement.ts` owner and its `movement/faq/` attachment.
+- Species data lives under `src/lib/typescript/data/internals/species/`.
+  The current Species runtime owner is the index page; the four ownerless FAQ
+  topics do not imply Species child pages.
+- FAQ Search is assembled by
+  `src/lib/typescript/pages/search.ts`, which indexes structured FAQ questions
+  generically and categorizes ownerless groups as project FAQ content.
+- FAQ rendering uses `src/lib/svelte/components/page/Faq.svelte` and the
+  generic FAQ routes above. Related questions are resolved from the central
+  group/question registry.
+- The maintained static-site audit is `scripts/audit-prelive.mjs`; the
+  focused FAQ output audit is retained as Codex migration tooling at
+  `codex/scripts/audit-faq-static.mjs`. Run the project validation commands
+  from the repository root:
+
+```bash
+pnpm check
+pnpm build
+pnpm audit:prelive:crawl
+```
+
+The ignored `codex/` directory is for local migration scripts, reports,
+notes, and temporary artifacts only. It is not canonical project
+documentation or production runtime data.
+
 ## Routing
 
 The site is statically generated. Dynamic routes that need static output must provide prerender entries when SvelteKit cannot infer all pages automatically.

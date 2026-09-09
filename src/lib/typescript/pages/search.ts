@@ -21,8 +21,9 @@ import {
 	getPugilistNpcSlug,
 	pugilistNpcs,
 	type PugilistNpc
-} from '$lib/typescript/data/internals/classes/pugilist';
+} from '$lib/typescript/data/internals/classes/pugilist/_index_';
 import { getPageLabel } from './currentPage';
+import { faqGroups, type FaqGroup, type FaqQuestion } from '$lib/typescript/data/internals/faq';
 
 export type SearchCategory =
 	| 'all'
@@ -371,7 +372,59 @@ function createNpcSearchEntry(npc: PugilistNpc): SearchEntry {
 }
 
 function shouldUseGeneratedPageSearchEntry(path: PagePath): boolean {
-	return !path.startsWith('internals.equipment.') || path === 'internals.equipment.page';
+	return !path.startsWith('internals.faq.') && (!path.startsWith('internals.equipment.') || path === 'internals.equipment.page');
+}
+
+function getFaqCategory(group: FaqGroup): Exclude<SearchCategory, 'all'> {
+	if (!group.sourcePage) return 'project';
+	if (group.sourcePage.includes('.subclasses.')) return 'subclasses';
+	if (group.sourcePage.includes('.classes.')) return 'classes';
+	if (group.sourcePage.includes('.rules.')) return 'rules';
+	if (group.sourcePage.includes('.spells.')) return 'spells';
+	if (group.sourcePage.includes('.equipment.')) return 'equipment';
+	if (group.sourcePage.includes('.species.')) return 'species';
+	if (group.sourcePage.includes('.monsters.')) return 'monsters';
+	if (group.sourcePage.includes('.locations.')) return 'locations';
+	return 'project';
+}
+
+function getFaqContentText(question: FaqQuestion): string {
+	return [
+		question.fullAnswer.introduction,
+		...question.fullAnswer.sections.flatMap((section) => [
+			section.title,
+			...section.paragraphs,
+			...(section.blocks ?? []).flatMap((block) => block.type === 'paragraph' ? [block.content] : block.items)
+		])
+	].join(' ');
+}
+
+function createFaqSearchEntry(group: FaqGroup, question: FaqQuestion): SearchEntry {
+	const href = `/faq/${group.slug}/${question.slug}/`;
+	const content = getFaqContentText(question);
+	const fields: Record<SearchSourceField, string> = {
+		title: question.question,
+		description: question.shortAnswer,
+		content,
+		tags: `faq ${group.slug}`,
+		url: href,
+		metadata: group.title
+	};
+
+	return {
+		id: `faq:${group.slug}:${question.slug}`,
+		href,
+		title: question.question,
+		subtitle: `${group.title} FAQ`,
+		description: question.shortAnswer,
+		category: getFaqCategory(group),
+		tags: ['faq', group.slug],
+		sourceFields: Object.entries(fields)
+			.filter(([, value]) => value.trim().length > 0)
+			.map(([field]) => field as SearchSourceField),
+		fieldText: fields,
+		searchText: normalize(Object.values(fields).join(' '))
+	};
 }
 
 export const searchIndex = [
@@ -380,7 +433,8 @@ export const searchIndex = [
 		.map(([path, page]) => createPageSearchEntry(path, page)),
 	...spells.map(createSpellSearchEntry),
 	...equipmentItems.map(createEquipmentSearchEntry),
-	...pugilistNpcs.map(createNpcSearchEntry)
+	...pugilistNpcs.map(createNpcSearchEntry),
+	...faqGroups.flatMap((group) => group.questions.map((question) => createFaqSearchEntry(group, question)))
 ] as const;
 
 function scoreField(value: string, tokens: readonly string[], weight: number): number {

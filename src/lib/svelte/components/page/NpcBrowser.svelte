@@ -3,8 +3,8 @@
 	Use: Filterable NPC browser for the central NPCs category.
 -->
 <script lang="ts">
-	import type { PugilistNpc as NpcBrowserItem } from '$lib/typescript/data/internals/classes/pugilist';
-	import { getPugilistNpcHref } from '$lib/typescript/data/internals/classes/pugilist';
+ import type { PugilistNpc as NpcBrowserItem } from '$lib/typescript/data/internals/classes/pugilist/_index_';
+ import { getPugilistNpcHref } from '$lib/typescript/data/internals/classes/pugilist/_index_';
 	import type { InlineContentNode } from '$lib/typescript/data/_index_';
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
 

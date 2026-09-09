@@ -42,6 +42,19 @@ type BasicClassConfig = {
 	readonly hasImages?: boolean;
 };
 
+type BasicClassContent = {
+	readonly startingEquipment: readonly EquipmentChoiceGroup[];
+	readonly progression: ProgressionData<string>;
+	readonly sections: {
+		readonly identity: PageContentSection;
+		readonly coreTraits: PageContentSection;
+		readonly classFeaturesOverview: PageContentSection;
+		readonly featureSections: readonly PageContentSection[];
+		readonly subclasses: PageContentSection;
+	};
+	readonly tableOfContents: readonly PageTableOfContentsSection[];
+};
+
 const pageIcon = {
 	href: '/icons/white/game/character.svg',
 	alt: 'A stylized character icon representing a playable class.'
@@ -215,7 +228,10 @@ function createTableOfContents(
 	];
 }
 
-export function createBasicClass(config: BasicClassConfig) {
+export function createBasicClass(config: BasicClassConfig): {
+	readonly page: ReturnType<typeof createInternalPage>;
+	readonly content: BasicClassContent;
+} {
 	const featureSections = createFeatureSections(config.features);
 
 	return {

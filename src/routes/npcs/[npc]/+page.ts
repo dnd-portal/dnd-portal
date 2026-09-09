@@ -6,7 +6,7 @@ import {
 	getPugilistNpcBySlug,
 	getPugilistNpcSlug,
 	pugilistNpcs
-} from '$lib/typescript/data/internals/classes/pugilist';
+} from '$lib/typescript/data/internals/classes/pugilist/_index_';
 import { createNpcSeoMetadata } from '$lib/typescript/pages/seo';
 
 export function entries() {

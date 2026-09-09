@@ -7,11 +7,13 @@
 		PageContentSection as PageContentSectionData,
 		PageTableOfContentsSection
 	} from '$lib/typescript/data/_index_';
-	import { pugilist } from '$lib/typescript/data/internals/classes/pugilist';
+ import { pugilist } from '$lib/typescript/data/internals/classes/pugilist/_index_';
 	import { equipmentItems } from '$lib/typescript/data/internals/equipment-items';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
+	import { getFaqItems } from '$lib/typescript/pages/faq';
 
 	import EquipmentBrowser from '$lib/svelte/components/page/EquipmentBrowser.svelte';
+	import Faq from '$lib/svelte/components/page/Faq.svelte';
 	import NpcBrowser from '$lib/svelte/components/page/NpcBrowser.svelte';
 	import NotFound from '$lib/svelte/components/page/NotFound.svelte';
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
@@ -45,6 +47,7 @@
 	let content = $derived(getTopLevelPageContent(currentPage.data));
 	let isEquipmentPage = $derived(currentPage.path === 'internals.equipment.page');
 	let isNpcsPage = $derived(currentPage.path === 'internals.npcs.page');
+	let faqItems = $derived(getFaqItems(currentPage.path));
 </script>
 
 {#if currentPage.data}
@@ -64,6 +67,10 @@
 
 			{#if isNpcsPage}
 				<NpcBrowser items={pugilist.npcItems} />
+			{/if}
+
+			{#if faqItems.length}
+				<Faq items={faqItems} />
 			{/if}
 		</article>
 

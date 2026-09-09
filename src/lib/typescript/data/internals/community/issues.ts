@@ -13,6 +13,171 @@ import { isResolvedIssue } from './_types_';
 
 const publicIssueItems: readonly PublicIssue[] = [
 	{
+		id: 'prelive-audit-did-not-recognize-faq-routes',
+		title: 'Pre-live audit did not recognize canonical FAQ routes',
+		summary:
+			'The route-shape validator treated valid /faq/<group>/ and /faq/<group>/<question>/ links as unknown after the FAQ registry became fully modular.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Added strict validation for the supported FAQ route depths without broad route exclusions.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'stale-messenger-faq-compatibility-paths',
+		title: 'Stale Messenger FAQ compatibility paths survived migration',
+		summary:
+			'Legacy Messenger-specific FAQ aliases referenced paths that no longer existed after Messenger moved to the generic modular FAQ registry.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Removed the dead Messenger-only mapping and kept Messenger on the canonical generic FAQ path and registry.',
+		relatedPage: 'internals.classes.messenger.page',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'prelive-placeholder-detector-flagged-normal-prose',
+		title: 'Placeholder audit flagged normal “still needs” prose',
+		summary:
+			'The unfinished-content detector treated ordinary rules prose such as “the Rogue still needs...” as a placeholder.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Refined the matcher to retain explicit unfinished wording while allowing ordinary English uses of “still needs”.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-group-pages-rendered-ordinary-page-titles',
+		title: 'FAQ group pages rendered ordinary page titles',
+		summary:
+			'FAQ group PageData exposed a plain group label to SEO, causing group pages such as Classes FAQ to share titles with the ordinary Classes page.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'seo',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'FAQ group labels now include the FAQ context, producing distinct descriptive titles without route-specific special cases.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'repository-local-pnpm-store-was-not-ignored',
+		title: 'Repository-local pnpm store was not ignored',
+		summary:
+			'Local pnpm database artifacts could appear as repository changes under .pnpm-store.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Added a repository-local /.pnpm-store/ ignore rule; tracked project content was not present in that directory.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-runtime-depended-on-editorial-markdown',
+		title: 'FAQ runtime depended on the editorial Markdown master',
+		summary:
+			'The production FAQ registry depended on faqMasterReady and the editorial Markdown master instead of keeping all published FAQ content in runtime modules.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'All 60 FAQ groups and 300 articles now use structured modular TypeScript, so production no longer imports faqMasterReady or the FAQ Markdown master.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-source-page-required-for-ownerless-topics',
+		title: 'FAQ source-page metadata implied owners that did not exist',
+		summary:
+			'FAQ sourcePage was treated as mandatory even for Human, Elf, Astral Elf, and Fighting topics without ordinary runtime pages.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'FaqGroup sourcePage is now optional. Attached groups retain source-page lookup, while ownerless groups use neutral FAQ storage and remain fully routable and searchable without fake page owners.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-editorial-source-pages-were-aspirational',
+		title: 'Some FAQ sourcePage values were stale or aspirational',
+		summary:
+			'The editorial FAQ metadata referenced Human, Elf, Astral Elf, and Fighting page paths that were not runtime owners in the application.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'content',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Those groups now omit sourcePage in production and are represented as standalone FAQ entities; the editorial source remains migration input rather than a claim about runtime ownership.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'faq-rendered-markdown-heading-leak',
+		title: 'FAQ output exposed raw Markdown heading syntax',
+		summary:
+			'At least one rendered FAQ article exposed a literal ## marker inherited from Markdown migration input.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'content',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Removed the leaked heading marker from modular FAQ data and verified the built FAQ output with the static content-leak audit.',
+		relatedPage: 'internals.utility.faq',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'migration-process-files-polluted-repository-root',
+		title: 'Migration runs left process artifacts in the repository root',
+		summary:
+			'Batch migration runs accumulated generated PID and log files at the project root.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Removed completed root-level process clutter and added an ignored codex workspace for Codex-only scripts, reports, previews, and temporary artifacts.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
+		id: 'migration-tooling-boundary-was-unclear',
+		title: 'Migration-only tooling was mixed with project files',
+		summary:
+			'Completed migration scripts and generated previews were not clearly separated from canonical project runtime and documentation.',
+		status: 'resolved',
+		source: 'internal',
+		category: 'technical',
+		reportedAt: '2026-09-08',
+		updatedAt: '2026-09-08',
+		resolution:
+			'Completed Codex migration artifacts now live under the ignored codex workspace, while maintained project validation remains in scripts and canonical architecture documentation remains in docs.',
+		relatedPage: 'internals.project.changelog',
+		relatedRelease: '0.9.2'
+	},
+	{
 		id: 'mobile-navigation-rendered-as-desktop-sidebar',
 		title: 'Mobile navigation behaved like the desktop sidebar',
 		summary:

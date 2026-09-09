@@ -227,6 +227,151 @@
 	}
 }
 
+.page-layout--barbarian {
+	.page-layout__article { padding-top: calc(var(--navbar-height, #{sizes.get(navbar, height)}) + #{sizes.get(spacing, md)}); }
+
+	.page-layout__article {
+		max-width: none;
+	}
+
+	.page-header,
+	.class-overview {
+		max-width: sizes.get(content, wide-max-width);
+	}
+
+	.wiki-article__section,
+	.content-section,
+	.starting-equipment,
+	.progression,
+	.faq {
+		max-width: sizes.get(content, article-max-width);
+	}
+}
+
+.class-overview {
+	width: 100%;
+	display: grid;
+	grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.9fr);
+	gap: sizes.get(spacing, xxl);
+	align-items: start;
+	margin-top: sizes.get(spacing, lg);
+}
+
+.quick-links {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: sizes.get(spacing, sm);
+
+	h2 { grid-column: 1 / -1; }
+
+	a {
+	padding: sizes.get(spacing, sm) sizes.get(spacing, md);
+	color: colors.get-dark(text, primary);
+	background: colors.get-dark(background, secondary);
+	border: 1px solid colors.get-dark(border, base);
+	border-radius: sizes.get(radius, md);
+	display: flex;
+	align-items: center;
+	gap: sizes.get(spacing, sm);
+	text-decoration: none;
+	font-size: 0.92rem;
+	font-weight: 700;
+	}
+
+	a img { width: 1.05rem; height: 1.05rem; opacity: 1; filter: brightness(0) invert(1); }
+
+	a:hover, a:focus-visible { color: colors.get-dark(theme, primary); border-color: colors.get-dark(border, interactive); }
+}
+
+.class-information {
+	padding: sizes.get(spacing, lg);
+	background: colors.get-dark(background, secondary);
+	border: 1px solid colors.get-dark(border, base);
+	border-radius: sizes.get(radius, lg);
+
+	h2 { font-size: 1.35rem; }
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+
+		div {
+			display: grid;
+			grid-template-columns: minmax(96px, 0.7fr) minmax(0, 1.3fr);
+			gap: sizes.get(spacing, md);
+			padding: sizes.get(spacing, sm) 0;
+			border-bottom: 1px solid colors.get-dark(border, subtle);
+		}
+
+		div:last-child { border-bottom: 0; }
+		dt {
+			display: inline-flex;
+			align-items: center;
+			gap: sizes.get(spacing, xs);
+			color: colors.get-dark(text, tertiary);
+			font-size: 0.82rem;
+			font-weight: 700;
+
+			img { width: 0.95rem; height: 0.95rem; opacity: 1; filter: brightness(0) invert(1); }
+		}
+		dd { min-width: 0; color: colors.get-dark(text, secondary); font-size: 0.88rem; line-height: 1.4; }
+		dd .link { text-decoration: none; }
+	}
+}
+
+.class-divider { width: 100%; border: 0; border-top: 1px solid colors.get-dark(border, subtle); }
+
+.barbarian-about { max-width: sizes.get(content, text-max-width); }
+
+.source-metadata {
+	display: flex;
+	flex-wrap: wrap;
+	gap: sizes.get(spacing, sm);
+	margin-top: sizes.get(spacing, lg);
+}
+
+.source-metadata__badge {
+	display: inline-flex;
+	align-items: center;
+	gap: sizes.get(spacing, xs);
+	padding: sizes.get(spacing, xs) sizes.get(spacing, sm);
+	color: colors.get-dark(text, secondary);
+	background: colors.get-dark(background, secondary);
+	border: 1px solid colors.get-dark(border, base);
+	border-radius: sizes.get(radius, pill);
+	font-size: 0.78rem;
+	font-weight: 700;
+
+	img { width: 0.9rem; height: 0.9rem; filter: brightness(0) invert(1); }
+}
+
+.campaign-notes {
+	margin-top: sizes.get(spacing, md);
+	border: 1px solid colors.get-dark(border, base);
+	border-radius: sizes.get(radius, md);
+	background: colors.get-dark(background, secondary);
+
+	summary {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		min-height: 2.15rem;
+		padding: sizes.get(spacing, xs) sizes.get(spacing, md);
+	color: colors.get-dark(text, primary);
+	font-weight: 700;
+	cursor: pointer;
+	list-style: none;
+	}
+
+	summary::-webkit-details-marker { display: none; }
+	summary::after { content: '▾'; grid-column: 3; grid-row: 1; color: colors.get-dark(theme, primary); }
+	summary > img { width: 1rem; height: 1rem; margin-right: sizes.get(spacing, sm); filter: brightness(0) invert(1); }
+	summary > span:not(.campaign-notes__count) { grid-column: 2; grid-row: 1; min-width: 0; }
+	&__count { grid-column: 2; grid-row: 2; margin: 0; color: colors.get-dark(text, tertiary); font-size: 0.74rem; font-weight: 400; }
+	&__entry, > p { margin: 0 sizes.get(spacing, md) sizes.get(spacing, md); color: colors.get-dark(text, secondary); font-size: 0.9rem; }
+}
+
 .wiki-article__image-cards {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(sizes.get(content, image-card-min-width), 100%), sizes.get(content, image-card-max-width)));

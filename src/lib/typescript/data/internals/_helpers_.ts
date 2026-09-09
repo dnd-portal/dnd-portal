@@ -4,6 +4,7 @@ import type {
 	InlineContent,
 	InlineContentBlock
 } from '$lib/typescript/pages/content-types';
+import type { CampaignNote, PageSourceMetadata } from '../functions/Types/PageData';
 
 type ImageSizeSources = {
 	s: string;
@@ -52,6 +53,8 @@ interface InternalPageInput {
 	};
 
 	tags?: readonly string[];
+	sourceMetadata?: readonly PageSourceMetadata[];
+	campaignNotes?: readonly CampaignNote[];
 }
 
 type FeatureSectionLike = {

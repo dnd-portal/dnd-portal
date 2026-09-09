@@ -12,6 +12,9 @@
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
 	import TableOfContents from '$lib/svelte/components/page/TableOfContents.svelte';
+	import Faq from '$lib/svelte/components/page/Faq.svelte';
+	import type { LinkPath } from '$lib/typescript/data/_index_';
+	import { getFaqGroupBySourcePage } from '$lib/typescript/data/internals/faq';
 
 	type SubclassPageContent = {
 		readonly source: string;
@@ -33,6 +36,14 @@
 	let content = $derived(
 		isSubclassPageData(currentPage.data) ? currentPage.data.content : null
 	);
+	let faqGroup = $derived(getFaqGroupBySourcePage(currentPage.path));
+	let faqItems = $derived(faqGroup?.questions.map((question) => ({
+		question: question.question,
+		answer: question.shortAnswer,
+		reference: faqGroup.sourcePage as LinkPath,
+		referenceLabel: faqGroup.title,
+		faqPath: `internals.faq.${faqGroup.slug}.${question.slug}` as LinkPath
+	})) ?? []);
 </script>
 
 {#if content}
@@ -43,6 +54,10 @@
 			{#each content.featureSections as section}
 				<PageContentSection {section} />
 			{/each}
+
+			{#if faqItems.length}
+				<Faq items={faqItems} />
+			{/if}
 		</article>
 
 		<aside class="page-layout__toc">
