@@ -7,83 +7,40 @@
 
 		<script>
 			(() => {
-				const storageKey = 'dnd-hydration-debug';
-				const maxRecords = 30;
-				const debug = (window.__dndHydrationDebug = window.__dndHydrationDebug || []);
-				const recentErrors = [];
-
-				const save = () => {
-					try { localStorage.setItem(storageKey, JSON.stringify(debug.slice(-maxRecords))); } catch {}
+				const storageKey = 'dnd-head-marker-debug-v2';
+				const maxEvents = 120;
+				const runId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+				const run = { runId, timestamp: new Date().toISOString(), location: document.location.href, userAgent: navigator.userAgent, initialHead: null, events: [] };
+				let reportData = { currentRun: run, historical: [] };
+				const nodeDescription = (node) => {
+					if (!node) return null;
+					if (node.nodeType === Node.COMMENT_NODE) return { type: 'comment', nodeType: node.nodeType, nodeName: node.nodeName, data: node.data };
+					if (node.nodeType !== Node.ELEMENT_NODE) return { type: 'node', nodeType: node.nodeType, nodeName: node.nodeName, data: node.data ?? null };
+					return { type: 'element', nodeType: node.nodeType, nodeName: node.nodeName, outerHTML: node.outerHTML, rel: node.getAttribute('rel'), href: node.getAttribute('href'), name: node.getAttribute('name'), property: node.getAttribute('property'), content: node.getAttribute('content') };
 				};
-				const record = (record) => {
-					debug.push(record);
-					if (debug.length > maxRecords) debug.splice(0, debug.length - maxRecords);
-					save();
-					if (record.type === 'stylesheet-removal') showOverlay();
-				};
-				const stylesheet = (node) => {
-					if (!(node instanceof Element)) return null;
-					if (node.matches('link[rel="stylesheet"]')) return node;
-					return node.querySelector('link[rel="stylesheet"]');
-				};
-				const removed = (operation, node) => {
-					const link = stylesheet(node);
-					if (!link) return;
-					record({
-						type: 'stylesheet-removal',
-						timestamp: new Date().toISOString(),
-						operation,
-						removedNode: node.outerHTML || String(node),
-						href: link.href || link.getAttribute('href') || '',
-						stack: new Error().stack || '',
-						location: document.location.href
-					});
-				};
-				const wrap = (prototype, method) => {
-					const original = prototype[method];
-					prototype[method] = function (...args) {
-						if (method === 'replaceChildren') args.forEach((node) => removed('replaceChildren', node));
-						else removed(method, method === 'removeChild' || method === 'replaceChild' ? args[method === 'removeChild' ? 0 : 1] : this);
-						return original.apply(this, args);
-					};
-				};
-				wrap(Node.prototype, 'removeChild');
-				wrap(Node.prototype, 'replaceChild');
-				wrap(Element.prototype, 'remove');
-				wrap(Element.prototype, 'replaceWith');
-				wrap(Element.prototype, 'replaceChildren');
-				new MutationObserver((mutations) => mutations.forEach((mutation) => mutation.removedNodes.forEach((node) => removed('MutationObserver', node)))
-				).observe(document.head, { childList: true, subtree: true });
-				const runtimeError = (type, detail) => {
-					const entry = { type, timestamp: new Date().toISOString(), detail, location: document.location.href };
-					recentErrors.push(entry);
-					if (recentErrors.length > 10) recentErrors.shift();
-					debug.push(entry);
-					if (debug.length > maxRecords) debug.splice(0, debug.length - maxRecords);
-					save();
-				};
+				const headNodes = () => Array.from(document.head?.childNodes ?? [], (node, index) => ({ index, ...nodeDescription(node) }));
+				const comments = () => headNodes().filter((node) => node.type === 'comment');
+				const headSnapshot = () => ({ html: document.head?.innerHTML ?? '', nodes: headNodes(), comments: comments() });
+				const persist = () => { try { localStorage.setItem(storageKey, JSON.stringify(reportData)); } catch {} };
+				const addEvent = (event) => { run.events.push({ timestamp: new Date().toISOString(), ...event }); if (run.events.length > maxEvents) run.events.splice(0, run.events.length - maxEvents); persist(); };
+				const stylesheet = (node) => node?.nodeType === Node.ELEMENT_NODE ? (node.matches('link[rel="stylesheet"]') ? node : node.querySelector('link[rel="stylesheet"]')) : null;
+				const nearby = (node) => { const all = Array.from(document.head?.childNodes ?? []); const index = all.indexOf(node); const preceding = all.slice(0, Math.max(index, 0)).reverse().find((item) => item.nodeType === Node.COMMENT_NODE); const following = all.slice(index + 1).find((item) => item.nodeType === Node.COMMENT_NODE); return { previousSibling: node?.previousSibling ? nodeDescription(node.previousSibling) : null, nextSibling: node?.nextSibling ? nodeDescription(node.nextSibling) : null, precedingComment: nodeDescription(preceding), followingComment: nodeDescription(following) }; };
+				const recordRemoval = (operation, node) => { const link = stylesheet(node); if (!link) return; addEvent({ type: 'stylesheet-removal', operation, removedNode: nodeDescription(node), stylesheet: nodeDescription(link), href: link.href || link.getAttribute('href') || '', stack: new Error().stack || '', preRemovalHead: headSnapshot(), ...nearby(node), hydrationComments: comments() }); showOverlay(); };
+				const wrap = (prototype, method) => { const original = prototype[method]; prototype[method] = function (...args) { recordRemoval(method, method === 'removeChild' ? args[0] : method === 'replaceChild' ? args[1] : this); return original.apply(this, args); }; };
+				wrap(Node.prototype, 'removeChild'); wrap(Node.prototype, 'replaceChild'); wrap(Element.prototype, 'remove'); wrap(Element.prototype, 'replaceWith'); wrap(Element.prototype, 'replaceChildren');
+				const mutationDescription = (mutation) => ({ type: mutation.type, target: nodeDescription(mutation.target), addedNodes: Array.from(mutation.addedNodes, nodeDescription), removedNodes: Array.from(mutation.removedNodes, nodeDescription), previousSibling: nodeDescription(mutation.previousSibling), nextSibling: nodeDescription(mutation.nextSibling), head: headSnapshot() });
+				new MutationObserver((mutations) => mutations.forEach((mutation) => addEvent({ type: 'mutation', mutation: mutationDescription(mutation) }))).observe(document.head, { childList: true, subtree: true, attributes: true, characterData: true });
+				const runtimeError = (type, detail) => addEvent({ type, detail, stack: detail, head: headSnapshot() });
 				window.addEventListener('error', (event) => runtimeError('error', event.error?.stack || event.message || String(event.error)));
 				window.addEventListener('unhandledrejection', (event) => runtimeError('unhandledrejection', event.reason?.stack || String(event.reason)));
-				const report = () => debug.slice(-maxRecords).map((entry) => JSON.stringify(entry, null, 2)).join('\n\n');
-				function showOverlay() {
-					if (document.getElementById('dnd-hydration-debug-overlay')) return;
-					const overlay = document.createElement('div');
-					overlay.id = 'dnd-hydration-debug-overlay';
-					overlay.style.cssText = 'position:fixed;z-index:2147483647;inset:8px;background:#fff;color:#111;border:3px solid #b00;padding:12px;overflow:auto;font:14px/1.4 monospace;box-sizing:border-box;';
-					const title = document.createElement('h2'); title.textContent = 'D&D Hydration Debug'; title.style.cssText = 'font:700 20px sans-serif;margin:0 0 10px;'; overlay.append(title);
-					const latest = debug.filter((entry) => entry.type === 'stylesheet-removal').slice(-1)[0];
-					const details = document.createElement('pre'); details.textContent = latest ? `Operation: ${latest.operation}\nStylesheet: ${latest.href}\n\nStack:\n${latest.stack}\n\nErrors:\n${recentErrors.map((entry) => `${entry.type}: ${entry.detail}`).join('\n') || 'None'}` : report(); details.style.cssText = 'white-space:pre-wrap;overflow-wrap:anywhere;'; overlay.append(details);
-					const copy = document.createElement('button'); copy.textContent = 'Copy debug'; copy.style.cssText = 'padding:8px;margin:8px 8px 8px 0;'; copy.onclick = () => { const fallback = () => { const area = document.createElement('textarea'); area.value = report(); area.style.cssText = 'display:block;width:100%;height:180px;'; overlay.append(area); area.select(); }; if (navigator.clipboard) navigator.clipboard.writeText(report()).catch(fallback); else fallback(); }; overlay.append(copy);
-					const close = document.createElement('button'); close.textContent = 'Close'; close.style.cssText = 'padding:8px;'; close.onclick = () => overlay.remove(); overlay.append(close);
-					document.body.append(overlay);
-				}
-				try {
-					const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
-					if (Array.isArray(stored)) stored.slice(-maxRecords).forEach((entry) => debug.push(entry));
-				} catch {}
-				if (new URLSearchParams(document.location.search).get('hydration-debug') === '1' && debug.length) {
-					if (document.body) showOverlay(); else addEventListener('DOMContentLoaded', showOverlay, { once: true });
-				}
+				run.initialHead = headSnapshot(); persist();
+				const fullReport = () => JSON.stringify(reportData, null, 2);
+				function showOverlay() { if (!document.body || document.getElementById('dnd-head-marker-debug-overlay')) return; const overlay = document.createElement('div'); overlay.id = 'dnd-head-marker-debug-overlay'; overlay.style.cssText = 'position:fixed;z-index:2147483647;inset:8px;background:#fff;color:#111;border:3px solid #900;padding:12px;overflow:auto;font:13px/1.35 monospace;box-sizing:border-box;'; const title = document.createElement('h2'); title.textContent = 'D&D Head Marker Debug'; title.style.cssText = 'font:700 20px sans-serif;margin:0 0 8px;'; overlay.append(title); const status = document.createElement('p'); status.textContent = `${runId} — ${run.events.length} events`; overlay.append(status); const area = document.createElement('textarea'); area.value = fullReport(); area.readOnly = true; area.style.cssText = 'display:block;width:100%;height:55vh;box-sizing:border-box;font:12px monospace;'; overlay.append(area); const button = (label, action) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'padding:8px;margin:8px 8px 0 0;'; b.onclick = action; overlay.append(b); }; button('Copy full report', () => navigator.clipboard?.writeText(fullReport()).catch(() => { area.focus(); area.select(); })); button('Select report', () => { area.focus(); area.select(); }); button('Clear previous report', () => { reportData.historical = []; persist(); area.value = fullReport(); }); button('Close', () => overlay.remove()); document.body.append(overlay); }
+				try { const stored = JSON.parse(localStorage.getItem(storageKey) || 'null'); if (stored?.currentRun) reportData.historical = [...(stored.historical || []), stored.currentRun].slice(-5); } catch {}
+				if (new URLSearchParams(document.location.search).get('hydration-debug') === '1') addEvent({ type: 'debug-opened', head: headSnapshot() });
+				addEvent({ type: 'head-after-script', head: headSnapshot() });
+				if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => addEvent({ type: 'dom-content-loaded', head: headSnapshot() }), { once: true }); else addEvent({ type: 'dom-content-loaded', head: headSnapshot() });
+				if (new URLSearchParams(document.location.search).get('hydration-debug') === '1') { if (document.body) showOverlay(); else document.addEventListener('DOMContentLoaded', showOverlay, { once: true }); }
 			})();
 		</script>
 
@@ -91,18 +48,13 @@
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X1M5VW1SF"></script>
 		<script>
 			window.dataLayer = window.dataLayer || [];
-
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-
+			function gtag() { dataLayer.push(arguments); }
 			gtag('js', new Date());
 			gtag('config', 'G-6X1M5VW1SF');
 		</script>
 
 		%sveltekit.head%
 	</head>
-
 	<body data-sveltekit-preload-data="hover" class="layout">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
