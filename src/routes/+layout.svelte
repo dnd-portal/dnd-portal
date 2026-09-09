@@ -82,6 +82,7 @@
 	<meta name="twitter:description" content={seo.description} />
 	<meta name="twitter:image" content={seo.imageUrl} />
 	<meta name="twitter:image:alt" content={seo.imageAlt} />
+	{@html `<script type="application/ld+json">${seo.structuredDataJson ?? ''}</script>`}
 </svelte:head>
 
 <div class='layout'>
