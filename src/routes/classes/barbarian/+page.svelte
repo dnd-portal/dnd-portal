@@ -14,12 +14,24 @@
 	import TraitTable from '$lib/svelte/components/page/TraitTable.svelte';
 	import InlineContent from '$lib/svelte/components/page/InlineContent.svelte';
 	import { barbarianFaqEntries } from '$lib/typescript/data/internals/faq';
+	import type { InlineContent as InlineContentData, InlineContentBlock } from '$lib/typescript/pages/content-types';
+	import type { CampaignNote } from '$lib/typescript/data/functions/Types/PageData';
 
 	const barbarian = getData('internals.classes.barbarian');
 	const classFeatureOverview = barbarian.content.classFeatureSections[0];
 	const coreTraitSections = barbarian.content.classFeatureSections.slice(1, 3);
 	const classFeatureSections = barbarian.content.classFeatureSections.slice(3);
-	const longDescription = barbarian.page.descriptions.long ?? [];
+	const longDescription: readonly InlineContentData[] = normalizeParagraphs(barbarian.page.descriptions.long);
+	const campaignNotes: readonly CampaignNote[] = barbarian.page.campaignNotes ?? [];
+
+	function isParagraphs(content: InlineContentBlock): content is readonly InlineContentData[] {
+		return Array.isArray(content[0]);
+	}
+
+	function normalizeParagraphs(content: InlineContentBlock | undefined): readonly InlineContentData[] {
+		if (!content) return [];
+		return isParagraphs(content) ? content : [content];
+	}
 	const linkedSectionIds = [
 		barbarian.content.sections.progression.id,
 		barbarian.content.sections.coreTraits.id,
@@ -65,7 +77,7 @@
 		<section class="class-overview" id="multiclassing" aria-label="Class overview">
 			<div class="class-overview__about barbarian-about" aria-labelledby="about-barbarian-title">
 				<h2 id="about-barbarian-title">About the Barbarian</h2>
-				{#each Array.isArray(longDescription[0]) ? longDescription : [longDescription] as paragraph}
+				{#each longDescription as paragraph}
 					<p><InlineContent content={paragraph} /></p>
 				{/each}
 				{#if barbarian.page.sourceMetadata?.length}
@@ -82,13 +94,13 @@
 					<summary>
 						<img src="/icons/white/entity/person.svg" alt="" aria-hidden="true" />
 						<span>Campaign notes &amp; variants</span>
-						<span class="campaign-notes__count">{barbarian.page.campaignNotes?.length ?? 0} campaign-specific rules</span>
+					<span class="campaign-notes__count">{campaignNotes.length} campaign-specific rules</span>
 					</summary>
-					{#if barbarian.page.campaignNotes?.length}
-						{#each barbarian.page.campaignNotes as note}
+					{#if campaignNotes.length}
+						{#each campaignNotes as note}
 							<div class="campaign-notes__entry">
 								<strong>{note.party}</strong>{#if note.title} — {note.title}{/if}
-								{#each Array.isArray(note.content[0]) ? note.content : [note.content] as paragraph}
+								{#each normalizeParagraphs(note.content) as paragraph}
 									<p><InlineContent content={paragraph} /></p>
 								{/each}
 							</div>

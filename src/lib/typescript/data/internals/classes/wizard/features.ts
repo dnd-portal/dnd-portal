@@ -1,3 +1,3 @@
 import { content } from './page';
 
-export const features = content.sections ?? [];
+export const features = content.sections;

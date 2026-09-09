@@ -7,6 +7,7 @@ import type {
 	PageContentSection,
 	ProgressionData
 } from '$lib/typescript/pages/content-types';
+import type { CampaignNote } from '$lib/typescript/data/functions/Types/PageData';
 
 
 export const website = core.internals.website;
@@ -14,6 +15,8 @@ export const website = core.internals.website;
 export const classes = core.internals.classes;
 
 export const current = classes.barbarian;
+
+const campaignNotes: readonly CampaignNote[] = [];
 
 export const baseUrl = `${classes.baseUrl}/${current.name.slug}`;
 
@@ -861,7 +864,7 @@ export const page = createInternalPage({
             icon: '/icons/white/game/character.svg'
         }
     ],
-    campaignNotes: [],
+    campaignNotes,
     header: {
         sections: [
             {

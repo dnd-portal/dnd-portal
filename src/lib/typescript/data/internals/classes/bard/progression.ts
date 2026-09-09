@@ -1,6 +1,7 @@
 import { content } from './page';
+import type { ProgressionData } from '$lib/typescript/pages/content-types';
 
-export const progression = {
+export const progression: ProgressionData<string> = {
     "title": "Bard progression",
     "heading": "Bard Progression",
     "columns": [

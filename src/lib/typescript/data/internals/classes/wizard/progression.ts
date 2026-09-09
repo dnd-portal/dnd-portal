@@ -4,9 +4,10 @@
 */
 
 import { createInternalPage } from '$lib/typescript/data/internals/_helpers_';
+import type { ProgressionData } from '$lib/typescript/pages/content-types';
 
 
-export const progression = {
+export const progression: ProgressionData<string> = {
     "title": "Wizard progression",
     "heading": "Wizard Progression",
     "columns": [

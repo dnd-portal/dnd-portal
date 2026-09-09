@@ -23,15 +23,15 @@
 	}
 
 	function getDescriptionParagraphs(
-		content: InlineContentBlock | undefined,
+		content: InlineContentBlock | string | undefined,
 		fallback: string
 	): readonly InlineContentData[] {
-		if (!content) {
+		if (!content || typeof content === 'string') {
 			return [
 				[
 					{
 						type: 'text',
-						text: fallback
+						text: content || fallback
 					}
 				]
 			];
