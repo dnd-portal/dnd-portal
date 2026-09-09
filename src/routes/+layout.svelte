@@ -69,12 +69,14 @@
 	<meta property="og:url" content={seo.canonicalUrl} />
 	<meta property="og:image" content={seo.imageUrl} />
 	<meta property="og:image:alt" content={seo.imageAlt} />
-	{#if seo.imageWidth}
-		<meta property="og:image:width" content={String(seo.imageWidth)} />
-	{/if}
-	{#if seo.imageHeight}
-		<meta property="og:image:height" content={String(seo.imageHeight)} />
-	{/if}
+	<meta
+		property="og:image:width"
+		content={seo.imageWidth == null ? undefined : String(seo.imageWidth)}
+	/>
+	<meta
+		property="og:image:height"
+		content={seo.imageHeight == null ? undefined : String(seo.imageHeight)}
+	/>
 	<meta name="twitter:card" content={seo.twitterCard} />
 	<meta name="twitter:title" content={seo.title} />
 	<meta name="twitter:description" content={seo.description} />
