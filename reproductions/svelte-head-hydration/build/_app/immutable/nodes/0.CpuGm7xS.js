@@ -1,1 +1,0 @@
-import{L as e,T as t,c as n,d as r,f as i,l as a,o,p as s}from"../chunks/BUWaG0La.js";import"../chunks/xihTtKlq.js";var c=e({prerender:()=>!0}),l=s(`<meta name="head-hydration-repro" content="client-only"/>`);function u(e,s){var c=i();o(`12qhfyh`,e=>{var n=i(),o=t(n),s=e=>{r(e,l())};a(o,e=>{e(s)}),r(e,n)}),n(t(c),()=>s.children),r(e,c)}export{u as component,c as universal};
