@@ -21,7 +21,6 @@
 	const classFeatureOverview = barbarian.content.classFeatureSections[0];
 	const coreTraitSections = barbarian.content.classFeatureSections.slice(1, 3);
 	const classFeatureSections = barbarian.content.classFeatureSections.slice(3);
-	const longDescription: readonly InlineContentData[] = normalizeParagraphs(barbarian.page.descriptions.long);
 	const campaignNotes: readonly CampaignNote[] = barbarian.page.campaignNotes ?? [];
 
 	function isParagraphs(content: InlineContentBlock): content is readonly InlineContentData[] {
@@ -62,39 +61,29 @@
 	<article class="wiki-article page-layout__article">
 		<PageHeader
 			description="short"
-			descriptionText={barbarian.page.descriptions.short}
 			showHeaderSections={false}
+			imagePresentation="class-hero"
+			descriptionContent={barbarian.page.descriptions.long}
 		>
-			<nav class="quick-links" aria-label="Quick links">
-				<h2>Quick links</h2>
-				<a href="#class-features"><img src="/icons/white/util/build.svg" alt="" aria-hidden="true" />Features</a>
-				<a href="#progression"><img src="/icons/white/util/trade.svg" alt="" aria-hidden="true" />Progression</a>
-				<a href="#subclasses"><img src="/icons/white/game/party.svg" alt="" aria-hidden="true" />Subclasses</a>
-				<a href="#starting-equipment"><img src="/icons/white/entity/pack.svg" alt="" aria-hidden="true" />Starting Equipment</a>
-			</nav>
+			{#if barbarian.page.sourceMetadata?.length}
+				<div class="source-metadata" aria-label="Source metadata">
+					{#each barbarian.page.sourceMetadata as source}
+						<span class="source-metadata__badge">
+							{#if source.icon}<img src={source.icon} alt="" aria-hidden="true" />{/if}
+							{source.label}: {source.value}
+						</span>
+					{/each}
+				</div>
+			{/if}
 		</PageHeader>
 
 		<section class="class-overview" id="multiclassing" aria-label="Class overview">
-			<div class="class-overview__about barbarian-about" aria-labelledby="about-barbarian-title">
-				<h2 id="about-barbarian-title">About the Barbarian</h2>
-				{#each longDescription as paragraph}
-					<p><InlineContent content={paragraph} /></p>
-				{/each}
-				{#if barbarian.page.sourceMetadata?.length}
-					<div class="source-metadata" aria-label="Source metadata">
-						{#each barbarian.page.sourceMetadata as source}
-							<span class="source-metadata__badge">
-								{#if source.icon}<img src={source.icon} alt="" aria-hidden="true" />{/if}
-								{source.label}: {source.value}
-							</span>
-						{/each}
-					</div>
-				{/if}
+			<div class="class-overview__resources">
 				<details class="campaign-notes">
 					<summary>
-						<img src="/icons/white/entity/person.svg" alt="" aria-hidden="true" />
+						<img src="/icons/white/game/campaign.svg" alt="" aria-hidden="true" />
 						<span>Campaign notes &amp; variants</span>
-					<span class="campaign-notes__count">{campaignNotes.length} campaign-specific rules</span>
+						<span class="campaign-notes__count">{campaignNotes.length} campaign-specific rules</span>
 					</summary>
 					{#if campaignNotes.length}
 						{#each campaignNotes as note}
@@ -109,6 +98,15 @@
 						<p>No campaign-specific rules</p>
 					{/if}
 				</details>
+
+			<nav class="quick-links" aria-label="Quick links">
+				<h2>Quick links</h2>
+				<a href="#class-features" style="--quick-link-icon: url('/icons/white/util/build.svg');"><img src="/icons/white/util/build.svg" alt="" aria-hidden="true" />Features</a>
+				<a href="#progression" style="--quick-link-icon: url('/icons/white/util/trade.svg');"><img src="/icons/white/util/trade.svg" alt="" aria-hidden="true" />Progression</a>
+				<a href="#subclasses" style="--quick-link-icon: url('/icons/white/game/party.svg');"><img src="/icons/white/game/party.svg" alt="" aria-hidden="true" />Subclasses</a>
+				<a href="#starting-equipment" style="--quick-link-icon: url('/icons/white/entity/pack.svg');"><img src="/icons/white/entity/pack.svg" alt="" aria-hidden="true" />Starting Equipment</a>
+			</nav>
+
 			</div>
 			<aside class="class-overview__information class-information">
 				<h2>Class Information</h2>

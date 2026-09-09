@@ -44,11 +44,22 @@
 		description = 'long',
 		showHeaderSections = true,
 		descriptionText,
+		descriptionContent,
+		imagePresentation = 'default',
 		children
-	}: { description?: 'short' | 'long'; showHeaderSections?: boolean; descriptionText?: string; children?: Snippet } = $props();
+	}: {
+		description?: 'short' | 'long';
+		showHeaderSections?: boolean;
+		descriptionText?: string;
+		descriptionContent?: InlineContentBlock;
+		imagePresentation?: 'default' | 'class-hero';
+		children?: Snippet;
+	} = $props();
 	let descriptionParagraphs = $derived(
-		descriptionText
-			? getDescriptionParagraphs([{ type: 'text', text: descriptionText }], '')
+		descriptionContent
+			? getDescriptionParagraphs(descriptionContent, '')
+			: descriptionText
+			? getDescriptionParagraphs(descriptionText, '')
 			: description === 'short'
 			? getDescriptionParagraphs(
 					currentPage.data?.descriptions?.short,
@@ -108,6 +119,6 @@
 			{@render children?.()}
 		</div>
 
-		<PageImage presentation={description === 'short' ? 'class-header' : 'default'} />
+		<PageImage presentation={imagePresentation} />
 	</section>
 {/if}

@@ -14,7 +14,7 @@
 		ResponsiveImageData
 	} from '$lib/typescript/data/_index_';
 
-	let { presentation = 'default' }: { presentation?: 'default' | 'class-header' } = $props();
+	let { presentation = 'default' }: { presentation?: 'default' | 'class-hero' } = $props();
 	const currentPage = getCurrentPageContext();
 	let selectedGender = $state<ImageGender | null>(null);
 	let imageDialog = $state<HTMLDialogElement>();
@@ -27,6 +27,7 @@
 	let image = $derived<ResponsiveImageData | undefined>(
 		imageSet?.[displayGender] ?? imageSet?.female ?? imageSet?.male
 	);
+	let imagePosition = $derived(presentation === 'class-hero' ? 'center top' : (image?.position ?? 'center'));
 
 	onMount(() => {
 		if (currentPage.path) {
@@ -55,7 +56,7 @@
 {#if image && imageSet}
 	<figure
 		class="page-image"
-		class:page-image--class-header={presentation === 'class-header'}
+		class:page-image--class-header={presentation === 'class-hero'}
 		class:page-image--pending={selectedGender === null}
 	>
 		<div class="page-image__media">
@@ -64,7 +65,7 @@
 				srcset={`${image.sources.s} 314w, ${image.sources.m} 941w, ${image.sources.l} 1254w`}
 				sizes="(max-width: 800px) calc(100vw - 40px), min(38vw, 620px)"
 				alt={image.alt}
-				style={`object-position: ${image.position ?? 'center'}`}
+				style={`object-position: ${imagePosition}`}
 			/>
 
 			<div class="page-image__controls page-image__controls--gender">
@@ -132,7 +133,7 @@
 			<img
 				src={image.sources.l}
 				alt={image.alt}
-				style={`object-position: ${image.position ?? 'center'}`}
+				style={`object-position: ${imagePosition}`}
 			/>
 
 			{#if image.caption}

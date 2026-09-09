@@ -21,6 +21,11 @@
 	.page-header {
 		grid-template-columns: 1fr;
 	}
+
+	.page-image--class-header .page-image__media {
+		height: auto;
+		aspect-ratio: 16 / 9;
+	}
 }
 
 @media (max-width: 900px) {

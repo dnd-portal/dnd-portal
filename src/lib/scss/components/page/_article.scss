@@ -228,8 +228,6 @@
 }
 
 .page-layout--barbarian {
-	.page-layout__article { padding-top: calc(var(--navbar-height, #{sizes.get(navbar, height)}) + #{sizes.get(spacing, md)}); }
-
 	.page-layout__article {
 		max-width: none;
 	}
@@ -257,6 +255,12 @@
 	margin-top: sizes.get(spacing, lg);
 }
 
+.class-overview__resources {
+	display: flex;
+	flex-direction: column;
+	gap: sizes.get(spacing, lg);
+}
+
 .quick-links {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -265,22 +269,71 @@
 	h2 { grid-column: 1 / -1; }
 
 	a {
-	padding: sizes.get(spacing, sm) sizes.get(spacing, md);
+		--quick-link-accent: #{colors.get-dark(theme, primary)};
+		position: relative;
+		overflow: hidden;
+		min-height: 78px;
+		padding: sizes.get(spacing, md) sizes.get(spacing, lg);
 	color: colors.get-dark(text, primary);
-	background: colors.get-dark(background, secondary);
-	border: 1px solid colors.get-dark(border, base);
+	background:
+		linear-gradient(135deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%) 42%, rgb(0 0 0 / 18%)),
+		linear-gradient(135deg, color-mix(in srgb, var(--quick-link-accent) 18%, transparent), transparent 62%),
+		colors.get-dark(background, secondary);
+	border: 1px solid color-mix(in srgb, var(--quick-link-accent) 38%, colors.get-dark(border, base));
 	border-radius: sizes.get(radius, md);
 	display: flex;
 	align-items: center;
-	gap: sizes.get(spacing, sm);
 	text-decoration: none;
 	font-size: 0.92rem;
 	font-weight: 700;
+	box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+	transition: transform sizes.get(transition, fast) ease, border-color sizes.get(transition, fast) ease, background sizes.get(transition, fast) ease;
 	}
 
-	a img { width: 1.05rem; height: 1.05rem; opacity: 1; filter: brightness(0) invert(1); }
+		a img {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
 
-	a:hover, a:focus-visible { color: colors.get-dark(theme, primary); border-color: colors.get-dark(border, interactive); }
+	a::before {
+		content: '';
+		position: absolute;
+		right: 28px;
+		top: 50%;
+		width: 68px;
+		height: 68px;
+		background: var(--quick-link-accent);
+		opacity: 0.3;
+		pointer-events: none;
+		transform: translateY(-50%) rotate(-8deg);
+		transform-origin: center;
+		mask: var(--quick-link-icon) center / contain no-repeat;
+		-webkit-mask: var(--quick-link-icon) center / contain no-repeat;
+		transition: opacity sizes.get(transition, fast) ease, transform sizes.get(transition, fast) ease;
+	}
+
+	a:nth-of-type(1) { --quick-link-accent: #6aaec2; }
+	a:nth-of-type(2) { --quick-link-accent: #75b879; }
+	a:nth-of-type(3) { --quick-link-accent: #a38ac4; }
+	a:nth-of-type(4) { --quick-link-accent: #c2a15f; }
+
+	a:hover, a:focus-visible {
+		color: colors.get-dark(theme, primary);
+		background:
+			linear-gradient(135deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 3%) 42%, rgb(0 0 0 / 12%)),
+			linear-gradient(135deg, color-mix(in srgb, var(--quick-link-accent) 26%, transparent), transparent 64%),
+			colors.get-dark(background, secondary);
+		border-color: color-mix(in srgb, var(--quick-link-accent) 68%, colors.get-dark(border, interactive));
+		transform: translateY(-2px);
+		box-shadow: 0 3px 10px rgb(0 0 0 / 18%);
+	}
+
+	a:focus-visible { outline: 2px solid colors.get-dark(theme, primary); outline-offset: 2px; }
+	a::after { margin-left: auto; color: colors.get-dark(text, tertiary); content: '→'; font-size: 1.1rem; transition: color sizes.get(transition, fast) ease, transform sizes.get(transition, fast) ease; }
+		a:hover::before, a:focus-visible::before { opacity: 0.36; transform: translateY(-50%) rotate(-3deg) scale(1.04); }
+	a:hover::after, a:focus-visible::after { color: colors.get-dark(theme, primary); transform: translateX(2px); }
 }
 
 .class-information {
@@ -313,7 +366,7 @@
 			font-size: 0.82rem;
 			font-weight: 700;
 
-			img { width: 0.95rem; height: 0.95rem; opacity: 1; filter: brightness(0) invert(1); }
+			img { width: 19px; height: 19px; flex: 0 0 19px; opacity: 1; filter: brightness(0) invert(1); }
 		}
 		dd { min-width: 0; color: colors.get-dark(text, secondary); font-size: 0.88rem; line-height: 1.4; }
 		dd .link { text-decoration: none; }
@@ -321,8 +374,6 @@
 }
 
 .class-divider { width: 100%; border: 0; border-top: 1px solid colors.get-dark(border, subtle); }
-
-.barbarian-about { max-width: sizes.get(content, text-max-width); }
 
 .source-metadata {
 	display: flex;
@@ -335,15 +386,15 @@
 	display: inline-flex;
 	align-items: center;
 	gap: sizes.get(spacing, xs);
-	padding: sizes.get(spacing, xs) sizes.get(spacing, sm);
+	padding: sizes.get(spacing, sm) sizes.get(spacing, md);
 	color: colors.get-dark(text, secondary);
 	background: colors.get-dark(background, secondary);
 	border: 1px solid colors.get-dark(border, base);
 	border-radius: sizes.get(radius, pill);
-	font-size: 0.78rem;
+	font-size: 0.82rem;
 	font-weight: 700;
 
-	img { width: 0.9rem; height: 0.9rem; filter: brightness(0) invert(1); }
+	img { width: 1rem; height: 1rem; filter: brightness(0) invert(1); }
 }
 
 .campaign-notes {
@@ -356,8 +407,8 @@
 		display: grid;
 		grid-template-columns: auto minmax(0, 1fr) auto;
 		align-items: center;
-		min-height: 2.15rem;
-		padding: sizes.get(spacing, xs) sizes.get(spacing, md);
+		min-height: 3.5rem;
+		padding: sizes.get(spacing, md) sizes.get(spacing, lg);
 	color: colors.get-dark(text, primary);
 	font-weight: 700;
 	cursor: pointer;
@@ -366,7 +417,7 @@
 
 	summary::-webkit-details-marker { display: none; }
 	summary::after { content: '▾'; grid-column: 3; grid-row: 1; color: colors.get-dark(theme, primary); }
-	summary > img { width: 1rem; height: 1rem; margin-right: sizes.get(spacing, sm); filter: brightness(0) invert(1); }
+	summary > img { width: 21px; height: 21px; flex: 0 0 21px; margin-right: sizes.get(spacing, sm); filter: brightness(0) invert(1); }
 	summary > span:not(.campaign-notes__count) { grid-column: 2; grid-row: 1; min-width: 0; }
 	&__count { grid-column: 2; grid-row: 2; margin: 0; color: colors.get-dark(text, tertiary); font-size: 0.74rem; font-weight: 400; }
 	&__entry, > p { margin: 0 sizes.get(spacing, md) sizes.get(spacing, md); color: colors.get-dark(text, secondary); font-size: 0.9rem; }
