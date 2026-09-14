@@ -20,6 +20,7 @@
 	import Footer from '$lib/svelte/components/page/Footer.svelte';
 	import Navbar from '$lib/svelte/components/page/Navbar.svelte';
 	import Sidebar from '$lib/svelte/components/page/Sidebar.svelte';
+	import Analytics from '$lib/svelte/components/Analytics.svelte';
 
 	const page = buildPage();
 	let currentPage = $derived(resolveCurrentPage(appPage.url.pathname, appBase));
@@ -86,6 +87,7 @@
 </svelte:head>
 
 <div class='layout'>
+	<Analytics />
 	{#if page.navbar}
 		<Navbar {...page.navbar} />
 	{/if}
