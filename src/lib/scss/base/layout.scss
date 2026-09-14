@@ -214,3 +214,9 @@
         flex-direction: column;
     }
 }
+
+@media (min-width: #{sizes.get(breakpoint, navbar) + 1px}) and (max-width: #{sizes.get(breakpoint, sidebar)}) {
+    .layout__body {
+        display: flex;
+    }
+}

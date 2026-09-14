@@ -18,6 +18,7 @@
 	let search = $derived(getData(searchPath));
 	let searchAction = $derived(getSearchAction(search.href));
 	let isNavbarHidden = $state(false);
+	let mobileSidebarOpen = $state(false);
 
 	function getValidUrl(href: string): string {
 		if (!href.startsWith('/')) {
@@ -34,7 +35,17 @@
 	}
 
 	onMount(() => {
+		const handleSidebarState = (event: Event): void => {
+			mobileSidebarOpen = (event as CustomEvent<{ open: boolean }>).detail.open;
+		};
+
+		window.addEventListener('dnd-portal:mobile-sidebar-state', handleSidebarState);
 		let lastScrollY = window.scrollY;
+		const setNavbarHidden = (hidden: boolean): void => {
+			document.body.classList.toggle('navbar-hidden', hidden);
+		};
+
+		setNavbarHidden(false);
 
 		function handleScroll(): void {
 			const currentScrollY = window.scrollY;
@@ -43,8 +54,10 @@
 
 			if (scrollDelta > 6 && pastNavbar) {
 				isNavbarHidden = true;
+				setNavbarHidden(true);
 			} else if (scrollDelta < -4 || currentScrollY <= 0) {
 				isNavbarHidden = false;
+				setNavbarHidden(false);
 			}
 
 			lastScrollY = currentScrollY;
@@ -54,12 +67,28 @@
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener('dnd-portal:mobile-sidebar-state', handleSidebarState);
+			setNavbarHidden(false);
 		};
 	});
+
+	function toggleMobileSidebar(): void {
+		window.dispatchEvent(new CustomEvent('dnd-portal:toggle-mobile-sidebar'));
+	}
 </script>
 
 <header class="navbar" class:navbar--hidden={isNavbarHidden}>
 	<nav class="navbar__inner" aria-label="Primary">
+		<button
+			class="navbar__mobile-toggle"
+			type="button"
+			aria-label={mobileSidebarOpen ? 'Close navigation' : 'Open navigation'}
+			aria-expanded={mobileSidebarOpen}
+			aria-controls="wiki-sidebar"
+			onclick={toggleMobileSidebar}
+		>
+			<span aria-hidden="true"></span>
+		</button>
 		<a
 			class="navbar__brand"
 			href={getValidUrl(logo.href)}

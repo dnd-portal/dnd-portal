@@ -26,7 +26,10 @@
 	const collapseStorageKey = 'dnd-portal-sidebar-collapsed';
 
 	onMount(() => {
-		const desktopQuery = window.matchMedia('(min-width: 801px)');
+		const desktopQuery = window.matchMedia('(min-width: 701px)');
+		const handleNavbarToggle = (): void => {
+			if (!isDesktop) mobileOpen = !mobileOpen;
+		};
 		const updateDesktopState = (event: MediaQueryList | MediaQueryListEvent) => {
 			isDesktop = event.matches;
 
@@ -40,9 +43,11 @@
 		hasLoadedCollapsePreference = true;
 
 		desktopQuery.addEventListener('change', updateDesktopState);
+		window.addEventListener('dnd-portal:toggle-mobile-sidebar', handleNavbarToggle);
 
 		return () => {
 			desktopQuery.removeEventListener('change', updateDesktopState);
+			window.removeEventListener('dnd-portal:toggle-mobile-sidebar', handleNavbarToggle);
 		};
 	});
 
@@ -53,6 +58,7 @@
 
 		const shouldLockPage = !isDesktop && mobileOpen;
 		document.body.classList.toggle('sidebar-mobile-open', shouldLockPage);
+		window.dispatchEvent(new CustomEvent('dnd-portal:mobile-sidebar-state', { detail: { open: mobileOpen } }));
 
 		return () => {
 			document.body.classList.remove('sidebar-mobile-open');
@@ -82,7 +88,9 @@
 	}
 
 	function isCurrent(node: SidebarNode): boolean {
-		return normalizePath(page.url.pathname) === normalizePath(getData(node.path).href);
+		const currentPath = normalizePath(page.url.pathname);
+		const targetPath = normalizePath(getData(node.path).href);
+		return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
 	}
 
 	function hasCurrentDescendant(node: SidebarNode): boolean {
@@ -109,19 +117,15 @@
 		expandedPaths = nextExpandedPaths;
 	}
 
-	function closeMobileSidebar(): void {
-		mobileOpen = false;
-	}
-
 	function handleMobileLinkClick(event: MouseEvent): void {
 		if (!isDesktop && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-			closeMobileSidebar();
+			mobileOpen = false;
 		}
 	}
 
 	function handleKeydown(event: KeyboardEvent): void {
 		if (event.key === 'Escape' && mobileOpen) {
-			closeMobileSidebar();
+			mobileOpen = false;
 		}
 	}
 
@@ -186,27 +190,18 @@
 {/snippet}
 
 <button
-	class="sidebar__mobile-toggle"
-	type="button"
-	aria-expanded={mobileOpen}
-	aria-controls="wiki-sidebar"
-	onclick={() => (mobileOpen = !mobileOpen)}
->
-	Navigation
-</button>
-
-<button
 	class="sidebar__backdrop"
 	class:sidebar__backdrop--visible={mobileOpen}
 	type="button"
 	aria-label="Close navigation"
 	tabindex={mobileOpen ? 0 : -1}
-	onclick={closeMobileSidebar}
+	onclick={() => (mobileOpen = false)}
 ></button>
 
 <div
 	class="sidebar-shell"
 	class:sidebar-shell--collapsed={sidebarHidden}
+	class:sidebar-shell--mobile-open={mobileOpen}
 >
 	<aside
 		id="wiki-sidebar"
@@ -216,18 +211,14 @@
 		aria-hidden={sidebarAriaHidden}
 	>
 		{#if !sidebarHidden}
-			<div class="sidebar__mobile-header">
-				<p class="sidebar__mobile-title">Navigation</p>
-				<button
-					class="sidebar__mobile-close"
-					type="button"
-					aria-label="Close navigation"
-					onclick={closeMobileSidebar}
-				>
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-
+			<button
+				class="sidebar__mobile-close"
+				type="button"
+				aria-label="Close navigation"
+				onclick={() => (mobileOpen = false)}
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
 			<nav class="sidebar__nav">
 				{#each sections as section}
 					<section class="sidebar__section">
@@ -244,13 +235,13 @@
 		{/if}
 	</aside>
 
-	<button
-		class="sidebar-shell__toggle"
+<button
+	class="sidebar-shell__toggle"
 		type="button"
 		aria-controls="wiki-sidebar"
-		aria-expanded={!sidebarHidden}
-		aria-label={sidebarHidden ? 'Open sidebar' : 'Close sidebar'}
-		onclick={toggleSidebarCollapse}
+	aria-expanded={isDesktop ? !sidebarHidden : mobileOpen}
+	aria-label={isDesktop ? (sidebarHidden ? 'Open sidebar' : 'Close sidebar') : (mobileOpen ? 'Close navigation' : 'Open navigation')}
+	onclick={() => (isDesktop ? toggleSidebarCollapse() : (mobileOpen = !mobileOpen))}
 	>
 		<span
 			class="sidebar-shell__toggle-icon"
