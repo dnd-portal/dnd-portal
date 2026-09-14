@@ -234,16 +234,28 @@ body.sidebar-mobile-open {
 	}
 }
 
-@media (max-width: #{sizes.get(breakpoint, sidebar)}) {
+@media (max-width: #{sizes.get(breakpoint, navbar)}) {
 	.sidebar-shell {
-		width: 0;
-		height: 0;
+		width: min(390px, 100%);
+		height: calc(100dvh - var(--mobile-sidebar-top, var(--navbar-height, #{sizes.get(navbar, height)})));
 		flex-basis: 0;
 
-		position: static;
+		position: fixed;
+		top: var(--mobile-sidebar-top, var(--navbar-height, #{sizes.get(navbar, height)}));
+		left: 0;
+		z-index: 1200;
+		overflow: visible;
+		transition: top sizes.get(transition, sidebar) ease;
 
 		&__toggle {
-			display: none;
+			width: var(--sidebar-toggle-width);
+			height: sizes.get(control, lg);
+			position: absolute;
+			top: sizes.get(spacing, sm);
+			left: 100%;
+			z-index: 1300;
+
+			display: inline-flex;
 		}
 	}
 
@@ -276,12 +288,12 @@ body.sidebar-mobile-open {
 
 	.sidebar {
 		width: min(390px, 100vw);
-		height: 100dvh;
+		height: calc(100dvh - var(--mobile-sidebar-top, var(--navbar-height, #{sizes.get(navbar, height)})));
 		padding: 0 12px sizes.get(spacing, xl);
 		box-sizing: border-box;
 
-		position: fixed;
-		inset: 0 auto 0 0;
+		position: absolute;
+		inset: 0;
 		z-index: 1200;
 
 		overflow-y: auto;
@@ -301,6 +313,7 @@ body.sidebar-mobile-open {
 		transition:
 			opacity sizes.get(transition, fast) ease,
 			transform sizes.get(transition, sidebar) ease,
+			top sizes.get(transition, sidebar) ease,
 			visibility sizes.get(transition, fast) ease;
 
 		&--open {
@@ -436,5 +449,81 @@ body.sidebar-mobile-open {
 		.sidebar__backdrop {
 			transition: none;
 		}
+	}
+
+	body.navbar-hidden .sidebar-shell {
+		top: 0;
+		height: 100dvh;
+	}
+
+	body.navbar-hidden .sidebar-shell__toggle {
+		top: 25px;
+	}
+}
+
+@media (max-width: #{sizes.get(breakpoint, navbar)}) {
+	body.sidebar-mobile-open .sidebar-shell {
+		top: 0;
+		height: 100dvh;
+	}
+
+	.sidebar-shell__toggle {
+		display: none;
+	}
+
+	.sidebar__mobile-close {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		margin: 0 0 0 auto;
+		padding: 0;
+		background: colors.get-dark(background, primary);
+		border: 1px solid colors.get-dark(border, subtle);
+		border-radius: sizes.get(radius, sm);
+		color: colors.get-dark(text, primary);
+		font-size: 1.75rem;
+		line-height: 1;
+		cursor: pointer;
+
+		&:hover,
+		&:focus-visible {
+			color: colors.get-dark(text, links, hover);
+			border-color: colors.get-dark(border, interactive);
+			outline: none;
+		}
+	}
+}
+
+body.navbar-hidden .sidebar-shell {
+	top: 0;
+	height: 100dvh;
+}
+
+@media (min-width: #{sizes.get(breakpoint, navbar) + 1px}) and (max-width: #{sizes.get(breakpoint, sidebar)}) {
+	.sidebar {
+		background-color: colors.get-dark(background, primary);
+	}
+
+}
+
+@media (min-width: #{sizes.get(breakpoint, navbar) + 1px}) {
+	.sidebar-shell__toggle {
+		position: fixed;
+		top: calc(var(--navbar-height, #{sizes.get(navbar, height)}) + 25px);
+		left: calc(var(--sidebar-width) - 1px);
+		z-index: 1300;
+	}
+
+	.sidebar-shell--collapsed .sidebar-shell__toggle {
+		left: 0;
+	}
+
+	body.navbar-hidden .sidebar-shell__toggle {
+		top: sizes.get(spacing, sm);
 	}
 }

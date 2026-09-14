@@ -43,6 +43,10 @@
 		gap: 16px;
 	}
 
+	&__mobile-toggle {
+		display: none;
+	}
+
 	&__brand {
 		min-width: 0;
 
@@ -254,11 +258,12 @@
 	.navbar {
 		&__inner {
 			grid-template-columns:
+				auto
 				minmax(0, 1fr)
 				auto;
 			grid-template-areas:
-				'brand actions'
-				'search search';
+				'mobile-toggle brand actions'
+				'search search search';
 
 			gap: 10px;
 			padding: 14px 12px;
@@ -266,6 +271,45 @@
 
 		&__brand {
 			grid-area: brand;
+			justify-self: center;
+		}
+
+		&__mobile-toggle {
+			width: 44px;
+			height: 44px;
+			grid-area: mobile-toggle;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			background: transparent;
+			border: 1px solid colors.get-dark(border, base);
+			border-radius: sizes.get(radius, sm);
+			color: colors.get-dark(text, primary);
+			cursor: pointer;
+
+			span,
+			span::before,
+			span::after {
+				width: 20px;
+				height: 2px;
+				display: block;
+				background: currentColor;
+				content: '';
+			}
+
+			span { position: relative; }
+			span::before,
+			span::after { position: absolute; left: 0; }
+			span::before { top: -6px; }
+			span::after { top: 6px; }
+
+			&:hover,
+			&:focus-visible {
+				color: colors.get-dark(text, links, hover);
+				border-color: colors.get-dark(border, interactive);
+				outline: none;
+			}
 		}
 
 		&__brand-img {
