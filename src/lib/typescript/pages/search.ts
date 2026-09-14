@@ -148,6 +148,39 @@ function tokenize(query: string): readonly string[] {
 		.filter((token) => token.length >= 2);
 }
 
+function editDistance(left: string, right: string): number {
+	const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+
+	for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+		let diagonal = previous[0];
+		previous[0] = leftIndex;
+
+		for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+			const current = previous[rightIndex];
+			previous[rightIndex] = Math.min(
+				previous[rightIndex] + 1,
+				previous[rightIndex - 1] + 1,
+				diagonal + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1)
+			);
+			diagonal = current;
+		}
+	}
+
+	return previous[right.length];
+}
+
+function fuzzyPathScore(query: string, entry: SearchEntry): number {
+	const queryTokens = tokenize(query);
+	const candidateTokens = tokenize(`${entry.title} ${entry.href}`);
+
+	return queryTokens.reduce((score, queryToken) => {
+		const closest = Math.min(...candidateTokens.map((candidate) => editDistance(queryToken, candidate)));
+		const threshold = Math.max(1, Math.floor(queryToken.length / 4));
+
+		return closest <= threshold ? score + (threshold - closest + 1) * 10 : score;
+	}, 0);
+}
+
 function getCategory(path: string, page: PageData): Exclude<SearchCategory, 'all'> {
 	if (path.includes('.subclasses.')) {
 		return 'subclasses';
@@ -507,6 +540,17 @@ export function searchWiki(
 
 			return left.title.localeCompare(right.title);
 		});
+}
+
+export function suggestWiki(query: string, limit = 5): readonly SearchResult[] {
+	const exactResults = searchWiki(query);
+	if (exactResults.length) return exactResults.slice(0, limit);
+
+	return searchIndex
+		.map((entry) => ({ ...entry, score: fuzzyPathScore(query, entry), matchedFields: [] as readonly SearchSourceField[] }))
+		.filter((entry) => entry.score > 0)
+		.sort((left, right) => right.score - left.score || left.title.localeCompare(right.title))
+		.slice(0, limit);
 }
 
 export const searchCategories = [

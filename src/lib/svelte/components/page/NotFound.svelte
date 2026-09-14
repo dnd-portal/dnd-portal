@@ -6,7 +6,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
-	import { searchWiki } from '$lib/typescript/pages/search';
+	import { suggestWiki } from '$lib/typescript/pages/search';
 
 	let { analyticsPathname }: { analyticsPathname?: string } = $props();
 
@@ -25,7 +25,7 @@
 
 	let query = $derived(getSearchQuery(page.url.pathname));
 	let searchHref = $derived(getInternalHref(`/search/?q=${encodeURIComponent(query)}`));
-	let suggestions = $derived(query ? searchWiki(query).slice(0, 5) : []);
+	let suggestions = $derived(query ? suggestWiki(query) : []);
 	let analyticsTitle = $derived(
 		analyticsPathname ? `404: ${analyticsPathname} - D&D Portal Wiki` : 'Page Not Found - D&D Portal Wiki'
 	);
