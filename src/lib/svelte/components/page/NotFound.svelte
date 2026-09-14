@@ -8,6 +8,8 @@
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
 	import { searchWiki } from '$lib/typescript/pages/search';
 
+	let { analyticsPathname }: { analyticsPathname?: string } = $props();
+
 	function getSearchQuery(pathname: string): string {
 		return pathname
 			.split('/')
@@ -24,10 +26,13 @@
 	let query = $derived(getSearchQuery(page.url.pathname));
 	let searchHref = $derived(getInternalHref(`/search/?q=${encodeURIComponent(query)}`));
 	let suggestions = $derived(query ? searchWiki(query).slice(0, 5) : []);
+	let analyticsTitle = $derived(
+		analyticsPathname ? `404: ${analyticsPathname} - D&D Portal Wiki` : 'Page Not Found - D&D Portal Wiki'
+	);
 </script>
 
 <svelte:head>
-	<title>Page Not Found - D&D Portal Wiki</title>
+	<title>{analyticsTitle}</title>
 	<meta name="robots" content="noindex, follow" />
 </svelte:head>
 
