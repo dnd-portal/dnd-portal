@@ -65,17 +65,7 @@
 			descriptionText={barbarian.page.descriptions.short}
 			showHeaderSections={false}
 		>
-			<nav class="quick-links" aria-label="Quick links">
-				<h2>Quick links</h2>
-				<a href="#class-features"><img src="/icons/white/util/build.svg" alt="" aria-hidden="true" />Features</a>
-				<a href="#progression"><img src="/icons/white/util/trade.svg" alt="" aria-hidden="true" />Progression</a>
-				<a href="#subclasses"><img src="/icons/white/game/party.svg" alt="" aria-hidden="true" />Subclasses</a>
-				<a href="#starting-equipment"><img src="/icons/white/entity/pack.svg" alt="" aria-hidden="true" />Starting Equipment</a>
-			</nav>
-		</PageHeader>
-
-		<section class="class-overview" id="multiclassing" aria-label="Class overview">
-			<div class="class-overview__about barbarian-about" aria-labelledby="about-barbarian-title">
+			<section class="class-header-about barbarian-about" aria-labelledby="about-barbarian-title">
 				<h2 id="about-barbarian-title">About the Barbarian</h2>
 				{#each longDescription as paragraph}
 					<p><InlineContent content={paragraph} /></p>
@@ -94,7 +84,7 @@
 					<summary>
 						<img src="/icons/white/entity/person.svg" alt="" aria-hidden="true" />
 						<span>Campaign notes &amp; variants</span>
-					<span class="campaign-notes__count">{campaignNotes.length} campaign-specific rules</span>
+						<span class="campaign-notes__count">{campaignNotes.length} campaign-specific rules</span>
 					</summary>
 					{#if campaignNotes.length}
 						{#each campaignNotes as note}
@@ -109,7 +99,18 @@
 						<p>No campaign-specific rules</p>
 					{/if}
 				</details>
-			</div>
+			</section>
+
+			<nav class="quick-links" aria-label="Quick links">
+				<h2>Quick links</h2>
+				<a href="#class-features"><img src="/icons/white/util/build.svg" alt="" aria-hidden="true" />Features</a>
+				<a href="#progression"><img src="/icons/white/util/trade.svg" alt="" aria-hidden="true" />Progression</a>
+				<a href="#subclasses"><img src="/icons/white/game/party.svg" alt="" aria-hidden="true" />Subclasses</a>
+				<a href="#starting-equipment"><img src="/icons/white/entity/pack.svg" alt="" aria-hidden="true" />Starting Equipment</a>
+			</nav>
+		</PageHeader>
+
+		<section class="class-overview" id="multiclassing" aria-label="Class overview">
 			<aside class="class-overview__information class-information">
 				<h2>Class Information</h2>
 				<dl class="class-information__list">
