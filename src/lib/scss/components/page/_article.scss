@@ -257,6 +257,10 @@
 	margin-top: sizes.get(spacing, lg);
 }
 
+.page-layout--barbarian .class-overview {
+	grid-template-columns: minmax(0, 1fr);
+}
+
 .quick-links {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -323,6 +327,24 @@
 .class-divider { width: 100%; border: 0; border-top: 1px solid colors.get-dark(border, subtle); }
 
 .barbarian-about { max-width: sizes.get(content, text-max-width); }
+
+.class-header-about {
+	margin-top: sizes.get(spacing, xl);
+
+	h2 {
+		margin-bottom: sizes.get(spacing, sm);
+		color: colors.get-dark(text, headings);
+		font-size: 1.2rem;
+		line-height: 1.2;
+	}
+
+	p {
+		color: colors.get-dark(text, secondary);
+		line-height: sizes.get(typography, body-line-height);
+	}
+
+	p + p { margin-top: sizes.get(spacing, lg); }
+}
 
 .source-metadata {
 	display: flex;
