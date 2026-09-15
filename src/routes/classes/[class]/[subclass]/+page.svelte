@@ -12,6 +12,8 @@
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
 	import TableOfContents from '$lib/svelte/components/page/TableOfContents.svelte';
+	import EditionSelector from '$lib/svelte/components/page/EditionSelector.svelte';
+	import { editions } from '$lib/typescript/data/internals/editions';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getFaqItems } from '$lib/typescript/pages/faq';
 	import { getFaqGroupBySourcePage } from '$lib/typescript/data/internals/faq';
@@ -23,6 +25,7 @@
 		)
 	);
 	let content = $derived(subclassData?.content);
+	let sourceMetadata = $derived(subclassData?.page?.sourceMetadata ?? []);
 	const currentPage = getCurrentPageContext();
 	let faqGroup = $derived(getFaqGroupBySourcePage(currentPage.path));
 	let faqItems = $derived(faqGroup
@@ -39,7 +42,18 @@
 {#if content}
 	<div class="page-layout">
 		<article class="wiki-article page-layout__article">
-			<PageHeader />
+			<PageHeader>
+				{#snippet headerMeta()}
+					<div class="page-header__metadata">
+						<EditionSelector current="5.5e" options={[{ id: '5.5e', label: `${editions['5.5e'].shortName} - Current`, href: page.url.pathname }]} />
+						<div class="source-metadata" aria-label="Source metadata">
+							{#each sourceMetadata as source}
+								<span class="source-metadata__badge">{#if source.icon}<img src={source.icon} alt="" aria-hidden="true" />{/if}{source.label}: {source.value}</span>
+							{/each}
+						</div>
+					</div>
+				{/snippet}
+			</PageHeader>
 
 			{#each content.featureSections as section}
 				<PageContentSection {section} />

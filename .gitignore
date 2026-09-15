@@ -27,3 +27,4 @@ vite.config.ts.timestamp-*
 
 # Codex-only migration notes, reports, scripts and temporary artifacts
 /codex/
+/.tasks

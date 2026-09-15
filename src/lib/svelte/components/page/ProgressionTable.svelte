@@ -126,6 +126,15 @@
 	function getColumnClassName(column: ProgressionColumn<string>): string {
 		return column.key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 	}
+
+	function getFeatureIcon(feature: ProgressionFeature<string>): string {
+		if (feature.icon) return feature.icon;
+		const label = feature.label.toLowerCase();
+		if (label.includes('movement') || label.includes('pounce')) return '/icons/white/movement/walking.svg';
+		if (label.includes('attack') || label.includes('strike')) return '/icons/white/weapon/strike.svg';
+		if (label.includes('rage')) return '/icons/white/d20test/attacking.svg';
+		return '/icons/white/attribute/bonus.svg';
+	}
 </script>
 
 {#snippet renderColumnLabel(column: ProgressionColumn<string>, label = column.label)}
@@ -136,6 +145,7 @@
 			goto={columnPath}
 			placeholder={label}
 			popup="full"
+			showIcon
 		/>
 	{:else}
 		{label}
@@ -151,9 +161,11 @@
 				goto={featurePath}
 				placeholder={feature.label}
 				popup="full"
+				showIcon
 			/>
 		{:else if canLinkSection(feature.sectionId)}
 			<a class="progression-feature__anchor" href={`#${feature.sectionId}`}>
+				<img src={getFeatureIcon(feature)} alt="" aria-hidden="true" />
 				{feature.label}
 			</a>
 		{:else}

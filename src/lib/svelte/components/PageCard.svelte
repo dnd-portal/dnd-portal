@@ -31,6 +31,7 @@
 		imageGender,
 		imageSize = 's',
 		eyebrow,
+		featureLevels,
 		density = 'regular'
 	}: {
 		page?: PagePath | string;
@@ -39,6 +40,7 @@
 		imageGender?: ImageGender;
 		imageSize?: ImageSize;
 		eyebrow?: string;
+		featureLevels?: readonly number[];
 		density?: CardDensity;
 	} = $props();
 
@@ -110,6 +112,9 @@
 
 			<h3>{cardTitle}</h3>
 			<p>{cardDescription}</p>
+			{#if featureLevels?.length}
+				<span class="pagecard__levels"><small>Features at levels</small><strong>{featureLevels.join(' • ')}</strong></span>
+			{/if}
 
 			{#if cardTags?.length}
 				<ul>
@@ -144,6 +149,9 @@
 
 			<h3>{cardTitle}</h3>
 			<p>{cardDescription}</p>
+			{#if featureLevels?.length}
+				<span class="pagecard__levels"><small>Features at levels</small><strong>{featureLevels.join(' • ')}</strong></span>
+			{/if}
 
 			{#if cardTags?.length}
 				<ul>

@@ -355,6 +355,10 @@ export const sections = {
         id: 'unarmored-defense',
         title: 'Unarmored Defense'
     },
+    weaponMastery: {
+        id: 'weapon-mastery',
+        title: 'Weapon Mastery'
+    },
     dangerSense: {
         id: 'danger-sense',
         title: 'Danger Sense'
@@ -391,9 +395,9 @@ export const sections = {
         id: 'instinctive-pounce',
         title: 'Instinctive Pounce'
     },
-    brutalCritical: {
-        id: 'brutal-critical',
-        title: 'Brutal Critical'
+    brutalStrike: {
+        id: 'brutal-strike',
+        title: 'Brutal Strike'
     },
     relentlessRage: {
         id: 'relentless-rage',
@@ -451,6 +455,9 @@ export const coreTraits = {
         },
         {
             label: 'Skills',
+            layout: {
+                featured: true
+            },
             value: [
                 {
                     type: 'text',
@@ -654,39 +661,48 @@ export const primalPathCardGroups = [
         cards: [
             {
                 page: 'internals.classes.barbarian.subclasses.ancestralGuardian',
-                source: `Xanathar's Guide to Everything`
+                source: `Xanathar's Guide to Everything`,
+                featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.battlerager',
-                source: `Sword Coast Adventurer's Guide`
+                source: `Sword Coast Adventurer's Guide`,
+                featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.beast',
-                source: `Tasha's Cauldron of Everything`
+                source: `Tasha's Cauldron of Everything`,
+                featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.berserker',
-                source: `Player's Handbook`
+                source: `Player's Handbook`,
+                featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.giant',
-                source: 'Bigby Presents: Glory of the Giants'
+                source: 'Bigby Presents: Glory of the Giants',
+                featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.stormHerald',
                 source: `Xanathar's Guide to Everything`
+                , featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.totemWarrior',
                 source: `Player's Handbook`
+                , featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.wildMagic',
                 source: `Tasha's Cauldron of Everything`
+                , featureLevels: [3, 6, 10, 14]
             },
             {
                 page: 'internals.classes.barbarian.subclasses.zealot',
                 source: `Xanathar's Guide to Everything`
+                , featureLevels: [3, 6, 10, 14]
             }
         ]
     },
@@ -855,7 +871,7 @@ export const page = createInternalPage({
     sourceMetadata: [
         {
             label: 'Source',
-            value: `Player's Handbook`,
+            value: `Player's Handbook (2024)`,
             icon: '/icons/white/game/source-book.svg'
         },
         {
@@ -908,6 +924,7 @@ tableOfContents: [
         children: [
             sections.rage,
             sections.unarmoredDefense,
+            sections.weaponMastery,
             sections.dangerSense,
             sections.recklessAttack,
             sections.primalPath,
@@ -917,7 +934,7 @@ tableOfContents: [
             sections.fastMovement,
             sections.feralInstinct,
             sections.instinctivePounce,
-            sections.brutalCritical,
+            sections.brutalStrike,
             sections.relentlessRage,
             sections.persistentRage,
             sections.indomitableMight,

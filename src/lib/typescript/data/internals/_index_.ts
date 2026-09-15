@@ -12,6 +12,8 @@ import { community } from './community/_index_';
 import { project } from './project';
 import { legal } from './legal';
 import { faq } from './faq';
+export { editions } from './editions';
+export type { EditionId } from './editions';
 
 export const internals = {
 	website,

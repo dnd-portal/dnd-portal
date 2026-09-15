@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import { getBaseClassSlug } from '$lib/typescript/data/internals/classes/_index_';
 	import { onMount } from 'svelte';
 	import {
 		getSidebarLabel,
@@ -90,7 +91,27 @@
 	function isCurrent(node: SidebarNode): boolean {
 		const currentPath = normalizePath(page.url.pathname);
 		const targetPath = normalizePath(getData(node.path).href);
-		return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
+		if (currentPath === targetPath) return true;
+
+		const currentClassSlug = getBaseClassSlug(currentPath);
+		const targetClassSlug = getBaseClassSlug(targetPath);
+		const targetIsClassRoot = /^\/classes\/[^/]+\/?$/.test(targetPath);
+
+		if (targetIsClassRoot) {
+			const currentIsClassRoot = /^\/classes\/[^/]+\/?$/.test(currentPath);
+			return Boolean(
+				currentIsClassRoot &&
+				currentClassSlug &&
+				targetClassSlug &&
+				currentClassSlug === targetClassSlug
+			);
+		}
+
+		if (targetPath === '/' || targetPath === '/classes') {
+			return false;
+		}
+
+		return currentPath.startsWith(`${targetPath}/`);
 	}
 
 	function hasCurrentDescendant(node: SidebarNode): boolean {

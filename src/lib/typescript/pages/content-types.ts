@@ -27,8 +27,9 @@ export type InlineContentParagraphs = readonly InlineContent[];
 export type InlineContentBlock = InlineContent | InlineContentParagraphs;
 
 export type PageSection = {
-	readonly id: string;
-	readonly title: string;
+		readonly id: string;
+		readonly title: string;
+		readonly icon?: string;
 	readonly subtitle?: string;
 	readonly subtitleContent?: InlineContent;
 };
@@ -42,21 +43,26 @@ export type HeaderContentSection = PageSection & {
 };
 
 export type PageContentField = {
-	readonly label: string;
-	readonly content?: InlineContent;
-	readonly items?: readonly InlineContent[];
+		readonly label: string;
+		readonly content?: InlineContent;
+		readonly items?: readonly InlineContent[];
+		readonly layout?: {
+			readonly featured?: boolean;
+		};
 };
 
 export type PageContentCard =
 	| {
 			readonly page: string;
 			readonly source: string;
+			readonly featureLevels?: readonly number[];
 	  }
 	| {
 			readonly title: string;
 			readonly source: string;
 			readonly description: string;
 			readonly tags?: readonly string[];
+			readonly featureLevels?: readonly number[];
 	  };
 
 export type PageContentFallbackCard = {
@@ -264,9 +270,12 @@ export type PageContentSection = PageSection & {
 };
 
 export type TraitTableRow = {
-	readonly label: string;
-	readonly labelContent?: InlineContent;
-	readonly value: InlineContent;
+		readonly label: string;
+		readonly labelContent?: InlineContent;
+		readonly value: InlineContent;
+		readonly layout?: {
+			readonly featured?: boolean;
+		};
 };
 
 export type TraitTableColumnLabels = {
@@ -291,7 +300,8 @@ export type ProgressionValue = string | number;
 export type ProgressionColumnFormat = 'plain' | 'ordinal' | 'signed';
 
 export type ProgressionFeature<Path extends string = string> = {
-	readonly label: string;
+		readonly label: string;
+		readonly icon?: string;
 	readonly path?: Path;
 	readonly sectionId?: string;
 	readonly optional?: boolean;

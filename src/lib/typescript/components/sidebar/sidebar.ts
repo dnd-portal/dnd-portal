@@ -38,6 +38,10 @@ const sidebarSectionConfig = [
 		]
 	},
 	{
+		title: 'Tools',
+		roots: ['internals.utility.myCharacter']
+	},
+	{
 		title: 'Community',
 		roots: [
 			'internals.community.discord.page',

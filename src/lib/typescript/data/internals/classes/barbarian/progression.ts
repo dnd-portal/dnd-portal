@@ -152,8 +152,8 @@ export const progression = {
             proficiencyBonus: 4,
             features: [
                 {
-                    label: 'Brutal Critical (1 die)',
-                    sectionId: page.sections.brutalCritical.id
+                    label: 'Brutal Strike',
+                    sectionId: page.sections.brutalStrike.id
                 }
             ],
             values: {
@@ -207,8 +207,8 @@ export const progression = {
             proficiencyBonus: 5,
             features: [
                 {
-                    label: 'Brutal Critical (2 dice)',
-                    sectionId: page.sections.brutalCritical.id
+                    label: 'Improved Brutal Strike',
+                    sectionId: page.sections.brutalStrike.id
                 }
             ],
             values: {
@@ -255,8 +255,8 @@ export const progression = {
             proficiencyBonus: 6,
             features: [
                 {
-                    label: 'Brutal Critical (3 dice)',
-                    sectionId: page.sections.brutalCritical.id
+                    label: 'Improved Brutal Strike',
+                    sectionId: page.sections.brutalStrike.id
                 }
             ],
             values: {

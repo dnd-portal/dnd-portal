@@ -82,11 +82,23 @@
 		/>
 	{:else if block.type === 'card-grid'}
 		{#each block.groups as group}
+			{@const isArchived = group.title.toLowerCase().includes('archived')}
+			{#if isArchived}
+			<details class="content-section__card-group content-section__card-group--archived">
+				<summary><span class="content-section__card-group-icon" aria-hidden="true"><img src="/icons/white/game/source-book.svg" alt="" /></span><span>{group.title} ({group.cards.length})</span><span aria-hidden="true">⌄</span></summary>
+				<div class="wiki-article__image-cards">
+					{#each group.cards as card}
+						{#if 'page' in card}<PageCard page={card.page} variant="image" eyebrow={card.source} featureLevels={card.featureLevels} />{:else}<PageCard variant="image" featureLevels={card.featureLevels} fallback={{ title: card.title, source: card.source, description: card.description, tags: card.tags }} />{/if}
+					{/each}
+				</div>
+			</details>
+			{:else}
 			<section
-				class="content-section__card-group"
+				class="content-section__card-group content-section__card-group--official"
 				aria-labelledby={`${section.id}-${group.title.toLowerCase().replaceAll(' ', '-')}-title`}
 			>
 				<h3 id={`${section.id}-${group.title.toLowerCase().replaceAll(' ', '-')}-title`}>
+					<span class="content-section__card-group-icon" aria-hidden="true"><img src="/icons/white/game/party.svg" alt="" /></span>
 					{group.title}
 				</h3>
 
@@ -97,6 +109,7 @@
 								page={card.page}
 								variant="image"
 								eyebrow={card.source}
+								featureLevels={card.featureLevels}
 							/>
 						{:else}
 							<PageCard
@@ -105,13 +118,15 @@
 									title: card.title,
 									source: card.source,
 									description: card.description,
-									tags: card.tags
+									 tags: card.tags
 								}}
+								featureLevels={card.featureLevels}
 							/>
 						{/if}
 					{/each}
 				</div>
 			</section>
+			{/if}
 		{/each}
 	{:else if block.type === 'formula'}
 		<p class="content-section__formula">

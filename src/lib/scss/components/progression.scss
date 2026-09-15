@@ -171,10 +171,19 @@
 	min-width: 0;
 
 	&__anchor {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
 		color: colors.get-dark(text, links, base);
 		font-weight: 700;
 		text-decoration: underline;
 		text-underline-offset: 0.18em;
+
+		img {
+			width: 0.85rem;
+			height: 0.85rem;
+			filter: brightness(0) invert(1);
+		}
 
 		&:hover,
 		&:focus-visible {
