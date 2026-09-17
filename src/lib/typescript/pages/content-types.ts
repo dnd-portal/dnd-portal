@@ -27,8 +27,9 @@ export type InlineContentParagraphs = readonly InlineContent[];
 export type InlineContentBlock = InlineContent | InlineContentParagraphs;
 
 export type PageSection = {
-	readonly id: string;
-	readonly title: string;
+		readonly id: string;
+		readonly title: string;
+		readonly icon?: string;
 	readonly subtitle?: string;
 	readonly subtitleContent?: InlineContent;
 };
@@ -42,21 +43,26 @@ export type HeaderContentSection = PageSection & {
 };
 
 export type PageContentField = {
-	readonly label: string;
-	readonly content?: InlineContent;
-	readonly items?: readonly InlineContent[];
+		readonly label: string;
+		readonly content?: InlineContent;
+		readonly items?: readonly InlineContent[];
+		readonly layout?: {
+			readonly width?: 'normal' | 'wide';
+		};
 };
 
 export type PageContentCard =
 	| {
 			readonly page: string;
 			readonly source: string;
+			readonly featureLevels?: readonly number[];
 	  }
 	| {
 			readonly title: string;
 			readonly source: string;
 			readonly description: string;
 			readonly tags?: readonly string[];
+			readonly featureLevels?: readonly number[];
 	  };
 
 export type PageContentFallbackCard = {
@@ -203,6 +209,10 @@ export type PageContentBlock =
 			readonly items: readonly InlineContent[];
 	  }
 	| {
+			readonly type: 'ordered-list';
+			readonly items: readonly InlineContent[];
+	  }
+	| {
 			readonly type: 'field-list';
 			readonly items: readonly PageContentField[];
 	  }
@@ -210,8 +220,8 @@ export type PageContentBlock =
 			readonly type: 'table';
 			readonly caption: string;
 			readonly showCaption?: boolean;
-			readonly columns: TraitTableColumnLabels;
-			readonly rows: readonly TraitTableRow[];
+			readonly columns: TraitTableColumnLabels | readonly PageContentTableColumn[];
+			readonly rows: readonly TraitTableRow[] | readonly PageContentTableRow[];
 	  }
 	| {
 			readonly type: 'card-grid';
@@ -219,6 +229,11 @@ export type PageContentBlock =
 	  }
 	| {
 			readonly type: 'formula';
+			readonly content: InlineContent;
+	  }
+	| {
+			readonly type: 'callout';
+			readonly title?: string;
 			readonly content: InlineContent;
 	  }
 	| {
@@ -264,15 +279,25 @@ export type PageContentSection = PageSection & {
 };
 
 export type TraitTableRow = {
-	readonly label: string;
-	readonly labelContent?: InlineContent;
-	readonly value: InlineContent;
+		readonly label: string;
+		readonly labelContent?: InlineContent;
+		readonly value: InlineContent;
+		readonly layout?: {
+			readonly width?: 'normal' | 'wide';
+		};
 };
 
 export type TraitTableColumnLabels = {
 	readonly label: string;
 	readonly value: string;
 };
+
+export type PageContentTableColumn = {
+	readonly key: string;
+	readonly label: string;
+};
+
+export type PageContentTableRow = Readonly<Record<string, InlineContent>>;
 
 export type EquipmentChoiceGroup = {
 	readonly label: string;
@@ -291,7 +316,8 @@ export type ProgressionValue = string | number;
 export type ProgressionColumnFormat = 'plain' | 'ordinal' | 'signed';
 
 export type ProgressionFeature<Path extends string = string> = {
-	readonly label: string;
+		readonly label: string;
+		readonly icon?: string;
 	readonly path?: Path;
 	readonly sectionId?: string;
 	readonly optional?: boolean;

@@ -10,6 +10,38 @@ src/lib/typescript/data/
 
 Central source for internal pages, external links, social links, class data, spell data, rules pages, project pages, legal pages, route metadata, images, and tags.
 
+Canonical content data is the single source of truth. It contains the complete
+page bodies and rules data used by route rendering, prerendering, static
+generation, search generation, and other build-time/content consumers.
+
+Shared browser UI must not import the complete canonical internal registry.
+Instead, the build-time generator
+`scripts/generate-runtime-metadata.mjs` derives a lightweight projection into:
+
+```text
+src/lib/typescript/data/runtime/generated.ts
+src/lib/typescript/data/runtime/index.ts
+```
+
+The resulting flow is:
+
+```text
+canonical data
+    -> runtime metadata generator
+    -> lightweight runtime metadata
+    -> Link / Breadcrumbs / Sidebar / currentPage
+```
+
+Runtime metadata contains only the fields currently needed by browser-side
+navigation and link UI: canonical data paths, hrefs, titles/labels, short
+descriptions and subtitles, icons/images used by the UI, popup metadata, and
+navigation relationships. It deliberately excludes full spell and equipment
+rules, FAQ bodies, class features, NPC stat blocks, structured Homebrew
+content, and other page-body data.
+
+Runtime metadata is generated automatically by the normal `dev`, `check`,
+`test`, and `build` scripts. The generated file is not manually maintained.
+
 ```text
 src/lib/typescript/pages/
 ```
@@ -60,6 +92,11 @@ Inline text that contains links should use the existing inline-content model ins
 
 Internal Wiki links should use central data paths and the existing Link or InlineContent components.
 
+The canonical data remains the source of truth for those paths. Browser-side
+resolution in `Link.svelte` uses the generated runtime metadata projection,
+which preserves hrefs, labels, icons, popup content, and accessibility without
+pulling the full canonical registry into shared client code.
+
 Avoid:
 
 - hard-coded internal hrefs
@@ -68,6 +105,36 @@ Avoid:
 - invented routes for pages that do not exist
 
 External links are also represented centrally where possible.
+
+`Breadcrumbs.svelte`, `Sidebar.svelte`, and `src/lib/typescript/pages/currentPage.ts`
+use the same lightweight runtime metadata for labels, hierarchy, current-page
+resolution, and navigation. Full content data remains available to the routes
+that need it.
+
+## Homebrew architecture
+
+Homebrew collections are data-driven and use generic routes:
+
+```text
+/homebrew/
+/homebrew/[collection]/
+/homebrew/[collection]/[category]/
+/homebrew/[collection]/[category]/[item]/
+```
+
+Eldor is currently the first collection. Collection metadata and available
+categories live in the central Homebrew data system; adding another collection
+should not require a collection-specific renderer or item route folder.
+
+`src/routes/homebrew/[collection]/+layout.svelte` renders
+`HomebrewCollectionInfo.svelte` for pages inside a collection. Setting,
+creator, copyright, and collection-level ownership information therefore stays
+in the collection layout rather than being duplicated in item content.
+
+Homebrew magic items reuse the generic `EquipmentItem` and `EquipmentDetail`
+infrastructure. Structured item rules use the generic PageContentSection and
+content-block model. Individual item pages are resolved by the generic
+collection/category/item route.
 
 ## FAQ architecture
 
@@ -127,6 +194,7 @@ There are no Markdown-derived FAQ groups in production.
 
 ```bash
 pnpm check
+pnpm test
 pnpm build
 pnpm audit:prelive:crawl
 ```
@@ -145,6 +213,10 @@ Current examples include:
 - level-specific spellcasting pages
 - central Wiki page routes
 - class and subclass routes
+
+The generic class/subclass route provides explicit static entries for subclass
+pages derived from canonical class data when SvelteKit cannot infer the dynamic
+paths itself.
 
 ## SEO
 
@@ -172,6 +244,7 @@ Use:
 
 ```bash
 pnpm check
+pnpm test
 pnpm build
 pnpm audit:prelive:crawl
 ```

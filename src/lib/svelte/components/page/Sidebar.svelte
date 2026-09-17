@@ -5,13 +5,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/state';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import { onMount } from 'svelte';
 	import {
 		getSidebarLabel,
 		type SidebarDataType,
 		type SidebarNode
 	} from '$lib/typescript/components/_index_';
-	import { getData } from '$lib/typescript/data/_index_';
 
 	import Link from '$lib/svelte/components/Link.svelte';
 
@@ -89,8 +89,36 @@
 
 	function isCurrent(node: SidebarNode): boolean {
 		const currentPath = normalizePath(page.url.pathname);
-		const targetPath = normalizePath(getData(node.path).href);
-		return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
+		const targetPath = normalizePath(getRuntimeData(node.path).href);
+		if (currentPath === targetPath) return true;
+
+		const currentClassSlug = getBaseClassSlug(currentPath);
+		const targetClassSlug = getBaseClassSlug(targetPath);
+		const targetIsClassRoot = /^\/classes\/[^/]+\/?$/.test(targetPath);
+
+		if (targetIsClassRoot) {
+			const currentIsClassRoot = /^\/classes\/[^/]+\/?$/.test(currentPath);
+			return Boolean(
+				currentIsClassRoot &&
+				currentClassSlug &&
+				targetClassSlug &&
+				currentClassSlug === targetClassSlug
+			);
+		}
+
+		if (targetPath === '/' || targetPath === '/classes') {
+			return false;
+		}
+
+		return false;
+	}
+
+	function getBaseClassSlug(pathname: string): string | null {
+		const match = pathname.match(/^\/classes\/([^/]+)(?:\/[^/]+)?\/?$/);
+
+		if (!match) return null;
+
+		return match[1].replace(/-(?:3-5e|5e|4e|3e)$/, '');
 	}
 
 	function hasCurrentDescendant(node: SidebarNode): boolean {

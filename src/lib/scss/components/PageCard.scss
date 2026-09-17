@@ -278,8 +278,11 @@
 		}
 
 		h3 {
-			font-size: 1.08rem;
+			font-size: 2rem;
 		}
+
+		.pagecard__levels { display: flex; flex-direction: column; gap: 3px; margin-top: auto; color: colors.get-dark(text, tertiary); font-size: 0.76rem; text-transform: uppercase; }
+		.pagecard__levels strong { color: colors.get-dark(text, secondary); font-size: 0.78rem; letter-spacing: 0.04em; }
 
 		p {
 			font-size: 0.9rem;

@@ -24,6 +24,7 @@
 			<Link
 				goto={path}
 				placeholder={node.label ?? getPageLabel(path)}
+				showIcon
 				popup="full"
 			/>
 		{:else}

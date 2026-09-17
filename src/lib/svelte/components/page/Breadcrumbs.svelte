@@ -11,7 +11,7 @@
 		getBreadcrumbItems,
 		homePagePath
 	} from '$lib/typescript/pages/currentPage';
-	import { getData } from '$lib/typescript/data/_index_';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 
 	import Link from '$lib/svelte/components/Link.svelte';
@@ -34,7 +34,7 @@
 			return;
 		}
 
-		goto(getInternalUrl(getData(backPath).href));
+		goto(getInternalUrl(getRuntimeData(backPath).href));
 	}
 </script>
 

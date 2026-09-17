@@ -3,10 +3,8 @@
 </script>
 
 <script lang="ts">
-	import {
-		getData,
-		type LinkPath
-	} from '$lib/typescript/data/_index_';
+	import type { LinkPath } from '$lib/typescript/data/_index_';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import { base as site } from '$lib/typescript/data/core/_index_';
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
 
@@ -30,7 +28,12 @@
 		onNavigate?: (event: MouseEvent) => void;
 	} = $props();
 
-	let link = $derived(getData(goto));
+	let link = $derived(getRuntimeData(goto));
+	let iconSize = $derived(
+		'navigation' in link && link.navigation && typeof link.navigation === 'object'
+			? (link.navigation as { iconSize?: 'default' | 'large' }).iconSize
+			: undefined
+	);
 	let popupVisible = $state(false);
 	let hoverTimer: ReturnType<typeof setTimeout> | undefined;
 	let trigger = $state<HTMLElement>();
@@ -204,6 +207,7 @@
 		{#if showIcon}
 			<span
 				class="link-img"
+				class:link-img--large={iconSize === 'large'}
 				style={`--link-icon: url("${link.img.href}")`}
 				aria-hidden="true"
 			></span>

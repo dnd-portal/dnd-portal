@@ -8,7 +8,7 @@ import {
 } from './classes/pugilist/_index_';
 import type { InlineContent } from '$lib/typescript/pages/content-types';
 
-type EquipmentImage = {
+export type EquipmentImage = {
 	readonly href: string;
 	readonly alt: string;
 };
@@ -18,6 +18,11 @@ export type EquipmentStatistic = {
 	readonly value: InlineContent;
 };
 
+export type EquipmentAttunement = boolean | {
+	readonly required: true;
+	readonly restriction?: InlineContent;
+};
+
 export type EquipmentItem = {
 	readonly name: string;
 	readonly slug: string;
@@ -25,7 +30,7 @@ export type EquipmentItem = {
 	readonly category: string;
 	readonly source: string;
 	readonly rarity: string;
-	readonly attunement: boolean;
+	readonly attunement: EquipmentAttunement;
 	readonly cost?: string;
 	readonly weight?: string;
 	readonly damage?: InlineContent;
@@ -34,6 +39,14 @@ export type EquipmentItem = {
 		readonly name: string;
 		readonly description: InlineContent;
 	};
+	readonly activation?: string;
+	readonly requirements?: InlineContent;
+	readonly charges?: {
+		readonly maximum: string;
+		readonly recharge?: string;
+		readonly description?: InlineContent;
+	};
+	readonly notes?: InlineContent;
 	readonly description: InlineContent;
 	readonly statistics?: readonly EquipmentStatistic[];
 	readonly tags: readonly string[];

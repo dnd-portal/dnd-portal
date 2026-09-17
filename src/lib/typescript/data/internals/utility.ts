@@ -66,5 +66,13 @@ export const utility = {
 		subTitle: 'Website preferences',
 		description: `Choose saved browser preferences for class artwork and
 			spell browser display modes.`
+	}),
+
+	myCharacter: createInternalPage({
+		href: current.myCharacter.href,
+		img: current.myCharacter.logos.simple,
+		title: `${website.name.short} - ${current.myCharacter.name.normal}`,
+		subTitle: 'Local character sheet',
+		description: 'Edit a portable D&D character sheet locally in your browser.'
 	})
 } as const;

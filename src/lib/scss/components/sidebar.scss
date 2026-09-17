@@ -244,8 +244,13 @@ body.sidebar-mobile-open {
 		top: var(--mobile-sidebar-top, var(--navbar-height, #{sizes.get(navbar, height)}));
 		left: 0;
 		z-index: 1200;
+		pointer-events: none;
 		overflow: visible;
 		transition: top sizes.get(transition, sidebar) ease;
+
+		&--mobile-open {
+			pointer-events: auto;
+		}
 
 		&__toggle {
 			width: var(--sidebar-toggle-width);
