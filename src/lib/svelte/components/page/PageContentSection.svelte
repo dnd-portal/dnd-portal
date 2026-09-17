@@ -98,11 +98,11 @@
 				showCaption={block.showCaption}
 			/>
 		{/if}
-	
+
 		{:else if block.type === 'card-grid'}
 		{#each block.groups as group}
 			{@const isArchived = group.title.toLowerCase().includes('archived')}
-			
+
 			{#if isArchived}
 			<details class="content-section__card-group content-section__card-group--archived">
 				<summary>
@@ -119,15 +119,15 @@
 						{#if 'page' in card}
 							<PageCard page={card.page} variant="image" eyebrow={card.source} featureLevels={card.featureLevels} />
 						{:else}
-							<PageCard 
-								variant="image" 
-								featureLevels={card.featureLevels} 
-								fallback={{ 
-									title: card.title, 
-									source: card.source, 
-									description: card.description, 
-									tags: card.tags 
-								}} 
+							<PageCard
+								variant="image"
+								featureLevels={card.featureLevels}
+								fallback={{
+									title: card.title,
+									source: card.source,
+									description: card.description,
+									tags: card.tags
+								}}
 							/>
 						{/if}
 					{/each}

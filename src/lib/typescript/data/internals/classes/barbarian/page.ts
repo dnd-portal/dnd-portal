@@ -766,8 +766,8 @@ export function paragraph(content: InlineContent): PageContentBlock {
 }
 
 export function featureSection(
-    id: string, 
-    title: string, 
+    id: string,
+    title: string,
     blocks: readonly PageContentBlock[]
 ): PageContentSection {
     return {
@@ -778,11 +778,11 @@ export function featureSection(
 }
 
 export function createSubclassPage(
-    key: BarbarianSubclassKey, 
-    source: string, 
-    shortDescription: string, 
-    longDescription: readonly InlineContent[], 
-    featureSections: readonly PageContentSection[], 
+    key: BarbarianSubclassKey,
+    source: string,
+    shortDescription: string,
+    longDescription: readonly InlineContent[],
+    featureSections: readonly PageContentSection[],
     images: BarbarianSubclassImages
 ) {
     const subclass = current.subclasses[key];

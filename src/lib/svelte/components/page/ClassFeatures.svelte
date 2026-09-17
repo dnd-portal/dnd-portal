@@ -2,14 +2,14 @@
 	import type { PageContentSection as PageContentSectionData, ProgressionData } from '$lib/typescript/pages/content-types';
 	import PageContentSection from './PageContentSection.svelte';
 
-	let { 
-		overview, 
-		sections, 
-		progression 
-	}: { 
-		overview: PageContentSectionData; 
-		sections: readonly PageContentSectionData[]; 
-		progression: ProgressionData<string> 
+	let {
+		overview,
+		sections,
+		progression
+	}: {
+		overview: PageContentSectionData;
+		sections: readonly PageContentSectionData[];
+		progression: ProgressionData<string>
 	} = $props();
 	let levelBySection = $derived(new Map(progression.rows.flatMap((row) => row.features.filter((feature) => feature.sectionId).map((feature) => [feature.sectionId!, row.level]))));
 	let groups = $derived(
@@ -20,18 +20,18 @@
 	);
 
 	function getFeatureIcon(section: PageContentSectionData): string {
-		if (section.icon) 
+		if (section.icon)
 			return section.icon;
 		const title = section.title.toLowerCase();
-		if (title.includes('rage')) 
+		if (title.includes('rage'))
 			return '/icons/white/d20test/attacking.svg';
-		if (title.includes('armor') || title.includes('defense')) 
+		if (title.includes('armor') || title.includes('defense'))
 			return '/icons/white/attribute/ac.svg';
-		if (title.includes('weapon') || title.includes('attack') || title.includes('strike')) 
+		if (title.includes('weapon') || title.includes('attack') || title.includes('strike'))
 			return '/icons/white/weapon/strike.svg';
-		if (title.includes('movement') || title.includes('pounce')) 
+		if (title.includes('movement') || title.includes('pounce'))
 			return '/icons/white/movement/walking.svg';
-		if (title.includes('sense') || title.includes('instinct')) 
+		if (title.includes('sense') || title.includes('instinct'))
 			return '/icons/white/attribute/vision.svg';
 		return '/icons/white/attribute/bonus.svg';
 	}
@@ -63,10 +63,10 @@
 						<img src={getFeatureIcon(section)} alt="" />
 					</div>
 					<div class="class-feature__content">
-						<PageContentSection 
-							{section} 
-							headingLevel="subsection" 
-							badge={group.level === null ? undefined : `Level ${group.level}`} 
+						<PageContentSection
+							{section}
+							headingLevel="subsection"
+							badge={group.level === null ? undefined : `Level ${group.level}`}
 						/>
 					</div>
 				</article>

@@ -2,10 +2,10 @@
 	import InlineContent from './InlineContent.svelte';
 	import type { InlineContent as InlineContentData } from '$lib/typescript/pages/content-types';
 
-	type Trait = { 
-		label: string | InlineContentData; 
-		value: InlineContentData | string; 
-		items?: readonly InlineContentData[]; 
+	type Trait = {
+		label: string | InlineContentData;
+		value: InlineContentData | string;
+		items?: readonly InlineContentData[];
 		supporting?: string;
 		layout?: unknown
 	};
@@ -18,12 +18,12 @@
 		return typeof layout === 'object' && layout !== null && 'width' in layout && layout.width === 'wide';
 	}
 
-	let { 
-		traits, 
-		icons = {} 
-	}: { 
-		traits: readonly Trait[]; 
-		icons?: Record<string, string> 
+	let {
+		traits,
+		icons = {}
+	}: {
+		traits: readonly Trait[];
+		icons?: Record<string, string>
 	} = $props();
 </script>
 
@@ -31,9 +31,9 @@
 	<article class="class-trait-card" class:class-trait-card--wide={isWide(trait.layout)}>
 		<header class="class-trait-card__header">
 			<span class="class-trait-card__icon">
-				<img 
-					 src={icons[labelText(trait.label)] ?? '/icons/white/entity/book.svg'} 
-					alt="" aria-hidden="true" 
+				<img
+					 src={icons[labelText(trait.label)] ?? '/icons/white/entity/book.svg'}
+					alt="" aria-hidden="true"
 				/>
 			</span>
 			<h3>{#if typeof trait.label === 'string'}{trait.label}{:else}<InlineContent content={trait.label} />{/if}</h3>

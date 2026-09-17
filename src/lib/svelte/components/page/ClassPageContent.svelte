@@ -19,19 +19,19 @@
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getFaqGroup } from '$lib/typescript/data/internals/faq';
 
-	let { 
-		content, 
-		header, 
-		headerMeta 
-	}: { 
-		content: ClassPageContentData; 
-		header?: { 
-			title: string; 
-			subtitle: string; 
-			description: string; 
-			descriptionContent?: InlineContentBlock 
-		}; 
-		headerMeta?: Snippet 
+	let {
+		content,
+		header,
+		headerMeta
+	}: {
+		content: ClassPageContentData;
+		header?: {
+			title: string;
+			subtitle: string;
+			description: string;
+			descriptionContent?: InlineContentBlock
+		};
+		headerMeta?: Snippet
 	} = $props();
 	const currentPage = getCurrentPageContext();
 	let faqGroup = $derived(currentPage.path ? getFaqGroup(currentPage.path.split('.')[2] ?? '') : null);
@@ -72,9 +72,9 @@
 	let coreTraitCards = $derived(
 		content.sections.coreTraits.blocks.flatMap((block) => {
 			if (block.type === 'table' && !Array.isArray(block.columns)) {
-				return block.rows.map((row) => ({ 
-					label: row.label, 
-					value: row.value, 
+				return block.rows.map((row) => ({
+					label: row.label,
+					value: row.value,
 					layout: row.layout && typeof row.layout === 'object' && !Array.isArray(row.layout)
 						? row.layout
 						: undefined
