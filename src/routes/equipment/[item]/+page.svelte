@@ -6,12 +6,15 @@
 	import { page } from '$app/state';
 	import {
 		equipmentItems,
-		getEquipmentTypeBySlug
+		getEquipmentTypeBySlug,
+		getEquipmentTypePathKey
 	} from '$lib/typescript/data/internals/equipment-items';
+	import { getData } from '$lib/typescript/data/_index_';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import type {
 		PageContentSection as PageContentSectionData,
-		PageTableOfContentsSection
+		PageTableOfContentsSection,
+		PagePath
 	} from '$lib/typescript/data/_index_';
 
 	import EquipmentBrowser from '$lib/svelte/components/page/EquipmentBrowser.svelte';
@@ -45,7 +48,15 @@
 
 	const currentPage = getCurrentPageContext();
 	const equipmentType = $derived(getEquipmentTypeBySlug(page.params.item ?? ''));
-	let content = $derived(getEquipmentTypeContent(currentPage.data));
+	let content = $derived(
+		equipmentType
+			? getEquipmentTypeContent(
+					getData(
+						`internals.equipment.${getEquipmentTypePathKey(equipmentType)}` as PagePath
+					)
+				)
+			: null
+	);
 </script>
 
 {#if equipmentType && currentPage.data && content}

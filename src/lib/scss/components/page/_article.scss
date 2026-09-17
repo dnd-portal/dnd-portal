@@ -317,17 +317,17 @@
 
 .class-trait-cards {
 	display: flex;
+	flex-wrap: wrap;
 	gap: sizes.get(spacing, md);
 	align-items: stretch;
-	&__featured { flex: 0 1 16rem; display: flex; min-width: 14rem; }
-	&__normal { flex: 1 1 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: sizes.get(spacing, md); }
-	&__normal .class-trait-card { flex: 0 1 14rem; min-width: 12rem; }
+	& > .class-trait-card { flex: 0 1 15.5rem; min-width: 12rem; max-width: 15.5rem; }
+	& > .class-trait-card--wide { flex-basis: 19rem; max-width: 19rem; }
 }
 
 .class-trait-card {
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	grid-column: var(--trait-grid-column, auto);
 	min-width: 0;
 	min-height: 7.5rem;
 	padding: sizes.get(spacing, lg);
@@ -389,15 +389,14 @@
 @media (max-width: 1100px) {
 	.class-trait-cards {
 		flex-wrap: wrap;
-		&__featured, &__normal { flex: 1 1 100%; }
-		&__normal .class-trait-card { flex: 0 1 14rem; }
+		& > .class-trait-card--wide { flex-basis: 16rem; max-width: 16rem; }
 	}
 }
 
 @media (max-width: 620px) {
 	.class-section-heading { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
 	.quick-links { grid-template-columns: 1fr; }
-	.class-trait-cards__normal .class-trait-card { flex-basis: 100%; }
+	.class-trait-cards > .class-trait-card { flex-basis: 100%; max-width: none; }
 	.class-trait-card__items { grid-template-columns: 1fr; }
 }
 
@@ -428,12 +427,21 @@
 		display: flex;
 		align-items: center;
 		gap: sizes.get(spacing, sm);
-		padding-bottom: sizes.get(spacing, xs);
 		color: colors.get-dark(text, tertiary);
-		border-bottom: 1px solid colors.get-dark(theme, primary);
 	}
-	&__divider h3 { margin: 0; color: colors.get-dark(text, eyebrow); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
-	&__divider span { margin-left: auto; font-size: 0.75rem; }
+	&__divider h3 {
+		flex: 1 1 auto;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: sizes.get(spacing, sm);
+		color: colors.get-dark(text, eyebrow);
+		font-size: 0.78rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	&__divider h3::after { content: ''; flex: 1 1 auto; border-top: 1px solid colors.get-dark(theme, primary); }
+	&__divider span { flex: 0 0 auto; font-size: 0.75rem; }
 }
 
 .class-feature {
@@ -451,7 +459,76 @@
 	&__content .content-section { max-width: none; margin: 0; }
 	&__content .content-section--subsection { margin-left: 0; padding-left: 0; border-left: 0; }
 	&__content .content-section__header { margin-bottom: sizes.get(spacing, sm); }
-	&__level { flex: 0 0 auto; color: colors.get-dark(text, tertiary); font-size: 0.7rem; white-space: nowrap; }
+}
+
+.content-section__feature-level {
+	flex: 0 0 auto;
+	align-self: center;
+	padding: 3px 7px;
+	color: colors.get-dark(text, tertiary);
+	border: 1px solid colors.get-dark(border, subtle);
+	border-radius: sizes.get(radius, pill);
+	font-size: 0.68rem;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.homebrew-header__identity {
+	display: inline-flex;
+	align-items: center;
+	gap: sizes.get(spacing, sm);
+	margin-bottom: sizes.get(spacing, sm);
+	color: colors.get-dark(text, tertiary);
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+
+	img {
+		width: 1.5rem;
+		height: 1.5rem;
+		object-fit: contain;
+	}
+}
+
+.homebrew-info {
+	margin-top: sizes.get(spacing, xl);
+	padding-top: sizes.get(spacing, xl);
+	border-top: 1px solid colors.get-dark(border, subtle);
+
+	&__metadata {
+		display: flex;
+		flex-wrap: wrap;
+		gap: sizes.get(spacing, md);
+		margin: sizes.get(spacing, lg) 0;
+
+		div {
+			min-width: 10rem;
+			padding: sizes.get(spacing, md);
+			background: colors.get-dark(background, secondary);
+			border: 1px solid colors.get-dark(border, subtle);
+			border-radius: sizes.get(radius, md);
+		}
+
+		dt {
+			color: colors.get-dark(text, tertiary);
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+		}
+
+		dd {
+			margin: sizes.get(spacing, xs) 0 0;
+			color: colors.get-dark(text, headings);
+		}
+	}
+
+	&__notice {
+		color: colors.get-dark(text, tertiary);
+		font-size: 0.9rem;
+	}
 }
 
 .source-metadata {

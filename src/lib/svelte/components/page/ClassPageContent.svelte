@@ -19,7 +19,20 @@
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getFaqGroup } from '$lib/typescript/data/internals/faq';
 
-	let { content, header, headerMeta }: { content: ClassPageContentData; header?: { title: string; subtitle: string; description: string; descriptionContent?: InlineContentBlock }; headerMeta?: Snippet } = $props();
+	let { 
+		content, 
+		header, 
+		headerMeta 
+	}: { 
+		content: ClassPageContentData; 
+		header?: { 
+			title: string; 
+			subtitle: string; 
+			description: string; 
+			descriptionContent?: InlineContentBlock 
+		}; 
+		headerMeta?: Snippet 
+	} = $props();
 	const currentPage = getCurrentPageContext();
 	let faqGroup = $derived(currentPage.path ? getFaqGroup(currentPage.path.split('.')[2] ?? '') : null);
 	let generatedFaqItems = $derived(faqGroup?.questions.map((question) => ({
@@ -58,8 +71,14 @@
 
 	let coreTraitCards = $derived(
 		content.sections.coreTraits.blocks.flatMap((block) => {
-			if (block.type === 'table') {
-				return block.rows.map((row) => ({ label: row.label, value: row.value, layout: row.layout }));
+			if (block.type === 'table' && !Array.isArray(block.columns)) {
+				return block.rows.map((row) => ({ 
+					label: row.label, 
+					value: row.value, 
+					layout: row.layout && typeof row.layout === 'object' && !Array.isArray(row.layout)
+						? row.layout
+						: undefined
+				}));
 			}
 
 			if (block.type === 'field-list') {
@@ -125,7 +144,9 @@
 			aria-labelledby={`${content.sections.coreTraits.id === 'core-class-traits' ? 'core-traits' : content.sections.coreTraits.id}-title`}
 		>
 			<header class="class-section-heading">
-				<h2 id={`${content.sections.coreTraits.id === 'core-class-traits' ? 'core-traits' : content.sections.coreTraits.id}-title`}>{content.sections.coreTraits.title}</h2>
+				<h2 id={`${content.sections.coreTraits.id === 'core-class-traits' ? 'core-traits' : content.sections.coreTraits.id}-title`}>
+					{content.sections.coreTraits.title}
+				</h2>
 				{#if content.sections.coreTraits.subtitle}
 					<p>{content.sections.coreTraits.subtitle}</p>
 				{/if}

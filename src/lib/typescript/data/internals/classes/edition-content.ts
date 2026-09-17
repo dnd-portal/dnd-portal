@@ -126,7 +126,11 @@ export function createCurrentBarbarianContent(): ClassPageContentData {
 		}))
 	};
 	const traitItems: { label: string; content: InlineContent }[] = [
-		...source.coreTraits.traits.map((trait) => ({ label: trait.label, content: trait.value as InlineContent })),
+		...source.coreTraits.traits.map((trait) => ({
+			label: trait.label,
+			content: trait.value as InlineContent,
+			layout: 'layout' in trait ? trait.layout : undefined
+		})),
 		{
 			label: 'Multiclassing',
 			content: [

@@ -65,11 +65,14 @@ Run:
 
 ```bash
 pnpm check
+pnpm test
 pnpm build
 pnpm audit:prelive:crawl
 ```
 
 The crawl check expects a fresh `build/` directory from `pnpm build`.
+Runtime metadata generation is integrated into the normal `dev`, `check`,
+`test`, and `build` scripts. No separate manual generation step is required.
 
 ## Do Not Change Without Approval
 

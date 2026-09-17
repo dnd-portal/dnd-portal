@@ -12,6 +12,7 @@ import { community } from './community/_index_';
 import { project } from './project';
 import { legal } from './legal';
 import { faq } from './faq';
+import { homebrew } from './homebrew/_index_';
 export { editions } from './editions';
 export type { EditionId } from './editions';
 
@@ -19,6 +20,7 @@ export const internals = {
 	website,
 	utility,
 	faq,
+	homebrew,
 
 	classes,
 	spells,

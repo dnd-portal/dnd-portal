@@ -58,6 +58,7 @@ export type PageData = LinkData & {
 		readonly label?: string;
 		readonly parent?: string;
 		readonly hidden?: boolean;
+		readonly iconSize?: 'default' | 'large';
 	};
 
 	readonly tags?: readonly string[];

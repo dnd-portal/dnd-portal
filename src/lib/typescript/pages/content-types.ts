@@ -47,7 +47,7 @@ export type PageContentField = {
 		readonly content?: InlineContent;
 		readonly items?: readonly InlineContent[];
 		readonly layout?: {
-			readonly featured?: boolean;
+			readonly width?: 'normal' | 'wide';
 		};
 };
 
@@ -209,6 +209,10 @@ export type PageContentBlock =
 			readonly items: readonly InlineContent[];
 	  }
 	| {
+			readonly type: 'ordered-list';
+			readonly items: readonly InlineContent[];
+	  }
+	| {
 			readonly type: 'field-list';
 			readonly items: readonly PageContentField[];
 	  }
@@ -216,8 +220,8 @@ export type PageContentBlock =
 			readonly type: 'table';
 			readonly caption: string;
 			readonly showCaption?: boolean;
-			readonly columns: TraitTableColumnLabels;
-			readonly rows: readonly TraitTableRow[];
+			readonly columns: TraitTableColumnLabels | readonly PageContentTableColumn[];
+			readonly rows: readonly TraitTableRow[] | readonly PageContentTableRow[];
 	  }
 	| {
 			readonly type: 'card-grid';
@@ -225,6 +229,11 @@ export type PageContentBlock =
 	  }
 	| {
 			readonly type: 'formula';
+			readonly content: InlineContent;
+	  }
+	| {
+			readonly type: 'callout';
+			readonly title?: string;
 			readonly content: InlineContent;
 	  }
 	| {
@@ -274,7 +283,7 @@ export type TraitTableRow = {
 		readonly labelContent?: InlineContent;
 		readonly value: InlineContent;
 		readonly layout?: {
-			readonly featured?: boolean;
+			readonly width?: 'normal' | 'wide';
 		};
 };
 
@@ -282,6 +291,13 @@ export type TraitTableColumnLabels = {
 	readonly label: string;
 	readonly value: string;
 };
+
+export type PageContentTableColumn = {
+	readonly key: string;
+	readonly label: string;
+};
+
+export type PageContentTableRow = Readonly<Record<string, InlineContent>>;
 
 export type EquipmentChoiceGroup = {
 	readonly label: string;

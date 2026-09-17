@@ -4,13 +4,12 @@
 */
 
 import {
-	data,
-	getData,
 	type LinkData,
 	type LinkPath,
 	type PageData,
 	type PagePath
 } from '$lib/typescript/data/_index_';
+import { getRuntimeData, runtimeLinks } from '$lib/typescript/data/runtime';
 
 export type CurrentPageContext = {
 	readonly pathname: string;
@@ -68,15 +67,7 @@ function isPageData(value: unknown): value is PageData {
 }
 
 function getValue(path: string): unknown {
-	return path
-		.split('.')
-		.reduce<unknown>((current, key) => {
-			if (!isRecord(current)) {
-				return undefined;
-			}
-
-			return current[key];
-		}, data);
+	return runtimeLinks[path];
 }
 
 function toLinkPath(path: string, value: unknown): LinkPath {
@@ -144,7 +135,9 @@ export function normalizeInternalHref(href: string, basePath = ''): string {
 	return normalized;
 }
 
-const pageEntries = collectPageEntries(data);
+const pageEntries = Object.entries(runtimeLinks)
+	.filter(([, value]) => isPageData(value))
+	.map(([path, value]) => [path as PagePath, value] as const);
 const hrefToPagePath = new Map(
 	pageEntries.map(([path, pageData]) => [
 		normalizeInternalHref(pageData.href),
@@ -196,7 +189,7 @@ export function resolveCurrentPage(
 
 	return {
 		path,
-		data: getData(path)
+		data: getRuntimeData(path) as unknown as PageData
 	};
 }
 
@@ -231,7 +224,7 @@ function getParentPathFromHref(pageData: PageData): PagePath | null {
 }
 
 function getParentPath(path: PagePath): PagePath | null {
-	const pageData = getData(path);
+	const pageData = getRuntimeData(path) as unknown as PageData;
 
 	return (
 		getNavigationParentPath(pageData) ??
@@ -247,7 +240,7 @@ function getDisplayTitle(title: string): string {
 }
 
 export function getPageLabel(path: LinkPath | PagePath): string {
-	const link = getData(path);
+	const link = getRuntimeData(path);
 
 	if ('label' in link && typeof link.label === 'string') {
 		return link.label;

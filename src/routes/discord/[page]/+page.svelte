@@ -8,6 +8,7 @@
 		PageTableOfContentsSection
 	} from '$lib/typescript/data/_index_';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
+	import { getCanonicalPageData } from '$lib/typescript/pages/canonicalPage';
 
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
@@ -37,7 +38,8 @@
 	}
 
 	const currentPage = getCurrentPageContext();
-	let content = $derived(getDiscordPageContent(currentPage.data));
+	let canonicalPage = $derived(getCanonicalPageData(currentPage.path));
+	let content = $derived(getDiscordPageContent(canonicalPage));
 </script>
 
 <div class="page-layout">

@@ -19,13 +19,16 @@
 	import PublicIssues from './PublicIssues.svelte';
 	import PublicRoadmap from './PublicRoadmap.svelte';
 	import TraitTable from './TraitTable.svelte';
+	import PageContentTable from './PageContentTable.svelte';
 
 	let {
 		section,
-		headingLevel = 'section'
+		headingLevel = 'section',
+		badge
 	}: {
 		section: PageContentSection;
 		headingLevel?: 'section' | 'subsection';
+		badge?: string;
 	} = $props();
 	let hasTable = $derived(section.blocks.some((block) => block.type === 'table'));
 </script>
@@ -67,6 +70,12 @@
 				</li>
 			{/each}
 		</ul>
+	{:else if block.type === 'ordered-list'}
+		<ol>
+			{#each block.items as item}
+				<li><InlineContent content={item} /></li>
+			{/each}
+		</ol>
 	{:else if block.type === 'field-list'}
 		<dl>
 			{#each block.items as field}
@@ -74,31 +83,67 @@
 			{/each}
 		</dl>
 	{:else if block.type === 'table'}
-		<TraitTable
-			caption={block.caption}
-			columns={block.columns}
-			rows={block.rows}
-			showCaption={block.showCaption}
-		/>
-	{:else if block.type === 'card-grid'}
+		{#if Array.isArray(block.columns)}
+			<PageContentTable
+				caption={block.caption}
+				columns={block.columns as readonly import('$lib/typescript/data/_index_').PageContentTableColumn[]}
+				rows={block.rows as readonly import('$lib/typescript/data/_index_').PageContentTableRow[]}
+				showCaption={block.showCaption}
+			/>
+		{:else}
+			<TraitTable
+				caption={block.caption}
+				columns={block.columns as import('$lib/typescript/data/_index_').TraitTableColumnLabels}
+				rows={block.rows as readonly import('$lib/typescript/data/_index_').TraitTableRow[]}
+				showCaption={block.showCaption}
+			/>
+		{/if}
+	
+		{:else if block.type === 'card-grid'}
 		{#each block.groups as group}
 			{@const isArchived = group.title.toLowerCase().includes('archived')}
+			
 			{#if isArchived}
 			<details class="content-section__card-group content-section__card-group--archived">
-				<summary><span class="content-section__card-group-icon" aria-hidden="true"><img src="/icons/white/game/source-book.svg" alt="" /></span><span>{group.title} ({group.cards.length})</span><span aria-hidden="true">⌄</span></summary>
+				<summary>
+					<span class="content-section__card-group-icon" aria-hidden="true">
+						<img src="/icons/white/game/source-book.svg" alt="" />
+					</span>
+					<span>
+						{group.title} ({group.cards.length})
+					</span>
+					<span aria-hidden="true">⌄</span>
+				</summary>
 				<div class="wiki-article__image-cards">
 					{#each group.cards as card}
-						{#if 'page' in card}<PageCard page={card.page} variant="image" eyebrow={card.source} featureLevels={card.featureLevels} />{:else}<PageCard variant="image" featureLevels={card.featureLevels} fallback={{ title: card.title, source: card.source, description: card.description, tags: card.tags }} />{/if}
+						{#if 'page' in card}
+							<PageCard page={card.page} variant="image" eyebrow={card.source} featureLevels={card.featureLevels} />
+						{:else}
+							<PageCard 
+								variant="image" 
+								featureLevels={card.featureLevels} 
+								fallback={{ 
+									title: card.title, 
+									source: card.source, 
+									description: card.description, 
+									tags: card.tags 
+								}} 
+							/>
+						{/if}
 					{/each}
 				</div>
 			</details>
+
 			{:else}
+
 			<section
 				class="content-section__card-group content-section__card-group--official"
 				aria-labelledby={`${section.id}-${group.title.toLowerCase().replaceAll(' ', '-')}-title`}
 			>
 				<h3 id={`${section.id}-${group.title.toLowerCase().replaceAll(' ', '-')}-title`}>
-					<span class="content-section__card-group-icon" aria-hidden="true"><img src="/icons/white/game/party.svg" alt="" /></span>
+					<span class="content-section__card-group-icon" aria-hidden="true">
+						<img src="/icons/white/game/party.svg" alt="" />
+					</span>
 					{group.title}
 				</h3>
 
@@ -132,6 +177,13 @@
 		<p class="content-section__formula">
 			<InlineContent content={block.content} />
 		</p>
+	{:else if block.type === 'callout'}
+		<aside class="content-section__callout">
+			{#if block.title}<strong>{block.title}</strong>{/if}
+			<p>
+				<InlineContent content={block.content} />
+			</p>
+		</aside>
 	{:else if block.type === 'changelog'}
 		<Changelog releases={block.releases} />
 	{:else if block.type === 'community-announcements'}
@@ -179,9 +231,13 @@
 	<header class="content-section__header">
 		<div class="content-section__title-group">
 			{#if headingLevel === 'subsection'}
-				<h3 id={`${section.id}-title`}>{section.title}</h3>
+				<h3 id={`${section.id}-title`}>
+					{section.title}
+				</h3>
 			{:else}
-				<h2 id={`${section.id}-title`}>{section.title}</h2>
+				<h2 id={`${section.id}-title`}>
+					{section.title}
+				</h2>
 			{/if}
 
 			{#if section.subtitleContent}
@@ -189,13 +245,22 @@
 					<InlineContent content={section.subtitleContent} />
 				</p>
 			{:else if section.subtitle}
-				<p>{section.subtitle}</p>
+				<p>
+					{section.subtitle}
+				</p>
 			{/if}
 		</div>
 
-		{#if section.optional}
-			<span class="content-section__badge">Optional</span>
-		{/if}
+			{#if section.optional}
+				<span class="content-section__badge">
+					Optional
+				</span>
+			{/if}
+			{#if badge}
+				<span class="content-section__feature-level">
+					{badge}
+				</span>
+			{/if}
 	</header>
 
 	<div class="content-section__body">

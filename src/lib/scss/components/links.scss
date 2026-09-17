@@ -38,5 +38,11 @@
 		-webkit-mask-repeat: no-repeat;
 		-webkit-mask-position: center;
 		-webkit-mask-size: contain;
+
+		&--large {
+			width: 1.2em;
+			height: 1.2em;
+			flex-basis: 1.2em;
+		}
 	}
 }

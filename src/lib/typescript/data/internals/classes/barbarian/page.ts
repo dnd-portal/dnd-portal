@@ -456,7 +456,7 @@ export const coreTraits = {
         {
             label: 'Skills',
             layout: {
-                featured: true
+                width: 'wide'
             },
             value: [
                 {
@@ -765,7 +765,11 @@ export function paragraph(content: InlineContent): PageContentBlock {
     };
 }
 
-export function featureSection(id: string, title: string, blocks: readonly PageContentBlock[]): PageContentSection {
+export function featureSection(
+    id: string, 
+    title: string, 
+    blocks: readonly PageContentBlock[]
+): PageContentSection {
     return {
         id,
         title,
@@ -773,7 +777,14 @@ export function featureSection(id: string, title: string, blocks: readonly PageC
     };
 }
 
-export function createSubclassPage(key: BarbarianSubclassKey, source: string, shortDescription: string, longDescription: readonly InlineContent[], featureSections: readonly PageContentSection[], images: BarbarianSubclassImages) {
+export function createSubclassPage(
+    key: BarbarianSubclassKey, 
+    source: string, 
+    shortDescription: string, 
+    longDescription: readonly InlineContent[], 
+    featureSections: readonly PageContentSection[], 
+    images: BarbarianSubclassImages
+) {
     const subclass = current.subclasses[key];
     return createInternalPage({
         href: `${baseUrl}/${subclass.name.slug}`,
