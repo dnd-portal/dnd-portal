@@ -16,13 +16,13 @@
 	import StartingEquipment from './StartingEquipment.svelte';
 	import TableOfContents from './TableOfContents.svelte';
 	import type { Snippet } from 'svelte';
-	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
-	import { getFaqGroup } from '$lib/typescript/data/internals/faq';
+import type { FaqItem } from '$lib/typescript/pages/faq';
 
 	let {
 		content,
 		header,
-		headerMeta
+		headerMeta,
+		faqItems: providedFaqItems
 	}: {
 		content: ClassPageContentData;
 		header?: {
@@ -31,18 +31,10 @@
 			description: string;
 			descriptionContent?: InlineContentBlock
 		};
-		headerMeta?: Snippet
+		headerMeta?: Snippet;
+		faqItems?: readonly FaqItem[]
 	} = $props();
-	const currentPage = getCurrentPageContext();
-	let faqGroup = $derived(currentPage.path ? getFaqGroup(currentPage.path.split('.')[2] ?? '') : null);
-	let generatedFaqItems = $derived(faqGroup?.questions.map((question) => ({
-		question: question.question,
-		answer: question.shortAnswer,
-		reference: faqGroup.sourcePage ?? currentPage.path ?? '',
-		referenceLabel: faqGroup.title,
-		faqPath: `internals.faq.${faqGroup.slug}.${question.slug}`
-	})) ?? []);
-	let faqItems = $derived(content.faqItems ?? generatedFaqItems);
+	let faqItems = $derived(providedFaqItems ?? content.faqItems ?? []);
 
 	let linkedSectionIds = $derived([
 		content.sections.identity.id,
