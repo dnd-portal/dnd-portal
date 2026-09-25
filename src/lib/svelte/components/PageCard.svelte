@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
-		getData,
 		type ImageGender,
 		type ImageSize,
 		type PageData,
 		type PagePath,
 		type ResponsiveImageData
 	} from '$lib/typescript/data/_index_';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import {
 		getCanonicalInternalHref,
 		getPageLabel
@@ -45,7 +45,7 @@
 	} = $props();
 
 	let pageData: PageData | undefined = $derived(
-		page ? getData(page as PagePath) : undefined
+		page ? (getRuntimeData(page as PagePath) as unknown as PageData) : undefined
 	);
 	let resolvedImageGender = $state<ImageGender | null>(null);
 	let displayGender = $derived(imageGender ?? resolvedImageGender ?? 'female');

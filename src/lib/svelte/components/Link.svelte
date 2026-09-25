@@ -5,7 +5,7 @@
 <script lang="ts">
 	import type { LinkPath } from '$lib/typescript/data/_index_';
 	import { getRuntimeData } from '$lib/typescript/data/runtime';
-	import { base as site } from '$lib/typescript/data/core/_index_';
+	import { siteMetadata } from '$lib/typescript/data/runtime/site-metadata';
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
 
 	import { base } from '$app/paths';
@@ -50,7 +50,7 @@
 			return href;
 		}
 
-		return new URL(getInternalHref(href), site.siteLink).href;
+		return new URL(getInternalHref(href), siteMetadata.baseUrl).href;
 	}
 
 	function supportsHover(): boolean {

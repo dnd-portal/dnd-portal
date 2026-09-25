@@ -2,9 +2,9 @@
 	Location: src/lib/typescript/pages/seo.ts
 	Use: Builds page-level SEO metadata from central page data and route overrides.
 */
-import { base as site, internals as coreInternals } from '$lib/typescript/data/core/_index_';
 import type { PageData, PagePath } from '$lib/typescript/data/_index_';
-import { getData } from '$lib/typescript/data/_index_';
+import { getRuntimeData } from '$lib/typescript/data/runtime';
+import { siteMetadata } from '$lib/typescript/data/runtime/site-metadata';
 import { getBreadcrumbItems, getPageLabel } from './currentPage';
 
 export type SeoMetadataInput = {
@@ -46,17 +46,17 @@ type SeoImage = {
 	readonly height?: number;
 };
 
-const siteName = site.siteSocial;
-const siteUrl = site.siteLink;
+const siteName = siteMetadata.name;
+const siteUrl = siteMetadata.baseUrl;
 const defaultDescription = 'Browse D&D Portal Wiki rules, classes, subclasses, spells, campaign references, and project information.';
-const defaultImage = coreInternals.website.logos.social;
-const favicon = coreInternals.website.logos.favicon;
-const iconImage = coreInternals.website.logos.icon;
-const icon96Image = coreInternals.website.logos.icon96;
-const icon192Image = coreInternals.website.logos.icon192;
-const icon512Image = coreInternals.website.logos.icon512;
-const appleTouchIcon = coreInternals.website.logos.appleTouchIcon;
-const manifest = coreInternals.website.logos.manifest;
+const defaultImage = siteMetadata.logos.social;
+const favicon = siteMetadata.logos.favicon;
+const iconImage = siteMetadata.logos.icon;
+const icon96Image = siteMetadata.logos.icon96;
+const icon192Image = siteMetadata.logos.icon192;
+const icon512Image = siteMetadata.logos.icon512;
+const appleTouchIcon = siteMetadata.logos.appleTouchIcon;
+const manifest = siteMetadata.logos.manifest;
 
 function normalizeText(value: string): string {
 	return value.replace(/\s+/g, ' ').trim();
@@ -186,7 +186,7 @@ function createWebsiteStructuredData(description: string) {
 		'@type': 'WebSite',
 		'@id': getAbsoluteSiteUrl('/#website'),
 		url: getAbsoluteSiteUrl('/'),
-		name: site.siteBase,
+		name: siteMetadata.shortName,
 		alternateName: siteName,
 		description
 	};
@@ -201,12 +201,12 @@ function createBreadcrumbStructuredData(path: PagePath | null) {
 
 	return {
 		'@type': 'BreadcrumbList',
-		'@id': `${getAbsoluteCanonicalUrl(getData(items[items.length - 1].path).href)}#breadcrumb`,
+		'@id': `${getAbsoluteCanonicalUrl(getRuntimeData(items[items.length - 1].path).href)}#breadcrumb`,
 		itemListElement: items.map((item, index) => ({
 			'@type': 'ListItem',
 			position: index + 1,
 			name: item.label,
-			item: getAbsoluteCanonicalUrl(getData(item.path).href)
+			item: getAbsoluteCanonicalUrl(getRuntimeData(item.path).href)
 		}))
 	};
 }
