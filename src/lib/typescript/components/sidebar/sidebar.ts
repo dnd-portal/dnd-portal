@@ -34,12 +34,16 @@ const sidebarSectionConfig = [
 		]
 	},
 	{
+		title: 'NEW SPELLS',
+		roots: ['internals.newSpells.acidSplash']
+	},
+	{
 		title: 'Homebrew',
 		roots: ['internals.homebrew.eldor.page']
 	},
 	{
 		title: 'Tools',
-		roots: ['internals.utility.myCharacter']
+		roots: ['internals.utility.diceRoller', 'internals.utility.myCharacter']
 	},
 	{
 		title: 'Community',

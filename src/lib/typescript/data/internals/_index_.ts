@@ -2,6 +2,7 @@ import { website } from './website';
 import { utility } from './utility';
 import { classes } from './classes/_index_';
 import { spells } from './spells/_index_';
+import { newSpells } from './new-spells';
 import { species } from './species/_index_';
 import { rules } from './rules/_index_';
 import { locations } from './locations/_index_';
@@ -24,6 +25,7 @@ export const internals = {
 
 	classes,
 	spells,
+	newSpells,
 	species,
 	rules,
 	equipment,

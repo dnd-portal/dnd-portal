@@ -427,7 +427,9 @@ function getFaqContentText(question: FaqQuestion): string {
 		...question.fullAnswer.sections.flatMap((section) => [
 			section.title,
 			...section.paragraphs,
-			...(section.blocks ?? []).flatMap((block) => block.type === 'paragraph' ? [block.content] : block.items)
+			...(section.blocks ?? []).flatMap((block) => block.type === 'paragraph'
+				? [typeof block.content === 'string' ? block.content : block.content.map((node) => node.type === 'text' ? node.text : '').join('')]
+				: block.items)
 		])
 	].join(' ');
 }

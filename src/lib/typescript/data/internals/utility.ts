@@ -74,5 +74,13 @@ export const utility = {
 		title: `${website.name.short} - ${current.myCharacter.name.normal}`,
 		subTitle: 'Local character sheet',
 		description: 'Edit a portable D&D character sheet locally in your browser.'
+	}),
+
+	diceRoller: createInternalPage({
+		href: current.diceRoller.href,
+		img: current.diceRoller.logos.simple,
+		title: `${website.name.short} - ${current.diceRoller.name.normal}`,
+		subTitle: 'Roll your dice',
+		description: 'Roll standard or custom dice with adjustable count, faces, advantage, and disadvantage.'
 	})
 } as const;

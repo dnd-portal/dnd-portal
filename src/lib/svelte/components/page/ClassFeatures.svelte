@@ -58,7 +58,7 @@
 				</span>
 			</div>
 			{#each group.sections as section}
-				<article class="class-feature">
+				<article class="class-feature" data-toc-pulse-target>
 					<div class="class-feature__icon" aria-hidden="true">
 						<img src={getFeatureIcon(section)} alt="" />
 					</div>

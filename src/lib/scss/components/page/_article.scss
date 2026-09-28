@@ -31,11 +31,14 @@
 	display: none;
 	min-width: 0;
 	align-self: start;
+	height: calc(100dvh - var(--navbar-height, #{sizes.get(navbar, height)}) - #{sizes.get(border, thin)});
 
 	position: sticky;
-	top: calc(var(--navbar-height, #{sizes.get(navbar, height)}) + #{sizes.get(spacing, xl)});
-	max-height: calc(100dvh - var(--navbar-height, #{sizes.get(navbar, height)}) - #{sizes.get(spacing, xxl)});
-	overflow-y: auto;
+	top: calc(var(--navbar-height, #{sizes.get(navbar, height)}) + #{sizes.get(border, thin)});
+	max-height: calc(100dvh - var(--navbar-height, #{sizes.get(navbar, height)}) - #{sizes.get(border, thin)});
+	overflow: hidden;
+	scrollbar-gutter: stable;
+	z-index: 800;
 }
 
 .wiki-article__section,

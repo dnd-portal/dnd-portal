@@ -41,9 +41,13 @@ import { humanFaq } from './faq-groups/human/_index_';
 import { elfFaq } from './faq-groups/elf/_index_';
 import { astralElfFaq } from './faq-groups/astral-elf/_index_';
 import { fightingFaq } from './faq-groups/fighting/_index_';
+import { acidSplash35eFaq } from './spells/acid-splash/3-5e/faq/_index_';
+import { acidSplash3eFaq } from './spells/acid-splash/3e/faq/_index_';
+import type { InlineContent } from '$lib/typescript/pages/content-types';
+import { combatLinks, damageTypeLinks } from './classes/barbarian/page';
 
 export type FaqContentBlock =
-	| { readonly type: 'paragraph'; readonly content: string }
+	| { readonly type: 'paragraph'; readonly content: string | InlineContent }
 	| { readonly type: 'list'; readonly items: readonly string[] };
 export type FaqSection = {
 	readonly title: string;
@@ -76,6 +80,65 @@ export type FaqGroup = {
 const website = core.internals.website;
 const faqParent = 'internals.utility.faq';
 const section = (title: string, ...paragraphs: string[]): FaqSection => ({ title, paragraphs });
+
+const faqText = (value: string): InlineContent => {
+	const parts = value.split(/(acid damage|acid|Armor Class|touch AC|spell resistance|critical hits?|1d3)/gi);
+	return parts.map((part) => {
+		const normalized = part.toLowerCase();
+		if (normalized === 'acid damage' || normalized === 'acid') return damageTypeLinks.acid;
+		if (normalized === 'armor class' || normalized === 'touch ac') return combatLinks.armorClass;
+		if (normalized === '1d3') return { type: 'link' as const, path: 'internals.utility.diceRoller', label: part, query: '?d=1d3', showIcon: false };
+		return { type: 'text' as const, text: part };
+	});
+};
+
+const acidSplashFaqGroup: FaqGroup = {
+	slug: 'acid-splash-3-5e',
+	title: 'Acid Splash 3.5e',
+	description: 'Frequently asked questions about Acid Splash in D&D 3.5e.',
+	sourcePage: 'internals.newSpells.acidSplash35e',
+	questions: acidSplash35eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((faqSection) => ({
+				title: faqSection.title,
+				paragraphs: faqSection.blocks.flatMap((block) =>
+					block.type === 'paragraph' ? [String(block.content)] : []
+				),
+				blocks: faqSection.blocks.map((block) =>
+					block.type === 'paragraph'
+						? { type: 'paragraph' as const, content: faqText(block.content) }
+						: { type: 'list' as const, items: block.items }
+				)
+			}))
+		}
+	}))
+};
+
+const acidSplash3eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-3e',
+	title: 'Acid Splash 3e',
+	description: 'Frequently asked questions about Acid Splash in D&D 3e.',
+	sourcePage: 'internals.newSpells.acidSplash3e',
+	questions: acidSplash3eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((faqSection) => ({
+				title: faqSection.title,
+				paragraphs: faqSection.blocks.flatMap((block) => block.type === 'paragraph' ? [String(block.content)] : []),
+				blocks: faqSection.blocks.map((block) => block.type === 'paragraph'
+					? { type: 'paragraph' as const, content: faqText(block.content) }
+					: { type: 'list' as const, items: block.items })
+			}))
+		}
+	}))
+};
 
 const baseFaqGroups = [
 	{
@@ -202,14 +265,21 @@ function createModularFaqGroup(group: ModularFaqSource, description: string, sou
 		shortAnswer: question.shortAnswer,
 		fullAnswer: (() => {
 			const sourceQuestion = question as typeof question & { readonly fullAnswer?: { readonly introduction?: string; readonly sections?: readonly { readonly title: string; readonly paragraphs?: readonly string[]; readonly blocks?: readonly FaqContentBlock[] }[] } };
-			const authored = sourceQuestion.fullAnswer ?? { introduction: sourceQuestion.introduction, sections: sourceQuestion.sections.map((section) => ({ ...section, paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => block.content), blocks: section.blocks })) };
-			return {
-				introduction: authored.introduction ?? '',
-				sections: (authored.sections ?? []).map((section) => ({
+			const authored = sourceQuestion.fullAnswer;
+			const sections = authored?.sections
+				? authored.sections.map((section) => ({
 					title: section.title,
-					paragraphs: section.paragraphs ?? (section.blocks ?? []).filter((block) => block.type === 'paragraph').map((block) => block.content),
-					blocks: section.blocks ?? (section.paragraphs ?? []).map((content) => ({ type: 'paragraph' as const, content }))
+					paragraphs: (section.paragraphs ?? []).map(String),
+					blocks: section.blocks
 				}))
+				: sourceQuestion.sections.map((section) => ({
+					title: section.title,
+					paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+					blocks: section.blocks
+				}));
+			return {
+				introduction: authored?.introduction ?? sourceQuestion.introduction,
+				sections
 			};
 		})()
 	}))
@@ -256,7 +326,7 @@ const modularFightingFaqGroup = createModularFaqGroup(fightingFaq, 'Frequently a
 const modularSubclassFaqGroups = [...rogueSubclassFaqGroups, ...shinobiSubclassFaqGroups, ...barbarianSubclassFaqGroups, ...clericSubclassFaqGroups].map((group) => createModularFaqGroup(group as unknown as ModularFaqSource, `Frequently asked questions about ${group.title}.`, group.sourcePage));
 
 const modularFaqGroupSlugs = [modularBarbarianFaqGroup.slug, modularBardFaqGroup.slug, modularArtificerFaqGroup.slug, modularBloodHunterFaqGroup.slug, modularClericFaqGroup.slug, modularDruidFaqGroup.slug, modularFighterFaqGroup.slug, modularMonkFaqGroup.slug, modularPaladinFaqGroup.slug, modularPugilistFaqGroup.slug, modularRangerFaqGroup.slug, modularRogueFaqGroup.slug, modularShinobiFaqGroup.slug, modularSorcererFaqGroup.slug, modularWarlockFaqGroup.slug, modularWizardFaqGroup.slug, modularScholarFaqGroup.slug, modularTreasureHunterFaqGroup.slug, modularVanguardFaqGroup.slug, modularCaptainFaqGroup.slug, modularChampionFaqGroup.slug, modularGunslingerFaqGroup.slug, modularIllriggerFaqGroup.slug, modularMonsterHunterFaqGroup.slug, modularWardenFaqGroup.slug, modularMessengerFaqGroup.slug, modularMonstersFaqGroup.slug, modularMovementFaqGroup.slug, modularSpellsFaqGroup.slug, modularEquipmentFaqGroup.slug, modularClassesFaqGroup.slug, modularRulesFaqGroup.slug, modularSpeciesFaqGroup.slug, modularHumanFaqGroup.slug, modularElfFaqGroup.slug, modularAstralElfFaqGroup.slug, modularFightingFaqGroup.slug, ...modularSubclassFaqGroups.map((group) => group.slug)];
-const legacyFaqGroups = baseFaqGroups.filter((group) => !modularFaqGroupSlugs.includes(group.slug));
+const legacyFaqGroups = [acidSplashFaqGroup, acidSplash3eFaqGroup, ...baseFaqGroups.filter((group) => !modularFaqGroupSlugs.includes(group.slug))];
 const existingGroupSlugs = new Set([...legacyFaqGroups, modularBarbarianFaqGroup, modularBardFaqGroup, modularArtificerFaqGroup, modularBloodHunterFaqGroup, modularClericFaqGroup, modularDruidFaqGroup, modularFighterFaqGroup, modularMonkFaqGroup, modularPaladinFaqGroup, modularPugilistFaqGroup, modularRangerFaqGroup, modularRogueFaqGroup, modularShinobiFaqGroup, modularSorcererFaqGroup, modularWarlockFaqGroup, modularWizardFaqGroup, modularScholarFaqGroup, modularTreasureHunterFaqGroup, modularVanguardFaqGroup, modularCaptainFaqGroup, modularChampionFaqGroup, modularGunslingerFaqGroup, modularIllriggerFaqGroup, modularMonsterHunterFaqGroup, modularWardenFaqGroup, modularMessengerFaqGroup, modularMonstersFaqGroup, modularMovementFaqGroup, modularSpellsFaqGroup, modularEquipmentFaqGroup, modularClassesFaqGroup, modularRulesFaqGroup, modularSpeciesFaqGroup, modularHumanFaqGroup, modularElfFaqGroup, modularAstralElfFaqGroup, modularFightingFaqGroup, ...modularSubclassFaqGroups].map((group) => group.slug));
 const missingMasterReadyGroups: readonly FaqGroup[] = [];
 

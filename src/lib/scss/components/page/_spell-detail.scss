@@ -10,6 +10,10 @@
 	max-width: sizes.get(content, article-max-width);
 
 	&__header {
+		position: relative;
+		min-height: 15rem;
+		padding-right: min(19rem, 34%);
+
 		p {
 			margin-bottom: sizes.get(spacing, xs);
 			color: colors.get-dark(text, eyebrow);
@@ -24,6 +28,57 @@
 			font-size: clamp(2rem, 4vw, 3.75rem);
 			line-height: sizes.get(typography, title-line-height);
 		}
+
+		.spell-detail__visual {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			display: grid;
+			place-items: center;
+			width: clamp(13.75rem, 22vw, 17.5rem);
+			aspect-ratio: 1;
+			border: 1px solid color-mix(in srgb, #{colors.get-dark(theme, primary)} 14%, transparent);
+			border-radius: 43% 57% 54% 46% / 52% 44% 56% 48%;
+			background: radial-gradient(circle at 45% 42%, color-mix(in srgb, #{colors.get-dark(theme, primary)} 9%, transparent), transparent 68%);
+			transform: translateY(-50%) rotate(-3deg);
+			pointer-events: none;
+
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 12%;
+				border-radius: 48% 52% 41% 59%;
+				background: color-mix(in srgb, #{colors.get-dark(theme, primary)} 4%, transparent);
+			}
+
+			img {
+				position: relative;
+				width: 52%;
+				height: 52%;
+				opacity: 0.46;
+				filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(850%) hue-rotate(65deg) brightness(96%) contrast(92%);
+				transform: rotate(3deg);
+			}
+		}
+	}
+
+	&__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: sizes.get(spacing, xs);
+		margin-top: sizes.get(spacing, sm);
+	}
+
+	&__chip {
+		font-size: 0.72rem;
+		font-weight: 600;
+		line-height: 1.2;
+
+		img {
+			width: 0.9rem;
+			height: 0.9rem;
+			filter: brightness(0) invert(1);
+		}
 	}
 
 	&__meta {
@@ -32,35 +87,67 @@
 		gap: sizes.get(spacing, sm);
 
 		div {
+			--spell-accent: #{colors.get-dark(theme, primary)};
+			--spell-hue: 90deg;
+			position: relative;
+			overflow: hidden;
 			padding: sizes.get(spacing, md);
 			background: colors.get-dark(background, secondary);
 			border: 1px solid colors.get-dark(border, subtle);
 			border-radius: sizes.get(radius, md);
+			border-color: color-mix(in srgb, var(--spell-accent) 18%, colors.get-dark(border, subtle));
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+				background: color-mix(in srgb, var(--spell-accent) 2%, transparent);
+			}
+
+			&:nth-child(2) { --spell-accent: #b28cff; --spell-hue: 245deg; }
+			&:nth-child(3) { --spell-accent: #79d8ff; --spell-hue: 175deg; }
+			&:nth-child(4) { --spell-accent: #ff9f6e; --spell-hue: 345deg; }
+			&:nth-child(5) { --spell-accent: #ffd36b; --spell-hue: 25deg; }
+			&:nth-child(6) { --spell-accent: #9dffcf; --spell-hue: 135deg; }
+			&:nth-child(7) { --spell-accent: #6ee7d8; --spell-hue: 160deg; }
+			&:nth-child(8) { --spell-accent: #84c7ff; --spell-hue: 195deg; }
+			&:nth-child(9) { --spell-accent: #c5f06a; --spell-hue: 75deg; }
+			&:nth-child(10) { --spell-accent: #ffcf5a; --spell-hue: 35deg; }
+			&:nth-child(11) { --spell-accent: #a4c7ff; --spell-hue: 220deg; }
+			&:nth-child(12) { --spell-accent: #ff8ec7; --spell-hue: 320deg; }
+			&:nth-child(13) { --spell-accent: #8fdbff; --spell-hue: 185deg; }
+			&:nth-child(14) { --spell-accent: #f37f5f; --spell-hue: 350deg; }
+			&:nth-child(15) { --spell-accent: #9dffcf; --spell-hue: 145deg; }
 		}
 
 		dt {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
 			margin-bottom: 4px;
 			color: colors.get-dark(text, subtle);
 			font-size: 0.7rem;
 			font-weight: 700;
 			text-transform: uppercase;
+
+			img {
+				width: 1rem;
+				height: 1rem;
+				filter: brightness(0) saturate(100%) invert(78%) sepia(25%) saturate(850%) hue-rotate(var(--spell-hue)) brightness(102%) contrast(96%);
+				opacity: 0.82;
+			}
 		}
 
 		dd {
 			color: colors.get-dark(text, primary);
+			font-size: 1.05rem;
 			line-height: 1.45;
 		}
 	}
 
 	&__section {
 		max-width: sizes.get(content, text-max-width);
-
-		h2 {
-			margin-bottom: sizes.get(spacing, md);
-			color: colors.get-dark(text, headings);
-			font-size: 1.45rem;
-			line-height: 1.2;
-		}
 
 		p {
 			color: colors.get-dark(text, secondary);
@@ -69,6 +156,12 @@
 
 		p + p {
 			margin-top: sizes.get(spacing, md);
+		}
+
+		ul {
+			padding-left: 1.25rem;
+			color: colors.get-dark(text, secondary);
+			line-height: sizes.get(typography, body-line-height);
 		}
 	}
 
@@ -98,6 +191,156 @@
 			color: colors.get-dark(text, secondary);
 			text-align: left;
 			vertical-align: top;
+		}
+	}
+}
+
+.new-spell-page .spell-detail__meta-card--school::before {
+	content: '';
+	position: absolute;
+	inset: 18% 5% 0 auto;
+	width: 45%;
+	background: url('/icons/white/spell/conjuration.svg') center / contain no-repeat;
+	opacity: 0.035;
+	pointer-events: none;
+}
+
+.new-spell-page {
+	.link {
+		font-weight: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+	max-width: none;
+	width: 100%;
+
+	.spell-detail__hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) clamp(13.75rem, 22vw, 17.5rem);
+		gap: sizes.get(spacing, lg);
+		align-items: start;
+	}
+
+	.spell-detail__hero .spell-detail__header {
+		grid-column: 1;
+		grid-row: 1;
+		min-height: 0;
+	}
+
+	.spell-detail__hero .spell-detail__meta {
+		grid-column: 1;
+		grid-row: 2;
+	}
+
+	.spell-detail__hero .spell-detail__visual {
+		position: relative;
+		top: auto;
+		right: auto;
+		display: grid;
+		place-items: center;
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		width: 100%;
+		aspect-ratio: 1;
+		border: 1px solid color-mix(in srgb, #{colors.get-dark(theme, primary)} 14%, transparent);
+		border-radius: 43% 57% 54% 46% / 52% 44% 56% 48%;
+		background: radial-gradient(circle at 45% 42%, color-mix(in srgb, #{colors.get-dark(theme, primary)} 9%, transparent), transparent 68%);
+		transform: rotate(-3deg);
+	}
+
+	.spell-detail__hero .spell-detail__visual::before {
+		content: '';
+		position: absolute;
+		inset: 12%;
+		border-radius: 48% 52% 41% 59%;
+		background: color-mix(in srgb, #{colors.get-dark(theme, primary)} 4%, transparent);
+	}
+
+	.spell-detail__hero .spell-detail__visual img {
+		position: relative;
+		width: 52%;
+		height: 52%;
+		opacity: 0.46;
+		filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(850%) hue-rotate(65deg) brightness(96%) contrast(92%);
+		transform: rotate(3deg);
+	}
+
+	.spell-detail__meta--full {
+		margin-top: sizes.get(spacing, sm);
+	}
+
+	.spell-detail__section {
+		max-width: none;
+	}
+
+	.spell-detail__summary {
+		margin-bottom: sizes.get(spacing, xxl);
+		color: colors.get-dark(text, primary);
+		font-size: 1.08rem;
+	}
+
+	.new-spell-faq .faq {
+		max-width: none;
+	}
+
+	@media (max-width: 700px) {
+		.spell-detail__hero {
+			display: block;
+		}
+
+		.spell-detail__header {
+			min-height: 0;
+			padding-right: 0;
+			padding-bottom: sizes.get(spacing, lg);
+
+		}
+
+		.spell-detail__visual {
+			display: none;
+		}
+	}
+
+	@media (min-width: 701px) and (max-width: 1000px) {
+		.spell-detail__hero {
+			grid-template-columns: minmax(0, 1fr) 12rem;
+		}
+
+		.spell-detail__hero .spell-detail__meta {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+}
+
+.spell-section-heading {
+	display: flex;
+	align-items: center;
+	gap: sizes.get(spacing, sm);
+	margin: 0 0 sizes.get(spacing, md);
+	color: colors.get-dark(text, headings);
+	font-size: 1.45rem;
+	line-height: 1.2;
+
+	&::after {
+		content: '';
+		flex: 1;
+		border-top: 1px solid colors.get-dark(theme, primary);
+	}
+
+	img {
+		width: 1.35rem;
+		height: 1.35rem;
+		flex: 0 0 auto;
+		filter: brightness(0) invert(1);
+	}
+}
+
+.new-spell-page {
+	.spell-detail__meta dt {
+		opacity: 0.5;
+
+		img {
+			width: 1.15rem;
+			height: 1.15rem;
 		}
 	}
 }

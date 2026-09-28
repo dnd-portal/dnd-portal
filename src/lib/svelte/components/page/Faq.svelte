@@ -16,11 +16,19 @@
 		readonly faqLabel?: string;
 	};
 
-	let { items }: { items: readonly FaqItem[] } = $props();
+	let {
+		items,
+		showHeading = true
+	}: {
+		items: readonly FaqItem[];
+		showHeading?: boolean;
+	} = $props();
 </script>
 
-<section class="faq" aria-labelledby="faq-title">
-	<h2 id="faq-title">FAQ</h2>
+<section class="faq" id="faq" aria-labelledby={showHeading ? 'faq-title' : undefined} aria-label={showHeading ? undefined : 'FAQ'}>
+	{#if showHeading}
+		<h2 id="faq-title">FAQ</h2>
+	{/if}
 
 	<div class="faq__list">
 		{#each items as item}

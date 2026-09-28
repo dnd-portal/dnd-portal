@@ -4,6 +4,15 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<style>
+			@media (max-width: 1699px) {
+				body:not(.toc-ready) .page-layout__toc .table-of-contents {
+					visibility: hidden;
+					opacity: 0;
+					pointer-events: none;
+				}
+			}
+		</style>
 
 		<!-- Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X1M5VW1SF"></script>
