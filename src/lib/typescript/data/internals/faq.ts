@@ -42,9 +42,14 @@ import { elfFaq } from './faq-groups/elf/_index_';
 import { astralElfFaq } from './faq-groups/astral-elf/_index_';
 import { fightingFaq } from './faq-groups/fighting/_index_';
 import { acidSplash35eFaq } from './spells/acid-splash/3-5e/faq/_index_';
+import { acidSplash2eFaq } from './spells/acid-splash/2e/faq/_index_';
 import { acidSplash3eFaq } from './spells/acid-splash/3e/faq/_index_';
+import { acidSplash4eFaq } from './spells/acid-splash/4e/faq/_index_';
+import { acidSplash5eFaq } from './spells/acid-splash/5e/faq/_index_';
+import { acidSplash55eFaq } from './spells/acid-splash/5-5e/faq/_index_';
+import { acidSplash1eFaq } from './spells/acid-splash/1e/faq/_index_';
 import type { InlineContent } from '$lib/typescript/pages/content-types';
-import { combatLinks, damageTypeLinks } from './classes/barbarian/page';
+import { combatLinks, damageTypeLinks, d20TestLinks } from './classes/barbarian/page';
 
 export type FaqContentBlock =
 	| { readonly type: 'paragraph'; readonly content: string | InlineContent }
@@ -82,12 +87,16 @@ const faqParent = 'internals.utility.faq';
 const section = (title: string, ...paragraphs: string[]): FaqSection => ({ title, paragraphs });
 
 const faqText = (value: string): InlineContent => {
-	const parts = value.split(/(acid damage|acid|Armor Class|touch AC|spell resistance|critical hits?|1d3)/gi);
+	const parts = value.split(/(acid damage|acid|Armor Class|touch AC|spell resistance|critical hits?|1d6|1d3|saving throws?|spell save DC|ranged attacks?|attack powers?|Sorcerers?|Wizards?)/gi);
 	return parts.map((part) => {
 		const normalized = part.toLowerCase();
 		if (normalized === 'acid damage' || normalized === 'acid') return damageTypeLinks.acid;
 		if (normalized === 'armor class' || normalized === 'touch ac') return combatLinks.armorClass;
-		if (normalized === '1d3') return { type: 'link' as const, path: 'internals.utility.diceRoller', label: part, query: '?d=1d3', showIcon: false };
+		if (normalized === '1d3' || normalized === '1d6') return { type: 'link' as const, path: 'internals.utility.diceRoller', label: part, query: `?d=${part}`, showIcon: false };
+		if (normalized === 'saving throw' || normalized === 'saving throws' || normalized === 'spell save dc') return d20TestLinks.savingThrow;
+		if (normalized === 'ranged attack' || normalized === 'ranged attacks' || normalized === 'attack power' || normalized === 'attack powers') return { type: 'link' as const, path: 'internals.rules.combat.attackRoll', label: part, showIcon: false };
+		if (normalized === 'sorcerer' || normalized === 'sorcerers') return { type: 'link' as const, path: 'internals.classes.sorcerer.page', label: part };
+		if (normalized === 'wizard' || normalized === 'wizards') return { type: 'link' as const, path: 'internals.classes.wizard.page', label: part };
 		return { type: 'text' as const, text: part };
 	});
 };
@@ -96,7 +105,7 @@ const acidSplashFaqGroup: FaqGroup = {
 	slug: 'acid-splash-3-5e',
 	title: 'Acid Splash 3.5e',
 	description: 'Frequently asked questions about Acid Splash in D&D 3.5e.',
-	sourcePage: 'internals.newSpells.acidSplash35e',
+	sourcePage: 'internals.spells.acidSplash55e',
 	questions: acidSplash35eFaq.map((question) => ({
 		slug: question.slug,
 		question: question.question,
@@ -118,11 +127,55 @@ const acidSplashFaqGroup: FaqGroup = {
 	}))
 };
 
+const acidSplash2eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-2e',
+	title: 'Acid Splash 2e FAQ',
+	description: 'Frequently asked questions about the D&D Portal Acid Splash conversion for AD&D 2e.',
+	sourcePage: 'internals.spells.acidSplash55e',
+	questions: acidSplash2eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((section) => ({
+				title: section.title,
+				paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+				blocks: section.blocks.map((block) => 'items' in block
+					? { type: 'list' as const, items: Array.isArray(block.items) ? block.items.map(String) : [] }
+					: { type: 'paragraph' as const, content: faqText(block.content) })
+			}))
+		}
+	}))
+};
+
+const acidSplash1eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-1e',
+	title: 'Acid Splash 1e FAQ',
+	description: 'Frequently asked questions about the D&D Portal Acid Splash conversion for AD&D 1e.',
+	sourcePage: 'internals.spells.acidSplash55e',
+	questions: acidSplash1eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((section) => ({
+				title: section.title,
+				paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+				blocks: section.blocks.map((block) => 'items' in block
+					? { type: 'list' as const, items: Array.isArray(block.items) ? block.items.map(String) : [] }
+					: { type: 'paragraph' as const, content: faqText(block.content) })
+			}))
+		}
+	}))
+};
+
 const acidSplash3eFaqGroup: FaqGroup = {
 	slug: 'acid-splash-3e',
 	title: 'Acid Splash 3e',
 	description: 'Frequently asked questions about Acid Splash in D&D 3e.',
-	sourcePage: 'internals.newSpells.acidSplash3e',
+	sourcePage: 'internals.spells.acidSplash55e',
 	questions: acidSplash3eFaq.map((question) => ({
 		slug: question.slug,
 		question: question.question,
@@ -135,6 +188,72 @@ const acidSplash3eFaqGroup: FaqGroup = {
 				blocks: faqSection.blocks.map((block) => block.type === 'paragraph'
 					? { type: 'paragraph' as const, content: faqText(block.content) }
 					: { type: 'list' as const, items: block.items })
+			}))
+		}
+	}))
+};
+
+const acidSplash4eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-4e',
+	title: 'Acid Splash 4e FAQ',
+	description: 'Frequently asked questions about the D&D Portal 4e Acid Splash conversion.',
+	sourcePage: 'internals.spells.acidSplash55e',
+	questions: acidSplash4eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((section) => ({
+				title: section.title,
+				paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+				blocks: section.blocks.map((block) => 'items' in block
+					? { type: 'list' as const, items: Array.isArray(block.items) ? block.items.map(String) : [] }
+					: { type: 'paragraph' as const, content: faqText(block.content) })
+			}))
+		}
+	}))
+};
+
+const acidSplash5eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-5e',
+	title: 'Acid Splash 5e FAQ',
+	description: 'Frequently asked questions about Acid Splash in D&D 5e.',
+	sourcePage: 'internals.spells.acidSplash55e',
+	questions: acidSplash5eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((section) => ({
+				title: section.title,
+				paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+				blocks: section.blocks.map((block) => 'items' in block
+					? { type: 'list' as const, items: Array.isArray(block.items) ? block.items.map(String) : [] }
+					: { type: 'paragraph' as const, content: faqText(block.content) })
+			}))
+		}
+	}))
+};
+
+const acidSplash55eFaqGroup: FaqGroup = {
+	slug: 'acid-splash-5-5e',
+	title: 'Acid Splash 5.5e FAQ',
+	description: 'Frequently asked questions about Acid Splash in D&D 5.5e.',
+	sourcePage: 'internals.spells.acidSplash55e',
+	questions: acidSplash55eFaq.map((question) => ({
+		slug: question.slug,
+		question: question.question,
+		shortAnswer: question.shortAnswer,
+		fullAnswer: {
+			introduction: question.introduction,
+			sections: question.sections.map((section) => ({
+				title: section.title,
+				paragraphs: section.blocks.filter((block) => block.type === 'paragraph').map((block) => String(block.content)),
+				blocks: section.blocks.map((block) => 'items' in block
+					? { type: 'list' as const, items: Array.isArray(block.items) ? block.items.map(String) : [] }
+					: { type: 'paragraph' as const, content: faqText(block.content) })
 			}))
 		}
 	}))
@@ -326,7 +445,7 @@ const modularFightingFaqGroup = createModularFaqGroup(fightingFaq, 'Frequently a
 const modularSubclassFaqGroups = [...rogueSubclassFaqGroups, ...shinobiSubclassFaqGroups, ...barbarianSubclassFaqGroups, ...clericSubclassFaqGroups].map((group) => createModularFaqGroup(group as unknown as ModularFaqSource, `Frequently asked questions about ${group.title}.`, group.sourcePage));
 
 const modularFaqGroupSlugs = [modularBarbarianFaqGroup.slug, modularBardFaqGroup.slug, modularArtificerFaqGroup.slug, modularBloodHunterFaqGroup.slug, modularClericFaqGroup.slug, modularDruidFaqGroup.slug, modularFighterFaqGroup.slug, modularMonkFaqGroup.slug, modularPaladinFaqGroup.slug, modularPugilistFaqGroup.slug, modularRangerFaqGroup.slug, modularRogueFaqGroup.slug, modularShinobiFaqGroup.slug, modularSorcererFaqGroup.slug, modularWarlockFaqGroup.slug, modularWizardFaqGroup.slug, modularScholarFaqGroup.slug, modularTreasureHunterFaqGroup.slug, modularVanguardFaqGroup.slug, modularCaptainFaqGroup.slug, modularChampionFaqGroup.slug, modularGunslingerFaqGroup.slug, modularIllriggerFaqGroup.slug, modularMonsterHunterFaqGroup.slug, modularWardenFaqGroup.slug, modularMessengerFaqGroup.slug, modularMonstersFaqGroup.slug, modularMovementFaqGroup.slug, modularSpellsFaqGroup.slug, modularEquipmentFaqGroup.slug, modularClassesFaqGroup.slug, modularRulesFaqGroup.slug, modularSpeciesFaqGroup.slug, modularHumanFaqGroup.slug, modularElfFaqGroup.slug, modularAstralElfFaqGroup.slug, modularFightingFaqGroup.slug, ...modularSubclassFaqGroups.map((group) => group.slug)];
-const legacyFaqGroups = [acidSplashFaqGroup, acidSplash3eFaqGroup, ...baseFaqGroups.filter((group) => !modularFaqGroupSlugs.includes(group.slug))];
+const legacyFaqGroups = [acidSplash1eFaqGroup, acidSplash2eFaqGroup, acidSplashFaqGroup, acidSplash3eFaqGroup, acidSplash4eFaqGroup, acidSplash5eFaqGroup, acidSplash55eFaqGroup, ...baseFaqGroups.filter((group) => !modularFaqGroupSlugs.includes(group.slug))];
 const existingGroupSlugs = new Set([...legacyFaqGroups, modularBarbarianFaqGroup, modularBardFaqGroup, modularArtificerFaqGroup, modularBloodHunterFaqGroup, modularClericFaqGroup, modularDruidFaqGroup, modularFighterFaqGroup, modularMonkFaqGroup, modularPaladinFaqGroup, modularPugilistFaqGroup, modularRangerFaqGroup, modularRogueFaqGroup, modularShinobiFaqGroup, modularSorcererFaqGroup, modularWarlockFaqGroup, modularWizardFaqGroup, modularScholarFaqGroup, modularTreasureHunterFaqGroup, modularVanguardFaqGroup, modularCaptainFaqGroup, modularChampionFaqGroup, modularGunslingerFaqGroup, modularIllriggerFaqGroup, modularMonsterHunterFaqGroup, modularWardenFaqGroup, modularMessengerFaqGroup, modularMonstersFaqGroup, modularMovementFaqGroup, modularSpellsFaqGroup, modularEquipmentFaqGroup, modularClassesFaqGroup, modularRulesFaqGroup, modularSpeciesFaqGroup, modularHumanFaqGroup, modularElfFaqGroup, modularAstralElfFaqGroup, modularFightingFaqGroup, ...modularSubclassFaqGroups].map((group) => group.slug));
 const missingMasterReadyGroups: readonly FaqGroup[] = [];
 

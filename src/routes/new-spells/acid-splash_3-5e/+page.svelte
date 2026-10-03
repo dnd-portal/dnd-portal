@@ -1,5 +1,4 @@
 <script lang="ts">
-	import AcidSplashPage from '../acid-splash/+page.svelte';
+	import { redirect } from '@sveltejs/kit';
+	throw redirect(308, '/spells/acid-splash/3-5e/');
 </script>
-
-<AcidSplashPage />

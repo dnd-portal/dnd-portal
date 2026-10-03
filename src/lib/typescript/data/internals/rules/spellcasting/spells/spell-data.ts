@@ -44,7 +44,7 @@ export type SpellData = {
 const generated = {
 	"spells": [
 		{
-			"href": "/spell:acid-splash",
+			"href": "/spells/acid-splash",
 			"index": "acid-splash",
 			"slug": "acid-splash",
 			"name": "Acid Splash",

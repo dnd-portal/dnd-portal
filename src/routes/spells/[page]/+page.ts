@@ -4,6 +4,7 @@
 */
 import { spells, spellLevels } from '$lib/typescript/data/internals/rules/spellcasting/spells/spell-data';
 import { createSpellSeoMetadata } from '$lib/typescript/pages/seo';
+import { redirect } from '@sveltejs/kit';
 
 export function entries() {
 	return [
@@ -13,7 +14,14 @@ export function entries() {
 	];
 }
 
-export function load({ params }) {
+export function load({ params, url }) {
+	if (params.page === 'acid-splash') {
+		const edition = url.searchParams.get('edition');
+		const destination = edition && ['1e', '2e', '3e', '3-5e', '4e', '5e'].includes(edition)
+			? `/spells/acid-splash/${edition}/`
+			: '/spells/acid-splash/';
+		throw redirect(308, destination);
+	}
 	const spell = spells.find((item) => item.slug === params.page);
 
 	if (!spell) {

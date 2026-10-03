@@ -83,4 +83,4 @@ export const spells = {
 	}
 } as const;
 
-export { default as acidSplashEditions, acidSplash3e, acidSplash35e } from './acid-splash/_index_';
+export { default as acidSplashEditions, acidSplash1e, acidSplash2e, acidSplash3e, acidSplash35e, acidSplash55e } from './acid-splash/_index_';

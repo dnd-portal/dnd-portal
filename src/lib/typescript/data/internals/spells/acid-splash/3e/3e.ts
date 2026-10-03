@@ -1,6 +1,7 @@
 const spell = {
 	id: 'acid-splash',
 	edition: '3e',
+	contentStatus: 'published',
 
 	name: 'Acid Splash',
 

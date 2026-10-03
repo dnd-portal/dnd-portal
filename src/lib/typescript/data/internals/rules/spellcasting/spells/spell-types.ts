@@ -14,6 +14,7 @@ export type NewSpellExplanationSection = {
 export type NewSpell = {
 	readonly id: string;
 	readonly edition: string;
+	readonly contentStatus: 'published' | 'portal-conversion';
 	readonly source: SpellSourceKey;
 	readonly name: string;
 	readonly level: NewSpellLevel;

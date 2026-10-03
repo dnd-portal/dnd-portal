@@ -34,10 +34,6 @@ const sidebarSectionConfig = [
 		]
 	},
 	{
-		title: 'NEW SPELLS',
-		roots: ['internals.newSpells.acidSplash']
-	},
-	{
 		title: 'Homebrew',
 		roots: ['internals.homebrew.eldor.page']
 	},

@@ -22,6 +22,7 @@ const wizard = { type: 'link', path: 'internals.classes.wizard.page', label: 'Wi
 const spell = {
 	id: 'acid-splash',
 	edition: '3-5e',
+	contentStatus: 'published',
 	source: 'phb-3-5e',
 	name: 'Acid Splash',
 	level: 0,
