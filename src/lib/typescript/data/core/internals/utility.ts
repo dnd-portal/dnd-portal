@@ -48,5 +48,16 @@ export const utility = {
 			}
 		},
 		href: '/my-character'
+	},
+
+	diceRoller: {
+		name: { normal: 'Dice Roller', slug: 'dice-roller' },
+		logos: {
+			simple: {
+				href: '/icons/white/dice/d20.svg',
+				alt: 'A twenty-sided die icon representing the dice roller.'
+			}
+		},
+		href: '/dice-roller'
 	}
 }

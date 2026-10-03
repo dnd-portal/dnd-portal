@@ -82,3 +82,5 @@ export const spells = {
 		ninthLevel: createSpellListPage(current.spellLevels.ninthLevel, 9)
 	}
 } as const;
+
+export { default as acidSplashEditions, acidSplash1e, acidSplash2e, acidSplash3e, acidSplash35e, acidSplash55e } from './acid-splash/_index_';

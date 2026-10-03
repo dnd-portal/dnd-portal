@@ -39,7 +39,7 @@ const sidebarSectionConfig = [
 	},
 	{
 		title: 'Tools',
-		roots: ['internals.utility.myCharacter']
+		roots: ['internals.utility.diceRoller', 'internals.utility.myCharacter']
 	},
 	{
 		title: 'Community',

@@ -10,10 +10,92 @@
 	.page-layout {
 		grid-template-columns: minmax(0, sizes.get(content, article-max-width)) sizes.get(content, toc-width);
 		align-items: start;
+		transition: grid-template-columns 220ms ease;
+	}
+
+	.page-layout:has(.table-of-contents--closed) {
+		grid-template-columns: minmax(0, 1fr) 0;
 	}
 
 	.page-layout__toc {
 		display: block;
+		min-width: 0;
+		position: fixed;
+		inset-block: var(--navbar-height, #{sizes.get(navbar, height)}) 0;
+		inset-inline-end: max(
+			var(--content-padding-inline),
+			calc(
+				(100vw - #{sizes.get(content, max-width)} - #{sizes.get(sidebar, width)}) / 2
+				+ var(--content-padding-inline)
+			)
+		);
+		width: sizes.get(content, toc-width);
+		height: auto;
+		max-height: none;
+	}
+
+	body.navbar-hidden .page-layout__toc {
+		inset-block-start: 0;
+		height: 100dvh;
+		max-height: 100dvh;
+	}
+
+	.page-layout__toc:has(.table-of-contents--closed) {
+		overflow: visible;
+	}
+}
+
+@media (max-width: #{sizes.get(breakpoint, toc) - 1px}) {
+	.page-layout__toc {
+		display: block;
+		position: static;
+		height: auto;
+	}
+
+	.page-layout__toc .table-of-contents {
+		position: fixed;
+		visibility: hidden;
+		opacity: 0;
+		pointer-events: none;
+		height: auto;
+		top: var(--navbar-height, #{sizes.get(navbar, height)});
+		right: max(#{sizes.get(spacing, md)}, env(safe-area-inset-right));
+		width: min(320px, calc(100vw - #{sizes.get(spacing, xl)} - env(safe-area-inset-left) - env(safe-area-inset-right)));
+		max-height: calc(100dvh - var(--navbar-height, #{sizes.get(navbar, height)}) - #{sizes.get(spacing, xxl)} - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+		overflow: hidden;
+		z-index: 800;
+		box-shadow: 0 12px 32px rgb(0 0 0 / 28%);
+		transform: translateX(12px);
+	}
+
+	body.navbar-hidden .page-layout__toc .table-of-contents {
+		top: 0;
+		max-height: 100dvh;
+	}
+
+	.page-layout__toc .table-of-contents__header {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		padding-bottom: sizes.get(spacing, md);
+		background-color: colors.get-dark(background, secondary);
+	}
+
+	.page-layout__toc .table-of-contents:not(.table-of-contents--closed) {
+		visibility: visible;
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateX(0);
+	}
+
+	.page-layout__toc .table-of-contents--closed + .table-of-contents__reopen {
+		display: inline-flex;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.page-layout {
+		transition: none;
 	}
 }
 

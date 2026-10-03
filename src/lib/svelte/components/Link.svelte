@@ -18,7 +18,8 @@
 		popup = 'full',
 		current = false,
 		goto,
-		onNavigate
+			onNavigate,
+		query
 	}: {
 		placeholder?: string;
 		showIcon?: boolean;
@@ -26,6 +27,7 @@
 		current?: boolean;
 		goto: LinkPath;
 		onNavigate?: (event: MouseEvent) => void;
+			query?: string;
 	} = $props();
 
 	let link = $derived(getRuntimeData(goto));
@@ -51,6 +53,10 @@
 		}
 
 		return new URL(getInternalHref(href), siteMetadata.baseUrl).href;
+	}
+
+	function withQuery(href: string): string {
+		return query ? `${href}${query}` : href;
 	}
 
 	function supportsHover(): boolean {
@@ -195,7 +201,7 @@
 	<a
 		bind:this={trigger}
 		class="link"
-		href={getInternalHref(link.href)}
+		href={withQuery(getInternalHref(link.href))}
 		target={link.external ? '_blank' : undefined}
 		rel={link.external ? 'noopener noreferrer' : undefined}
 		aria-current={current ? 'page' : undefined}
@@ -253,7 +259,7 @@
 
 				<a
 					class="popup__link"
-					href={getInternalHref(link.href)}
+					href={withQuery(getInternalHref(link.href))}
 					target={link.external ? '_blank' : undefined}
 					rel={link.external ? 'noopener noreferrer' : undefined}
 				>

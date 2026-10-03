@@ -22,6 +22,7 @@
 		background-color: colors.get-dark(background, secondary);
 		border: 1px solid colors.get-dark(border, base);
 		border-radius: sizes.get(radius, lg);
+		overflow: hidden;
 
 		&[open] {
 			border-color: colors.get-dark(border, interactive);
@@ -42,6 +43,7 @@
 		font-weight: 700;
 		cursor: pointer;
 		list-style: none;
+		border-radius: sizes.get(radius, lg);
 
 		&::-webkit-details-marker {
 			display: none;
@@ -51,6 +53,10 @@
 			outline: 2px solid colors.get-dark(theme, primary);
 			outline-offset: -3px;
 		}
+	}
+
+	details[open] > summary {
+		border-radius: sizes.get(radius, lg) sizes.get(radius, lg) 0 0;
 	}
 
 	&__question {

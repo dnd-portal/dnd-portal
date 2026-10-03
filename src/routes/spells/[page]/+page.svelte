@@ -51,7 +51,7 @@
 			{#if faqItems.length}<Faq items={faqItems} />{/if}
 		</article>
 	</div>
-{:else if spell}
+{:else if spell && slug !== 'acid-splash'}
 	<article class="wiki-article spell-detail">
 		<header class="spell-detail__header">
 			<p>{spell.levelLabel} - {spell.school}</p>

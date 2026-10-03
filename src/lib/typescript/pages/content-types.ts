@@ -12,6 +12,8 @@ export type InlineContentNode =
 			readonly type: 'link';
 			readonly path: string;
 			readonly label?: string;
+			readonly showIcon?: boolean;
+			readonly query?: string;
 	  }
 	| {
 			readonly type: 'emphasis';
@@ -36,6 +38,7 @@ export type PageSection = {
 
 export type PageTableOfContentsSection = PageSection & {
 	readonly children?: readonly PageTableOfContentsSection[];
+	readonly isGroup?: boolean;
 };
 
 export type HeaderContentSection = PageSection & {

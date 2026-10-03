@@ -9,6 +9,7 @@
 	import Faq from '$lib/svelte/components/page/Faq.svelte';
 	import Link from '$lib/svelte/components/Link.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
+	import InlineContent from '$lib/svelte/components/page/InlineContent.svelte';
 
 	const currentPage = getCurrentPageContext();
 	let faqSegments = $derived((appPage.params.page ?? '').split('/').filter(Boolean));
@@ -43,7 +44,11 @@
 						{#if section.blocks}
 							{#each section.blocks as block}
 								{#if block.type === 'paragraph'}
+								{#if typeof block.content === 'string'}
 									<p>{block.content}</p>
+								{:else}
+									<p><InlineContent content={block.content} /></p>
+								{/if}
 								{:else}
 									<ul>
 										{#each block.items as item}
@@ -54,7 +59,7 @@
 							{/each}
 						{:else}
 							{#each section.paragraphs as paragraph}
-								<p>{paragraph}</p>
+								{#if typeof paragraph === 'string'}<p>{paragraph}</p>{:else}<p><InlineContent content={paragraph} /></p>{/if}
 							{/each}
 						{/if}
 					</section>
