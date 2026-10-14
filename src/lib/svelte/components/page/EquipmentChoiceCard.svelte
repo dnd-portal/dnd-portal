@@ -12,44 +12,32 @@
 
 <article class="equipment-card">
 	<header>
-		{#if group.instruction}
-			<p class="equipment-card__eyebrow">{group.instruction}</p>
-		{/if}
-
+			<p class="equipment-card__eyebrow">{group.instruction ?? 'Included'}</p>
 		<h3>{group.label}</h3>
 	</header>
+	<div class="equipment-card__divider" aria-hidden="true"></div>
 
 	{#if group.choices?.length}
-		<p class="equipment-card__sentence">
+		<div class="equipment-card__list">
 			{#each group.choices as choice, index}
-				<span class="equipment-card__choice">
+				<div class="equipment-card__choice">
 					<InlineContent content={choice} />
-				</span>
+				</div>
 
 				{#if index < group.choices.length - 1}
-					<span class="equipment-card__separator">
-						or
-					</span>
-				{:else}
-					<span>.</span>
+					<div class="equipment-card__separator">or</div>
 				{/if}
 			{/each}
-		</p>
+		</div>
 	{/if}
 
 	{#if group.items?.length}
-		<p class="equipment-card__sentence">
+		<div class="equipment-card__list">
 			{#each group.items as item, index}
-				<span class="equipment-card__choice">
+				<div class="equipment-card__choice">
 					<InlineContent content={item} />
-				</span>
-
-				{#if index < group.items.length - 1}
-					<span>, </span>
-				{:else}
-					<span>.</span>
-				{/if}
+				</div>
 			{/each}
-		</p>
+		</div>
 	{/if}
 </article>

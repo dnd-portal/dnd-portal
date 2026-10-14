@@ -12,6 +12,7 @@
 	} from '$lib/typescript/data/_index_';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getPageLabel } from '$lib/typescript/pages/currentPage';
+	import { getCanonicalPageData } from '$lib/typescript/pages/canonicalPage';
 	import { getFaqItems } from '$lib/typescript/pages/faq';
 
 	import NotFound from '$lib/svelte/components/page/NotFound.svelte';
@@ -102,7 +103,8 @@
 	}
 
 	const currentPage = getCurrentPageContext();
-	let content = $derived(getRulePageContent(currentPage.data));
+	let canonicalPage = $derived(getCanonicalPageData(currentPage.path));
+	let content = $derived(getRulePageContent(canonicalPage));
 	let childPagePaths = $derived(getChildPagePaths(currentPage.path));
 	let faqItems = $derived(getFaqItems(currentPage.path));
 </script>

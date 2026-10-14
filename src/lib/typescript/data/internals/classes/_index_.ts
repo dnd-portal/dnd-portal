@@ -29,6 +29,9 @@ import { vanguard } from './vanguard/_index_';
 import { warlock } from './warlock/_index_';
 import { warden } from './warden/_index_';
 import { wizard } from './wizard/_index_';
+import { getClassEditionData } from './edition-data';
+import { getClassEditionRoute } from './edition-route';
+import type { EditionId } from '../editions';
 
 const website = core.internals.website;
 const current = core.internals.classes;
@@ -238,6 +241,10 @@ const genericClassEntries = [
 		data: bard
 	},
 	{
+		slug: 'barbarian',
+		data: barbarian
+	},
+	{
 		slug: 'cleric',
 		data: cleric
 	},
@@ -343,6 +350,44 @@ export function getClassBySlug(slug: string) {
 	return genericClassEntries.find((entry) => entry.slug === slug)?.data ?? null;
 }
 
+export type ClassRouteResolution = {
+	baseClassSlug: string;
+	edition: EditionId;
+};
+
+export function resolveClassRoute(routeSlug: string): ClassRouteResolution | null {
+	const normalizedSlug = routeSlug.replace(/^\/+|\/+$/g, '');
+	const directEntry = genericClassEntries.find((entry) => entry.slug === normalizedSlug);
+	if (directEntry) {
+		return {
+			baseClassSlug: directEntry.slug,
+			edition: '5.5e'
+		};
+	}
+
+	for (const entry of genericClassEntries) {
+		const availableEditions =
+			'availableEditions' in entry.data ? entry.data.availableEditions : [];
+		const edition = availableEditions.find((candidate) => {
+			const route = getClassEditionRoute(entry.slug, candidate);
+			return route.replace(/^\/+|\/+$/g, '').split('/').at(-1) === normalizedSlug;
+		});
+
+		if (edition && getClassEditionData(entry.slug, edition)) {
+			return { baseClassSlug: entry.slug, edition };
+		}
+	}
+
+	return null;
+}
+
+/** Resolve an edition-suffixed class route to its canonical class identity. */
+export function getBaseClassSlug(pathname: string): string | null {
+	const segments = pathname.split(/[?#]/, 1)[0].split('/').filter(Boolean);
+	const classRouteSlug = segments[0] === 'classes' ? segments[1] : segments.at(-1);
+	return classRouteSlug ? resolveClassRoute(classRouteSlug)?.baseClassSlug ?? null : null;
+}
+
 export function getSubclassBySlug(
 	classSlug: string,
 	subclassSlug: string
@@ -357,7 +402,7 @@ export function getSubclassBySlug(
 
 	return subclasses.find((subclass) => {
 		const href = 'page' in subclass ? subclass.page.href : subclass.href;
-		const parts = href.split('/');
+		const parts = href.replace(/\/+$/, '').split('/');
 
 		return parts[parts.length - 1] === subclassSlug;
 	}) ?? null;

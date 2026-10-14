@@ -10,6 +10,7 @@
  import { pugilist } from '$lib/typescript/data/internals/classes/pugilist/_index_';
 	import { equipmentItems } from '$lib/typescript/data/internals/equipment-items';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
+	import { getCanonicalPageData } from '$lib/typescript/pages/canonicalPage';
 	import { getFaqItems } from '$lib/typescript/pages/faq';
 
 	import EquipmentBrowser from '$lib/svelte/components/page/EquipmentBrowser.svelte';
@@ -44,7 +45,8 @@
 	}
 
 	const currentPage = getCurrentPageContext();
-	let content = $derived(getTopLevelPageContent(currentPage.data));
+	let canonicalPage = $derived(getCanonicalPageData(currentPage.path));
+	let content = $derived(getTopLevelPageContent(canonicalPage));
 	let isEquipmentPage = $derived(currentPage.path === 'internals.equipment.page');
 	let isNpcsPage = $derived(currentPage.path === 'internals.npcs.page');
 	let faqItems = $derived(getFaqItems(currentPage.path));

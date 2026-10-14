@@ -187,6 +187,7 @@ function isKnownInternalRoute(href) {
 		clean === '/rules/spellcasting/cantrips' ||
 		clean === '/rules/spellcasting/spells' ||
 		/^\/classes\/[^/]+(?:\/[^/]+)?$/.test(clean) ||
+		/^\/homebrew\/[a-z0-9-]+(?:\/[a-z0-9-]+){0,2}$/.test(clean) ||
 		/^\/discord\/[^/]+$/.test(clean) ||
 		/^\/equipment\/[^/]+$/.test(clean) ||
 		/^\/equipment\/[^/]+\/[^/]+$/.test(clean) ||
@@ -573,7 +574,9 @@ function collectGeneratedHtmlSeoFindings(productionOrigin) {
 
 		while ((jsonLdMatch = jsonLdRegex.exec(content))) {
 			try {
-				JSON.parse(decodeHtmlEntities(jsonLdMatch[1].trim()));
+				// JSON-LD is script raw text, not an HTML attribute. Decoding entities here
+				// can turn valid JSON string values such as `&amp;` into a different payload.
+				JSON.parse(jsonLdMatch[1].trim());
 			} catch (error) {
 				findings.invalidJsonLd.push(`${relative} has invalid JSON-LD: ${error.message}`);
 			}

@@ -44,11 +44,24 @@
 		description = 'long',
 		showHeaderSections = true,
 		descriptionText,
+		descriptionContent,
+		titleText,
+		subtitleText,
+		headerMeta,
 		children
-	}: { description?: 'short' | 'long'; showHeaderSections?: boolean; descriptionText?: string; children?: Snippet } = $props();
+	}: {
+		description?: 'short' | 'long';
+		showHeaderSections?: boolean;
+		descriptionText?: string;
+		descriptionContent?: InlineContentBlock;
+		titleText?: string;
+		subtitleText?: string;
+		headerMeta?: Snippet;
+		children?: Snippet;
+	} = $props();
 	let descriptionParagraphs = $derived(
-		descriptionText
-			? getDescriptionParagraphs([{ type: 'text', text: descriptionText }], '')
+		descriptionText || descriptionContent
+			? getDescriptionParagraphs(descriptionContent ?? [{ type: 'text', text: descriptionText ?? '' }], '')
 			: description === 'short'
 			? getDescriptionParagraphs(
 					currentPage.data?.descriptions?.short,
@@ -65,17 +78,20 @@
 	let hasHeaderImage = $derived(Boolean(imageSet?.female ?? imageSet?.male));
 </script>
 
-{#if currentPage.path && currentPage.data}
+	{#if (titleText && subtitleText) || (currentPage.path && currentPage.data)}
 	<section
 		class="page-header"
+		id="class-overview"
 		class:page-header--without-image={!hasHeaderImage}
 	>
 		<div class="page-header__content">
 			<p class="page-header__subtitle">
-				{currentPage.data.subTitle}
+				{subtitleText ?? currentPage.data?.subTitle}
 			</p>
 
-			<h1>{getPageLabel(currentPage.path)}</h1>
+			<h1>{titleText ?? (currentPage.path ? getPageLabel(currentPage.path) : '')}</h1>
+
+			{@render headerMeta?.()}
 
 			<div class="page-header__description">
 				{#each descriptionParagraphs as paragraph}
@@ -85,9 +101,9 @@
 				{/each}
 			</div>
 
-			{#if showHeaderSections && currentPage.data.header?.sections?.length}
+			{#if showHeaderSections && currentPage.data?.header?.sections?.length}
 				<div class="page-header__sections">
-					{#each currentPage.data.header.sections as section}
+					{#each currentPage.data?.header?.sections ?? [] as section}
 						<section
 							class="page-header__section"
 							id={section.id}

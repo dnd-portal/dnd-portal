@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
-		getData,
 		type ImageGender,
 		type ImageSize,
 		type PageData,
 		type PagePath,
 		type ResponsiveImageData
 	} from '$lib/typescript/data/_index_';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import {
 		getCanonicalInternalHref,
 		getPageLabel
@@ -31,6 +31,7 @@
 		imageGender,
 		imageSize = 's',
 		eyebrow,
+		featureLevels,
 		density = 'regular'
 	}: {
 		page?: PagePath | string;
@@ -39,11 +40,12 @@
 		imageGender?: ImageGender;
 		imageSize?: ImageSize;
 		eyebrow?: string;
+		featureLevels?: readonly number[];
 		density?: CardDensity;
 	} = $props();
 
 	let pageData: PageData | undefined = $derived(
-		page ? getData(page as PagePath) : undefined
+		page ? (getRuntimeData(page as PagePath) as unknown as PageData) : undefined
 	);
 	let resolvedImageGender = $state<ImageGender | null>(null);
 	let displayGender = $derived(imageGender ?? resolvedImageGender ?? 'female');
@@ -110,6 +112,9 @@
 
 			<h3>{cardTitle}</h3>
 			<p>{cardDescription}</p>
+			{#if featureLevels?.length}
+				<span class="pagecard__levels"><small>Features at levels</small><strong>{featureLevels.join(' • ')}</strong></span>
+			{/if}
 
 			{#if cardTags?.length}
 				<ul>
@@ -144,6 +149,9 @@
 
 			<h3>{cardTitle}</h3>
 			<p>{cardDescription}</p>
+			{#if featureLevels?.length}
+				<span class="pagecard__levels"><small>Features at levels</small><strong>{featureLevels.join(' • ')}</strong></span>
+			{/if}
 
 			{#if cardTags?.length}
 				<ul>

@@ -35,6 +35,8 @@ export type {
 	InlineContentNode,
 	InlineContentParagraphs,
 	PageContentBlock,
+	PageContentTableColumn,
+	PageContentTableRow,
 	PageContentCard,
 	PageContentFallbackCard,
 	PageContentCardGroup,

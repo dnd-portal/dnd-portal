@@ -275,6 +275,20 @@ export const features = [
         ]
     },
     {
+        ...page.sections.weaponMastery,
+        blocks: [
+            {
+                type: 'paragraph',
+                content: [
+                    {
+                        type: 'text',
+                        text: 'At 1st level, you can use the mastery properties of two Simple or Martial melee weapon types. The number of weapon types you can use grows with the class progression.'
+                    }
+                ]
+            }
+        ]
+    },
+    {
         ...page.sections.dangerSense,
         blocks: [
             {
@@ -576,7 +590,7 @@ export const features = [
         ]
     },
     {
-        ...page.sections.brutalCritical,
+        ...page.sections.brutalStrike,
         blocks: [
             {
                 type: 'paragraph',

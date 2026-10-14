@@ -7,7 +7,6 @@
 @use '../../core/sizes' as sizes;
 
 .starting-equipment {
-	margin-top: 28px;
 	container-type: inline-size;
 
 	&--subsection {
@@ -34,14 +33,16 @@
 
 	&__grid {
 		max-width: sizes.get(content, equipment-grid-max-width);
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+		display: flex;
+		flex-wrap: wrap;
 		gap: sizes.get(spacing, lg);
 	}
 }
 
 .equipment-card {
 	min-width: 0;
+	flex: 0 1 260px;
+	max-width: 360px;
 	padding: 18px;
 
 	display: flex;
@@ -81,20 +82,16 @@
 		line-height: 1.45;
 	}
 
-	&__sentence {
-		color: colors.get-dark(text, secondary);
-		line-height: 1.5;
-
-		.link,
-		.link-container {
-			display: inline;
-		}
+	&__divider {
+		border-top: 1px solid colors.get-dark(border, subtle);
 	}
 
 	&__separator {
-		margin: 0 0.35em;
+		margin: -2px 0;
 		color: colors.get-dark(text, tertiary);
+		font-size: 0.75rem;
 		font-style: italic;
+		text-transform: uppercase;
 	}
 }
 

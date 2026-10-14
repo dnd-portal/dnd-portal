@@ -47,10 +47,11 @@ interface InternalPageInput {
 	};
 
 	navigation?: {
-		label?: string;
-		parent?: string;
-		hidden?: boolean;
-	};
+			label?: string;
+			parent?: string;
+			hidden?: boolean;
+			iconSize?: 'default' | 'large';
+		};
 
 	tags?: readonly string[];
 	sourceMetadata?: readonly PageSourceMetadata[];

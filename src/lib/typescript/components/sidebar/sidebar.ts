@@ -3,12 +3,8 @@
     use:
 */
 
-import {
-	data,
-	getData,
-	type LinkData,
-	type LinkPath
-} from '$lib/typescript/data/_index_';
+import type { LinkData, LinkPath } from '$lib/typescript/data/_index_';
+import { getRuntimeChildren, getRuntimeData } from '$lib/typescript/data/runtime';
 
 import type {
 	SidebarDataType,
@@ -36,6 +32,14 @@ const sidebarSectionConfig = [
 			'internals.monsters.page',
 			'internals.locations.page'
 		]
+	},
+	{
+		title: 'Homebrew',
+		roots: ['internals.homebrew.eldor.page']
+	},
+	{
+		title: 'Tools',
+		roots: ['internals.utility.myCharacter']
 	},
 	{
 		title: 'Community',
@@ -94,18 +98,6 @@ function isLinkData(value: unknown): value is LinkData {
 	);
 }
 
-function getValue(path: string): unknown {
-	return path
-		.split('.')
-		.reduce<unknown>((current, key) => {
-			if (!isRecord(current)) {
-				return undefined;
-			}
-
-			return current[key];
-		}, data);
-}
-
 function toLinkPath(path: string, value: unknown): LinkPath {
 	if (!isLinkData(value)) {
 		throw new Error(`Sidebar path "${path}" does not resolve to link data.`);
@@ -143,7 +135,7 @@ function getDisplayTitle(title: string): string {
 }
 
 export function getSidebarLabel(path: LinkPath): string {
-	const link = getData(path);
+	const link = getRuntimeData(path);
 
 	return getNavigationLabel(link) ?? getDisplayTitle(link.title);
 }
@@ -157,61 +149,13 @@ function sortNodes(nodes: readonly SidebarNode[]): readonly SidebarNode[] {
 }
 
 function discoverChildNodes(containerPath: string): readonly SidebarNode[] {
-	const container = getValue(containerPath);
+	const children = getRuntimeChildren(containerPath).flatMap<SidebarNode>((childPath) => {
+		const value = getRuntimeData(childPath);
 
-	if (!isRecord(container)) {
-		return [];
-	}
-
-	const children = Object.entries(container).flatMap<SidebarNode>(
-		([key, value]) => {
-			if (
-				key === 'page' ||
-				key === 'img' ||
-				key === 'images' ||
-				key === 'tags' ||
-				key === 'navigation'
-			) {
-				return [];
-			}
-
-			const childPath = `${containerPath}.${key}`;
-
-			if (isLinkData(value)) {
-				if (isNavigationHidden(value)) {
-					return [];
-				}
-
-				return [
-					{
-						path: toLinkPath(childPath, value),
-						children: []
-					}
-				];
-			}
-
-			if (!isRecord(value)) {
-				return [];
-			}
-
-			if (isLinkData(value.page)) {
-				if (isNavigationHidden(value.page)) {
-					return [];
-				}
-
-				const pagePath = toLinkPath(`${childPath}.page`, value.page);
-
-				return [
-					{
-						path: pagePath,
-						children: discoverChildNodes(childPath)
-					}
-				];
-			}
-
-			return [...discoverChildNodes(childPath)];
-		}
-	);
+		return isNavigationHidden(value)
+			? []
+			: [{ path: childPath as LinkPath, children: discoverChildNodes(childPath.replace(/\.page$/, '')) }];
+	});
 
 	return sortNodes(children);
 }

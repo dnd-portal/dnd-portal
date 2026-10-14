@@ -5,17 +5,17 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import * as core from '$lib/typescript/data/core/_index_';
-	import { getData } from '$lib/typescript/data/_index_';
+	import { getRuntimeData } from '$lib/typescript/data/runtime';
+	import { siteMetadata } from '$lib/typescript/data/runtime/site-metadata';
 	import type { NavbarDataType } from '$lib/typescript/components/_index_';
 
 	import Link from '$lib/svelte/components/Link.svelte';
 
 	let { logoPath, searchPath, actions }: NavbarDataType = $props();
 
-	let logo = $derived(getData(logoPath));
-	let brandLogo = $derived(core.internals.website.logos.wide);
-	let search = $derived(getData(searchPath));
+	let logo = $derived(getRuntimeData(logoPath));
+	let brandLogo = siteMetadata.logos.wide;
+	let search = $derived(getRuntimeData(searchPath));
 	let searchAction = $derived(getSearchAction(search.href));
 	let isNavbarHidden = $state(false);
 	let mobileSidebarOpen = $state(false);
@@ -35,6 +35,21 @@
 	}
 
 	onMount(() => {
+		const navbar = document.querySelector<HTMLElement>('.navbar');
+		const updateNavbarHeight = (): void => {
+			if (navbar) {
+				const height = `${navbar.getBoundingClientRect().height}px`;
+				document.documentElement.style.setProperty('--navbar-height', height);
+				document.querySelectorAll<HTMLElement>('.layout').forEach((layout) => {
+					layout.style.setProperty('--navbar-height', height);
+				});
+			}
+		};
+
+		updateNavbarHeight();
+		const navbarObserver = navbar ? new ResizeObserver(updateNavbarHeight) : undefined;
+		navbarObserver?.observe(navbar!);
+
 		const handleSidebarState = (event: Event): void => {
 			mobileSidebarOpen = (event as CustomEvent<{ open: boolean }>).detail.open;
 		};
@@ -66,6 +81,7 @@
 		window.addEventListener('scroll', handleScroll, { passive: true });
 
 		return () => {
+			navbarObserver?.disconnect();
 			window.removeEventListener('scroll', handleScroll);
 			window.removeEventListener('dnd-portal:mobile-sidebar-state', handleSidebarState);
 			setNavbarHidden(false);

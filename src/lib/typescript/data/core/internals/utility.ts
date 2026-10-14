@@ -37,5 +37,16 @@ export const utility = {
 		},
 
 		href: '/preferences'
+	},
+
+	myCharacter: {
+		name: { normal: 'My Character', slug: 'my-character' },
+		logos: {
+			simple: {
+				href: '/icons/white/game/character.svg',
+				alt: 'A stylized character icon representing a personal character sheet.'
+			}
+		},
+		href: '/my-character'
 	}
 }

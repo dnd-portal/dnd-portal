@@ -4,7 +4,7 @@
 -->
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { base as site } from '$lib/typescript/data/core/_index_';
+	import { siteMetadata } from '$lib/typescript/data/runtime/site-metadata';
 	import { getCanonicalInternalHref } from '$lib/typescript/pages/currentPage';
 	import type { SearchResult } from '$lib/typescript/pages/search';
 
@@ -19,7 +19,7 @@
 			return href;
 		}
 
-		return new URL(getHref(href), site.siteLink).href;
+		return new URL(getHref(href), siteMetadata.baseUrl).href;
 	}
 </script>
 
