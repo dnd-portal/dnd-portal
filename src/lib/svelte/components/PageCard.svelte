@@ -31,6 +31,7 @@
 		imageGender,
 		imageSize = 's',
 		eyebrow,
+		descriptionText,
 		featureLevels,
 		density = 'regular'
 	}: {
@@ -40,6 +41,7 @@
 		imageGender?: ImageGender;
 		imageSize?: ImageSize;
 		eyebrow?: string;
+		descriptionText?: string;
 		featureLevels?: readonly number[];
 		density?: CardDensity;
 	} = $props();
@@ -54,11 +56,12 @@
 	);
 	let cardSource = $derived(eyebrow ?? fallback?.source);
 	let cardDescription = $derived(
-		pageData
+		descriptionText ??
+		(pageData
 			? variant === 'image'
-				? pageData.descriptions?.short ?? pageData.description
+				? (pageData.descriptions?.short ?? pageData.description).split('\n\n')[0]
 				: pageData.descriptions?.medium ?? pageData.description
-			: fallback?.description
+			: fallback?.description)
 	);
 	let cardTags = $derived(pageData?.tags ?? fallback?.tags);
 	let cardImageSet = $derived(

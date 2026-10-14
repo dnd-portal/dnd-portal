@@ -201,12 +201,12 @@ function createBreadcrumbStructuredData(path: PagePath | null) {
 
 	return {
 		'@type': 'BreadcrumbList',
-		'@id': `${getAbsoluteCanonicalUrl(getRuntimeData(items[items.length - 1].path).href)}#breadcrumb`,
+		'@id': `${getAbsoluteCanonicalUrl(getRuntimeData(items[items.length - 1].path!).href)}#breadcrumb`,
 		itemListElement: items.map((item, index) => ({
 			'@type': 'ListItem',
 			position: index + 1,
 			name: item.label,
-			item: getAbsoluteCanonicalUrl(getRuntimeData(item.path).href)
+			item: getAbsoluteCanonicalUrl(getRuntimeData(item.path!).href)
 		}))
 	};
 }

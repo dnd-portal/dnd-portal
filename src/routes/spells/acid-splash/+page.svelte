@@ -1,5 +1,6 @@
 <script lang="ts">
-	import AcidSplashPage from '$lib/svelte/components/page/AcidSplashPage.svelte';
+ import SpellDetailPage from '$lib/svelte/components/page/SpellDetailPage.svelte';
+ import { buildAcidSplashDetail } from '$lib/typescript/pages/acidSplashDetail';
 </script>
 
-<AcidSplashPage edition="5-5e" />
+<SpellDetailPage model={buildAcidSplashDetail('5-5e')} />

@@ -27,6 +27,7 @@ const sidebarSectionConfig = [
 			'internals.classes.page',
 			'internals.spells.page',
 			'internals.equipment.page',
+			'internals.companions.page',
 			'internals.npcs.page',
 			'internals.rules.page',
 			'internals.monsters.page',

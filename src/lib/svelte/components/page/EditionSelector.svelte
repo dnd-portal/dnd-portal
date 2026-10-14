@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { tick } from 'svelte';
-	import type { EditionId } from '$lib/typescript/data/internals/editions';
-
-	type EditionOption = { id: EditionId; label: string; href: string };
-	let { current, options }: { current: EditionId; options: readonly EditionOption[] } = $props();
+	type EditionOption = { id: string; label: string; href: string };
+	let { current, options }: { current: string; options: readonly EditionOption[] } = $props();
 	let open = $state(false);
 	let highlightedIndex = $state(0);
 	let container: HTMLDivElement;

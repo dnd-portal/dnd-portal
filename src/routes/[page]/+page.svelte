@@ -8,6 +8,7 @@
 		PageTableOfContentsSection
 	} from '$lib/typescript/data/_index_';
  import { pugilist } from '$lib/typescript/data/internals/classes/pugilist/_index_';
+ import { companionItems } from '$lib/typescript/data/internals/companions';
 	import { equipmentItems } from '$lib/typescript/data/internals/equipment-items';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getCanonicalPageData } from '$lib/typescript/pages/canonicalPage';
@@ -16,6 +17,7 @@
 	import EquipmentBrowser from '$lib/svelte/components/page/EquipmentBrowser.svelte';
 	import Faq from '$lib/svelte/components/page/Faq.svelte';
 	import NpcBrowser from '$lib/svelte/components/page/NpcBrowser.svelte';
+	import CompanionBrowser from '$lib/svelte/components/page/CompanionBrowser.svelte';
 	import NotFound from '$lib/svelte/components/page/NotFound.svelte';
 	import PageContentSection from '$lib/svelte/components/page/PageContentSection.svelte';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
@@ -49,6 +51,7 @@
 	let content = $derived(getTopLevelPageContent(canonicalPage));
 	let isEquipmentPage = $derived(currentPage.path === 'internals.equipment.page');
 	let isNpcsPage = $derived(currentPage.path === 'internals.npcs.page');
+	let isCompanionsPage = $derived(currentPage.path === 'internals.companions.page');
 	let faqItems = $derived(getFaqItems(currentPage.path));
 </script>
 
@@ -56,6 +59,10 @@
 	<div class="page-layout">
 		<article class="wiki-article page-layout__article">
 			<PageHeader />
+
+			{#if isCompanionsPage}
+				<CompanionBrowser items={companionItems} />
+			{/if}
 
 			{#if content}
 				{#each content.sections as section}
@@ -70,7 +77,6 @@
 			{#if isNpcsPage}
 				<NpcBrowser items={pugilist.npcItems} />
 			{/if}
-
 			{#if faqItems.length}
 				<Faq items={faqItems} />
 			{/if}

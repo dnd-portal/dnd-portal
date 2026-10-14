@@ -84,3 +84,4 @@ export const spells = {
 } as const;
 
 export { default as acidSplashEditions, acidSplash1e, acidSplash2e, acidSplash3e, acidSplash35e, acidSplash55e } from './acid-splash/_index_';
+export { default as bladeWardEditions, bladeWard1e, bladeWard2e, bladeWard3e, bladeWard35e, bladeWard4e, bladeWard5e, bladeWard55e } from './blade-ward/_index_';

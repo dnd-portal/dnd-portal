@@ -17,6 +17,8 @@
 	import SpellBrowser from '$lib/svelte/components/page/SpellBrowser.svelte';
 	import { getCurrentPageContext } from '$lib/svelte/context/currentPage';
 	import { getFaqItems } from '$lib/typescript/pages/faq';
+	import SpellDetailPage from '$lib/svelte/components/page/SpellDetailPage.svelte';
+	import type { SpellDetailViewModel } from '$lib/typescript/pages/spellDetail';
 
 	const slug = $derived(appPage.params.page ?? '');
 	const level = $derived(spellLevels.find((item) => item.slug === slug));
@@ -24,6 +26,11 @@
 	const isSpellcastingOverview = $derived(slug === 'spellcasting');
 	const currentPage = getCurrentPageContext();
 	let faqItems = $derived(getFaqItems(currentPage.path));
+
+	const metadataLayout = (value: string, fallback: 'compact' | 'wide' | 'full' = 'compact') => {
+		if (fallback === 'full') return fallback;
+		return value.length > 34 ? 'wide' : fallback;
+	};
 </script>
 
 {#if level}
@@ -52,95 +59,30 @@
 		</article>
 	</div>
 {:else if spell && slug !== 'acid-splash'}
-	<article class="wiki-article spell-detail">
-		<header class="spell-detail__header">
-			<p>{spell.levelLabel} - {spell.school}</p>
-			<h1>{spell.name}</h1>
-		</header>
-
-		<dl class="spell-detail__meta">
-			<div>
-				<dt>Casting Time</dt>
-				<dd>{spell.castingTime}</dd>
-			</div>
-			<div>
-				<dt>Range</dt>
-				<dd>{spell.range}</dd>
-			</div>
-			<div>
-				<dt>Duration</dt>
-				<dd>{spell.duration}</dd>
-			</div>
-			<div>
-				<dt>Components</dt>
-				<dd>{spell.components.raw || 'None'}</dd>
-			</div>
-			<div>
-				<dt>Classes</dt>
-				<dd>{spell.classes.join(', ')}</dd>
-			</div>
-			<div>
-				<dt>Flags</dt>
-				<dd>{[spell.ritual ? 'Ritual' : '', spell.concentration ? 'Concentration' : ''].filter(Boolean).join(', ') || 'None'}</dd>
-			</div>
-		</dl>
-
-		<section class="spell-detail__section" aria-labelledby="spell-text-title">
-			<h2 id="spell-text-title">Spell Text</h2>
-
-			{#each spell.description as paragraph}
-				<p>{paragraph}</p>
-			{/each}
-		</section>
-
-		{#if spell.higherLevel.length}
-			<section class="spell-detail__section" aria-labelledby="higher-levels-title">
-				<h2 id="higher-levels-title">At Higher Levels</h2>
-
-				{#each spell.higherLevel as paragraph}
-					<p>{paragraph}</p>
-				{/each}
-			</section>
-		{/if}
-
-		{#if spell.tables.length}
-			<section class="spell-detail__section" aria-labelledby="spell-tables-title">
-				<h2 id="spell-tables-title">Tables</h2>
-
-				<div class="spell-detail__tables">
-					{#each spell.tables as table}
-						<table>
-							{#if table.caption}
-								<caption>{table.caption}</caption>
-							{/if}
-
-							{#if table.headers.length}
-								<thead>
-									<tr>
-										{#each table.headers as header}
-											<th>{header}</th>
-										{/each}
-									</tr>
-								</thead>
-							{/if}
-
-							<tbody>
-								{#each table.rows as row}
-									<tr>
-										{#each row as cell}
-											<td>{cell}</td>
-										{/each}
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					{/each}
-				</div>
-			</section>
-		{/if}
-
-		{#if faqItems.length}<Faq items={faqItems} />{/if}
-	</article>
+	{@const model: SpellDetailViewModel = {
+		slug,
+		name: spell.name,
+		level: spell.levelLabel,
+		school: spell.school,
+		source: spell.sourceBook,
+		edition: '5e',
+		summary: spell.description[0],
+		metadata: [
+			{ id: 'level', label: 'Level', value: spell.levelLabel, layout: 'compact' },
+			{ id: 'school', label: 'School', value: spell.school, layout: 'compact' },
+			{ id: 'casting-time', label: 'Casting Time', value: spell.castingTime, layout: 'compact' },
+			{ id: 'range', label: 'Range', value: spell.range, layout: 'compact' },
+			{ id: 'duration', label: 'Duration', value: spell.duration, layout: 'compact' },
+			{ id: 'components', label: 'Components', value: spell.components.raw, layout: metadataLayout(spell.components.raw) },
+			{ id: 'classes', label: 'Spell Lists', value: spell.classes.join(', '), layout: 'full' },
+			{ id: 'flags', label: 'Flags', value: [spell.ritual ? 'Ritual' : '', spell.concentration ? 'Concentration' : ''].filter(Boolean).join(', ') || 'None', layout: 'compact' }
+		],
+		sections: [
+			{ id: 'spell-text', title: 'Description', paragraphs: spell.description, icon: '/icons/white/entity/scroll.svg' },
+			...(spell.higherLevel.length ? [{ id: 'higher-levels', title: 'At Higher Levels', paragraphs: spell.higherLevel }] : [])
+		]
+	}}
+	<SpellDetailPage {model} />
 {:else}
 	<NotFound />
 {/if}

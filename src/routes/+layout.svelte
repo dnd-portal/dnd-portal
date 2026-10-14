@@ -20,6 +20,7 @@
 	import Footer from '$lib/svelte/components/page/Footer.svelte';
 	import Navbar from '$lib/svelte/components/page/Navbar.svelte';
 	import Sidebar from '$lib/svelte/components/page/Sidebar.svelte';
+	import MobileNavigation from '$lib/svelte/components/page/MobileNavigation.svelte';
 	import Analytics from '$lib/svelte/components/Analytics.svelte';
 
 	const page = buildPage();
@@ -108,4 +109,5 @@
 	{#if page.footer}
 		<Footer {...page.footer} />
 	{/if}
+	<MobileNavigation />
 </div>

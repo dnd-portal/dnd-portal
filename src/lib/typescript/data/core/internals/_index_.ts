@@ -6,6 +6,7 @@ import { locations } from "./locations";
 import { monsters } from "./monsters";
 import { equipment } from "./equipment";
 import { npcs } from "./npcs";
+import { companions } from "./companions";
 import { species } from "./species";
 import { website } from "./website";
 import { utility } from "./utility";
@@ -14,5 +15,5 @@ import { legal } from "./legal";
 
 export const internals = {
     website, utility, classes, spells, project, legal, rules, species,
-	equipment, npcs, monsters, locations
+	equipment, npcs, companions, monsters, locations
 }
