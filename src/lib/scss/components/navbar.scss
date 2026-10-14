@@ -333,6 +333,25 @@
 	}
 }
 
+@media (max-width: #{sizes.get(breakpoint, navbar)}) {
+	.navbar {
+		&__inner {
+			grid-template-columns: 1fr auto;
+			grid-template-areas: 'brand actions';
+			padding: 10px 16px;
+		}
+
+		&__mobile-toggle,
+		&__search {
+			display: none;
+		}
+
+		&__brand {
+			justify-self: start;
+		}
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.navbar {
 		transition: none;

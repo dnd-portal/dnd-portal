@@ -79,7 +79,7 @@ const generated = {
 			"tables": []
 		},
 		{
-			"href": "/spell:blade-ward",
+			"href": "/spells/blade-ward",
 			"index": "blade-ward",
 			"slug": "blade-ward",
 			"name": "Blade Ward",

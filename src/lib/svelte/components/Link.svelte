@@ -31,6 +31,11 @@
 	} = $props();
 
 	let link = $derived(getRuntimeData(goto));
+	let linkDescription = $derived(
+		'descriptions' in link && link.descriptions && typeof link.descriptions === 'object' && 'short' in link.descriptions && typeof link.descriptions.short === 'string'
+			? link.descriptions.short
+			: link.description
+	);
 	let iconSize = $derived(
 		'navigation' in link && link.navigation && typeof link.navigation === 'object'
 			? (link.navigation as { iconSize?: 'default' | 'large' }).iconSize
@@ -251,7 +256,7 @@
 			</span>
 
 			<span class="popup-description">
-				{link.description}
+				{linkDescription}
 			</span>
 
 			<span class="popup__link-container">
@@ -277,7 +282,7 @@
 			data-nosnippet
 		>
 			<span class="popup-description">
-				{link.description}
+				{linkDescription}
 			</span>
 		</span>
 	{/if}

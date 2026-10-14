@@ -26,7 +26,7 @@ export const spellSources = {
 		edition: '5e'
 	},
 	'players-handbook-2024': {
-		name: "Player's Handbook",
+		name: "Player's Handbook (2024)",
 		shortName: 'PHB',
 		edition: '5-5e'
 	}

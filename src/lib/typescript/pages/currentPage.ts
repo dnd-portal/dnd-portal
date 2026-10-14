@@ -10,6 +10,7 @@ import {
 	type PagePath
 } from '$lib/typescript/data/_index_';
 import { getRuntimeData, runtimeLinks } from '$lib/typescript/data/runtime';
+import { getSpellBySlug } from '$lib/typescript/data/internals/rules/spellcasting/spells/spell-data';
 
 export type CurrentPageContext = {
 	readonly pathname: string;
@@ -23,9 +24,31 @@ export type CurrentPageResolution = {
 };
 
 export type BreadcrumbItem = {
-	readonly path: PagePath;
+	readonly key: string;
+	readonly path?: PagePath;
 	readonly label: string;
 };
+
+const spellLevelParent = (levelSlug: string): PagePath => {
+	if (levelSlug === 'cantrips') return 'internals.spells.cantrips';
+	const levelKey = {
+		'1st-level': 'firstLevel', '2nd-level': 'secondLevel', '3rd-level': 'thirdLevel',
+		'4th-level': 'fourthLevel', '5th-level': 'fifthLevel', '6th-level': 'sixthLevel',
+		'7th-level': 'seventhLevel', '8th-level': 'eighthLevel', '9th-level': 'ninthLevel'
+	}[levelSlug];
+	return `internals.spells.spellLevels.${levelKey ?? 'firstLevel'}` as PagePath;
+};
+
+export function getDynamicSpellBreadcrumbItems(slug: string): readonly BreadcrumbItem[] {
+	const spell = getSpellBySlug(slug);
+	if (!spell) return [];
+	const parent = spellLevelParent(spell.levelSlug);
+	return [
+		{ key: 'internals.spells.page', path: 'internals.spells.page', label: 'Spells' },
+		{ key: parent, path: parent, label: spell.levelSlug === 'cantrips' ? 'Cantrips' : spell.levelLabel },
+		{ key: `/spells/${spell.slug}`, label: spell.name }
+	];
+}
 
 const homeHref = '/';
 
@@ -281,6 +304,7 @@ export function getBreadcrumbItems(path: PagePath | null): readonly BreadcrumbIt
 			);
 
 			return specialPaths.map((itemPath) => ({
+				key: itemPath,
 				path: itemPath,
 				label: getPageLabel(itemPath)
 			}));
@@ -294,6 +318,7 @@ export function getBreadcrumbItems(path: PagePath | null): readonly BreadcrumbIt
 	while (currentPath && !seen.has(currentPath)) {
 		seen.add(currentPath);
 		items.push({
+			key: currentPath,
 			path: currentPath,
 			label: getPageLabel(currentPath)
 		});
@@ -307,6 +332,7 @@ export function getBreadcrumbItems(path: PagePath | null): readonly BreadcrumbIt
 		path !== homePagePath
 	) {
 		items.push({
+			key: homePagePath,
 			path: homePagePath,
 			label: getPageLabel(homePagePath)
 		});
@@ -319,7 +345,7 @@ export function getBreadcrumbBackPath(
 	items: readonly BreadcrumbItem[]
 ): PagePath | null {
 	if (items.length >= 2) {
-		return items[items.length - 2].path;
+		return items[items.length - 2].path ?? null;
 	}
 
 	return homePagePath;

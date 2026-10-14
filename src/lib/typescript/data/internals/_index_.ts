@@ -8,6 +8,7 @@ import { locations } from './locations/_index_';
 import { monsters } from './monsters/_index_';
 import { equipment } from './equipment';
 import { npcs } from './npcs';
+import { companions } from './companions';
 import { community } from './community/_index_';
 import { project } from './project';
 import { legal } from './legal';
@@ -28,6 +29,7 @@ export const internals = {
 	rules,
 	equipment,
 	npcs,
+	companions,
 	locations,
 	monsters,
 	community,

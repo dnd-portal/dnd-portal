@@ -1,0 +1,9 @@
+@use '../core/colors' as colors;
+@use '../core/sizes' as sizes;
+
+.tools-page__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: sizes.get(spacing, md); }
+.tools-page__card { display: flex; align-items: center; gap: sizes.get(spacing, md); padding: sizes.get(spacing, lg); color: colors.get-dark(text, primary); text-decoration: none; background: colors.get-dark(background, secondary); border: 1px solid colors.get-dark(border, subtle); border-radius: sizes.get(radius, md); }
+.tools-page__card:hover, .tools-page__card:focus-visible { border-color: colors.get-dark(border, interactive); outline: none; }
+.tools-page__card img { width: 2rem; height: 2rem; }
+.tools-page__card span { display: grid; gap: 4px; }
+.tools-page__card small { color: colors.get-dark(text, secondary); line-height: 1.4; }

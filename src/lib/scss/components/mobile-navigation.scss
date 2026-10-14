@@ -1,0 +1,60 @@
+@use '../core/colors' as colors;
+@use '../core/sizes' as sizes;
+
+.mobile-navigation {
+	display: none;
+}
+
+@media (max-width: #{sizes.get(breakpoint, navbar)}) {
+	.layout {
+		padding-bottom: calc(66px + env(safe-area-inset-bottom));
+	}
+
+	.mobile-navigation {
+		position: fixed;
+		inset: auto 0 0;
+		z-index: 1400;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+		background: colors.get-dark(background, secondary);
+		border-top: 1px solid colors.get-dark(border, base);
+		box-shadow: 0 -8px 24px rgb(0 0 0 / 28%);
+
+		&__item {
+			min-width: 0;
+			min-height: 50px;
+			padding: 5px 2px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+			background: transparent;
+			border: 0;
+			border-radius: sizes.get(radius, sm);
+			color: colors.get-dark(text, secondary);
+			font: inherit;
+			font-size: 0.68rem;
+			font-weight: 600;
+			text-decoration: none;
+			cursor: pointer;
+
+			img {
+				width: 23px;
+				height: 23px;
+				filter: brightness(0) invert(82%);
+				opacity: 0.9;
+			}
+
+			&--active { color: colors.get-dark(theme, primary); img { filter: brightness(0) saturate(100%) invert(83%) sepia(49%) saturate(650%) hue-rotate(61deg) brightness(102%); } }
+
+			&:hover,
+			&:focus-visible {
+				background: colors.get-dark(background, hover);
+				color: colors.get-dark(text, links, hover);
+				outline: none;
+			}
+		}
+	}
+}

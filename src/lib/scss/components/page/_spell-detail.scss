@@ -195,6 +195,10 @@
 	}
 }
 
+.spell-detail__eyebrow--mobile { display: none; }
+
+.new-spell-page .spell-detail__classification { display: none; }
+
 .new-spell-page .spell-detail__meta-card--school::before {
 	content: '';
 	position: absolute;
@@ -226,6 +230,15 @@
 		min-height: 0;
 		padding-right: 0;
 	}
+
+	.spell-detail__hero-art { display: none; }
+	.spell-detail__hero > .breadcrumbs { display: none; }
+	.spell-detail__hero-art img { width: 52%; opacity: .48; filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(850%) hue-rotate(65deg) brightness(96%) contrast(92%); }
+	.spell-detail__classification { padding-right: min(19rem, 34%); }
+	.spell-detail__summary-card { grid-column: 1 / -1; padding: 0; background: transparent; border: 0; border-radius: 0; }
+	.spell-detail__summary-card h2 { display: none; }
+	.spell-detail__summary-card p { margin: 0; color: colors.get-dark(text, primary); line-height: inherit; }
+	.spell-detail__summary-card { display: none; }
 
 	.spell-detail__header--conversion {
 		padding-bottom: sizes.get(spacing, md);
@@ -424,6 +437,82 @@
 	}
 
 	@media (max-width: 700px) {
+		.layout__content:has(.spell-detail) > .breadcrumbs { display: none; }
+		.spell-detail__hero > .breadcrumbs { display: flex !important; margin: 0 0 sizes.get(spacing, sm); }
+		.spell-detail__eyebrow--mobile { display: none; }
+		.breadcrumbs { margin: 0 0 sizes.get(spacing, md); padding: 0; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; scrollbar-width: none; }
+		.breadcrumbs::-webkit-scrollbar { display: none; }
+		.breadcrumbs__back { display: none; }
+		.breadcrumbs__list { flex-wrap: nowrap; gap: 6px; }
+		.breadcrumbs__item { gap: 6px; flex: 0 0 auto; }
+		.breadcrumbs__item:not(:first-child):not(:nth-last-child(-n + 2)) { display: flex; }
+		.breadcrumbs__item:first-child::after { content: none; }
+		.breadcrumbs .link, .breadcrumbs__current, .breadcrumbs__separator { font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+		.breadcrumbs .link { color: colors.get-dark(text, tertiary); }
+		.breadcrumbs__current { color: colors.get-dark(text, headings); }
+
+		.spell-detail__hero { position: relative; padding: 0; background: transparent; border: 0; box-shadow: none; }
+		.spell-detail__hero-art { position: absolute; top: 0; right: 4px; bottom: auto; width: 7rem; margin: 0; transform: rotate(-3deg); }
+		.spell-detail__hero-art { display: grid; place-items: center; aspect-ratio: 1; border: 1px solid color-mix(in srgb, #{colors.get-dark(theme, primary)} 16%, transparent); border-radius: 45% 55% 52% 48%; background: radial-gradient(circle, color-mix(in srgb, #{colors.get-dark(theme, primary)} 12%, transparent), transparent 68%); pointer-events: none; }
+		.spell-detail__hero-art img { width: 52%; }
+		.spell-detail__visual--desktop { display: none !important; }
+		.spell-detail__classification { padding-right: 9rem; margin-top: sizes.get(spacing, sm); }
+		.spell-detail__header { padding: 0 0 1rem; }
+		.spell-detail__classification-pill { flex: 1 1 0; justify-content: center; }
+		.spell-detail__overview-flow { padding: 0; border: 0; background: transparent; box-shadow: none; }
+		.spell-detail__summary-card { order: 0; margin-top: sizes.get(spacing, md); }
+		.spell-detail__section { padding: sizes.get(spacing, md); background: colors.get-dark(background, secondary); }
+		.spell-detail__accordion-trigger { width: 100%; padding: 0; display: flex; align-items: center; gap: 8px; background: none; border: 0; color: inherit; text-align: left; cursor: pointer; }
+		.spell-detail__accordion-trigger .spell-section-heading { flex: 1; margin-bottom: 0; }
+		.spell-section-heading { gap: 8px; font-size: 1rem; }
+		.spell-section-heading::after { display: none; }
+		.spell-detail__accordion-subtitle { position: absolute; left: 2.15rem; bottom: -1.05rem; color: colors.get-dark(text, tertiary); font-size: .72rem; font-weight: 400; }
+		.spell-detail__accordion-trigger { position: relative; min-height: 2.8rem; padding-bottom: 1.15rem; }
+		.spell-detail__accordion-chevron { color: colors.get-dark(theme, primary); font-size: 1.3rem; transition: transform sizes.get(transition, fast) ease; }
+		.spell-detail__accordion-trigger[aria-expanded="true"] .spell-detail__accordion-chevron { transform: rotate(180deg); }
+		.spell-detail__accordion-content { padding-top: sizes.get(spacing, md); }
+		.spell-detail__accordion-content[hidden] { display: none; }
+		.spell-detail__section + .spell-detail__section { margin-top: sizes.get(spacing, sm); }
+		.spell-detail__eyebrow--full { display: none; }
+		.spell-detail__eyebrow--mobile { display: block; }
+		.spell-detail__hero,
+		.spell-detail__overview-flow,
+		.spell-detail__section {
+			padding: sizes.get(spacing, md);
+			border: 1px solid colors.get-dark(border, subtle);
+			border-radius: sizes.get(radius, md);
+			background: colors.get-dark(background, secondary);
+			box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
+		}
+
+		.spell-detail__hero {
+			padding-bottom: 0;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		.spell-detail__overview-flow {
+			display: flex !important;
+			flex-direction: column;
+			gap: sizes.get(spacing, md);
+			margin-top: sizes.get(spacing, sm);
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+
+		.spell-detail__section + .spell-detail__section {
+			margin-top: sizes.get(spacing, md);
+		}
+
+		.spell-detail__header h1 {
+			font-size: clamp(2rem, 10vw, 2.8rem);
+		}
+
+		.spell-detail__chips {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
 		.spell-detail__overview-flow {
 			grid-template-columns: minmax(0, 1fr);
 		}
@@ -443,8 +532,8 @@
 			float: none;
 			grid-column: auto;
 			grid-row: auto;
-			width: min(15rem, 100%);
-			max-width: none;
+			width: min(11rem, 100%);
+			max-width: 11rem;
 			justify-self: center;
 			margin: 0 auto sizes.get(spacing, md);
 		}
@@ -452,8 +541,8 @@
 		&.spell-detail--legacy-edition,
 		&.spell-detail--5e {
 			.spell-detail__overview-flow .spell-detail__visual {
-				width: min(15rem, 100%);
-				max-width: none;
+				width: min(11rem, 100%);
+				max-width: 11rem;
 				margin: 0 auto sizes.get(spacing, md);
 			}
 
@@ -466,12 +555,30 @@
 		}
 
 		.spell-detail__metadata-area .spell-detail__meta {
-			display: contents;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+			gap: sizes.get(spacing, sm);
+			margin: 0;
+			padding: 0;
 
 			> div {
-				grid-column: span 1;
+				grid-column: span 1 !important;
+				inline-size: auto !important;
+				max-inline-size: none !important;
+				margin: 0 !important;
+				padding: 12px 14px;
+				min-height: 74px;
 			}
+
+			> .spell-detail__meta-card--wide,
+			> .spell-detail__meta-card--extra-wide,
+			> div:not([class*="spell-detail__meta-card--"]):first-child { grid-column: 1 / -1 !important; }
 		}
+	}
+
+	@media (max-width: 374px) {
+		.spell-detail__hero-art { width: 7.5rem; right: 0; }
+		.spell-detail__classification { padding-right: 8rem; }
 	}
 
 	@media (min-width: 701px) and (max-width: 1000px) {
@@ -489,6 +596,201 @@
 			grid-column: span 2;
 		}
 	}
+}
+
+.new-spell-page .spell-detail__meta div {
+	border-color: colors.get-dark(border, subtle);
+	background: colors.get-dark(background, secondary);
+}
+
+@media (max-width: 700px) {
+	.layout__content:has(.new-spell-page) > .breadcrumbs { display: none !important; }
+	.new-spell-page .spell-detail__hero > .breadcrumbs { display: flex !important; visibility: visible !important; opacity: 1 !important; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; }
+	.new-spell-page .spell-detail__eyebrow--mobile { display: none !important; visibility: hidden !important; }
+	.new-spell-page .spell-detail__hero { display: block; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+	.new-spell-page .spell-detail__header { display: grid; grid-template-columns: minmax(0, 1fr) 6.75rem; column-gap: 10px; padding: 0 0 0 !important; align-items: start; min-width: 0; }
+	.new-spell-page .spell-detail__header .spell-detail__eyebrow--full { display: none !important; }
+	.new-spell-page .spell-detail__header h1 { grid-column: 1 / -1; grid-row: 1; padding-right: 0; }
+	.new-spell-page .spell-detail__classification { display: flex; grid-column: 1; grid-row: 2; padding-right: 0 !important; align-self: start; }
+	.new-spell-page .spell-detail__hero-art { grid-column: 2; grid-row: 2; position: relative; top: auto; right: auto; width: 6.75rem; height: 6.75rem; margin: 0; }
+	.new-spell-page .spell-detail__chips { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; grid-column: 1 / -1; grid-row: 3; min-width: 0; }
+	.new-spell-page .spell-detail__overview-flow { display: block !important; padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+	.new-spell-page .spell-detail__summary--desktop { display: none; }
+	.new-spell-page .spell-detail__overview-flow,
+	.new-spell-page .spell-detail__metadata-area,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta { width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box; }
+	.new-spell-page .spell-detail__metadata-area { display: block !important; }
+	.new-spell-page .spell-detail__summary-card { margin: 20px 0 14px !important; padding: 14px 16px; }
+	.new-spell-page .spell-detail__summary-card p { line-height: 1.5; }
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta,
+	.new-spell-page.spell-detail--5e .spell-detail__metadata-area .spell-detail__meta,
+	.new-spell-page.spell-detail--legacy-edition .spell-detail__metadata-area .spell-detail__meta { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div { display: block !important; grid-column: span 1 !important; min-height: 74px; padding: 12px 14px; margin: 0 !important; inline-size: auto !important; max-inline-size: none !important; min-width: 0; box-sizing: border-box; }
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--extra-wide { grid-column: 1 / -1 !important; }
+}
+
+@media (max-width: 700px) {
+	.new-spell-page .spell-detail__header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.65rem, 11vw, 3.25rem); line-height: 1; font-weight: 700; letter-spacing: -0.03em; }
+	.new-spell-page .spell-detail__hero-art { width: 6.75rem; height: 6.75rem; border-color: color-mix(in srgb, #{colors.get-dark(theme, primary)} 24%, transparent); background: radial-gradient(circle, color-mix(in srgb, #{colors.get-dark(theme, primary)} 18%, transparent), transparent 70%); box-shadow: 0 0 34px color-mix(in srgb, #{colors.get-dark(theme, primary)} 16%, transparent); }
+	.new-spell-page .spell-detail__classification { gap: 8px; }
+	.new-spell-page .spell-detail__classification-pill { min-height: 38px; padding: 5px 10px; flex: 0 0 auto; background: linear-gradient(180deg, colors.get-dark(background, tiertiary), colors.get-dark(background, secondary)); border-color: colors.get-dark(border, subtle); border-radius: 8px; font-size: .78rem; }
+	.new-spell-page .spell-detail__classification-pill img { flex: 0 0 20px; width: 20px; height: 20px; max-width: 20px; max-height: 20px; object-fit: contain; }
+	.new-spell-page .spell-detail__classification-pill:first-child img { filter: brightness(0) saturate(100%) invert(83%) sepia(49%) saturate(650%) hue-rotate(61deg) brightness(102%); }
+	.new-spell-page .spell-detail__classification-pill:nth-child(2) img { filter: brightness(0) saturate(100%) invert(70%) sepia(25%) saturate(1000%) hue-rotate(225deg); }
+	.new-spell-page .spell-detail__chips { gap: 6px; }
+	.new-spell-page .spell-detail__chip, .new-spell-page .edition-selector { min-width: 0; min-height: 38px; padding: 6px 8px; border-color: colors.get-dark(border, subtle); border-radius: 8px; background: color-mix(in srgb, #{colors.get-dark(background, secondary)} 88%, transparent); font-size: .68rem; }
+	.new-spell-page .spell-detail__chip img, .new-spell-page .edition-selector img { flex: 0 0 16px; width: 16px; height: 16px; max-width: 16px; max-height: 16px; object-fit: contain; }
+	.new-spell-page .spell-detail__summary-card { display: block; position: relative; overflow: hidden; padding: 16px; margin-top: 20px !important; border: 1px solid color-mix(in srgb, #{colors.get-dark(theme, primary)} 32%, #{colors.get-dark(border, subtle)}); border-left: 3px solid colors.get-dark(theme, primary); border-radius: sizes.get(radius, md); background: linear-gradient(145deg, color-mix(in srgb, #{colors.get-dark(theme, primary)} 8%, #{colors.get-dark(background, secondary)}), colors.get-dark(background, secondary)); box-shadow: 0 8px 24px color-mix(in srgb, #{colors.get-dark(theme, primary)} 8%, transparent); }
+	.new-spell-page .spell-detail__summary-card h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; color: colors.get-dark(theme, primary); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+	.new-spell-page .spell-detail__summary-card h2 img { width: 1rem; height: 1rem; filter: brightness(0) saturate(100%) invert(83%) sepia(49%) saturate(650%) hue-rotate(61deg) brightness(102%); }
+	.new-spell-page .spell-detail__summary-card::after { content: ''; position: absolute; width: 42px; height: 42px; right: -20px; top: -20px; border: 1px solid color-mix(in srgb, #{colors.get-dark(theme, primary)} 45%, transparent); transform: rotate(45deg); }
+	.new-spell-page .spell-detail__meta > div { background: linear-gradient(145deg, colors.get-dark(background, secondary), colors.get-dark(background, primary)); box-shadow: inset 0 1px color-mix(in srgb, white 4%, transparent); border-radius: 8px; }
+	.new-spell-page .spell-detail__meta dt { font-size: .7rem; letter-spacing: .04em; }
+	.new-spell-page .spell-detail__meta dd { font-size: 1.12rem; font-weight: 600; }
+	.new-spell-page .spell-section-heading span { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+	.new-spell-page .spell-detail__section { border-color: colors.get-dark(border, subtle); border-radius: 10px; background: linear-gradient(145deg, colors.get-dark(background, secondary), colors.get-dark(background, primary)); box-shadow: inset 0 1px color-mix(in srgb, white 3%, transparent); }
+	.new-spell-page .spell-detail__accordion-subtitle { line-height: 1.2; }
+}
+
+@media (min-width: 375px) and (max-width: 700px) {
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta,
+	.new-spell-page.spell-detail--5e .spell-detail__metadata-area .spell-detail__meta,
+	.new-spell-page.spell-detail--legacy-edition .spell-detail__metadata-area .spell-detail__meta {
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+		gap: 8px !important;
+	}
+
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div {
+		min-height: 72px;
+		padding: 10px 11px;
+	}
+
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--extra-wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div:not([class*="spell-detail__meta-card--"]) {
+		grid-column: 1 / -1 !important;
+	}
+
+	.new-spell-page .spell-detail__meta dt { font-size: .64rem; gap: 4px; }
+	.new-spell-page .spell-detail__meta dt img { width: 15px; height: 15px; }
+	.new-spell-page .spell-detail__meta dd { font-size: 1rem; line-height: 1.25; }
+}
+
+@media (max-width: 374px) {
+	.new-spell-page .spell-detail__header { grid-template-columns: minmax(0, 1fr) 6.25rem; }
+	.new-spell-page .spell-detail__hero-art { width: 6.25rem; height: 6.25rem; }
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div { min-height: 70px; padding: 10px 11px; }
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--extra-wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div:not([class*="spell-detail__meta-card--"]) { grid-column: 1 / -1 !important; }
+}
+
+@media (max-width: 700px) {
+	.new-spell-page .spell-detail__header {
+		grid-template-columns: minmax(0, 1fr) 110px;
+		column-gap: 14px;
+		align-items: start;
+	}
+	.new-spell-page .spell-detail__header:not(.spell-detail__header--with-art) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.new-spell-page .spell-detail__header:not(.spell-detail__header--with-art) .spell-detail__classification,
+	.new-spell-page .spell-detail__header:not(.spell-detail__header--with-art) .spell-detail__chips {
+		grid-column: 1;
+	}
+	.new-spell-page .spell-detail__header:not(.spell-detail__header--with-art) .spell-detail__chips {
+		grid-row: 3;
+	}
+
+	.new-spell-page .spell-detail__header h1 {
+		grid-column: 1 / -1;
+		grid-row: 1;
+	}
+
+	.new-spell-page .spell-detail__classification {
+		grid-column: 1;
+		grid-row: 2;
+		padding-right: 0 !important;
+		gap: 6px;
+	}
+
+	.new-spell-page .spell-detail__classification-pill {
+		min-height: 38px;
+		padding: 5px 9px;
+		flex: 0 0 auto;
+	}
+
+	.new-spell-page .spell-detail__hero-art {
+		grid-column: 2;
+		grid-row: 2 / span 2;
+		align-self: center;
+		justify-self: center;
+		width: 110px;
+		height: 110px;
+		position: relative;
+		top: auto;
+		right: auto;
+		margin: 0;
+	}
+
+	.new-spell-page .spell-detail__chips {
+		grid-column: 1;
+		grid-row: 3;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 6px;
+		min-width: 0;
+	}
+
+	.new-spell-page .spell-detail__chip,
+	.new-spell-page .edition-selector {
+		width: 100%;
+		box-sizing: border-box;
+		min-width: 0;
+	}
+}
+
+@media (max-width: 374px) {
+	.new-spell-page .spell-detail__header { grid-template-columns: minmax(0, 1fr) 100px; }
+	.new-spell-page .spell-detail__hero-art { width: 100px; height: 100px; }
+}
+
+@media (max-width: 700px) {
+	.new-spell-page.spell-detail {
+		row-gap: 20px;
+	}
+
+	.layout__content:has(.new-spell-page) {
+		padding-block-start: 18px;
+	}
+
+	.new-spell-page .spell-detail__hero > .breadcrumbs {
+		margin-bottom: 12px !important;
+	}
+
+	.new-spell-page .spell-detail__header h1 {
+		margin-top: 0;
+	}
+
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div {
+		grid-column: span 1 !important;
+	}
+
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--wide {
+		grid-column: span 2 !important;
+	}
+
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > .spell-detail__meta-card--extra-wide,
+	.new-spell-page .spell-detail__metadata-area .spell-detail__meta > div:not([class*="spell-detail__meta-card--"]) {
+		grid-column: 1 / -1 !important;
+	}
+}
+
+@media (max-width: 374px) {
+	.new-spell-page .spell-detail__header { grid-template-columns: minmax(0, 1fr) 6.25rem; }
+	.new-spell-page .spell-detail__hero-art { width: 6.25rem; height: 6.25rem; }
 }
 
 .spell-section-heading {
