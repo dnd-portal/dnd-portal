@@ -1,6 +1,7 @@
 import * as core from '../../core/_index_';
 import { createInternalPage } from '../_helpers_';
 import { brinehookHarborShoppingSections } from './brinehook-harbor';
+import { gildersproutReachMarketSections } from './gildersprout-reach';
 
 const website = core.internals.website;
 const current = core.internals.locations;
@@ -98,6 +99,34 @@ export const locations = {
 				...brinehookHarborShoppingSections.map(({ id, title }) => ({ id, title }))
 			]
 		}
-	})
-	}
+	}),
+	},
+
+	gildersproutReach: {
+		page: createInternalPage({
+			href: `${current.baseUrl}/gildersprout-reach/`,
+			title: `${website.name.short} - Gildersprout Reach`,
+			subTitle: 'Location',
+			label: 'Gildersprout Reach',
+			description: 'Gildersprout Reach',
+			img: { href: '/icons/white/entity/anchor.svg', alt: 'A white anchor icon representing Gildersprout Reach.' },
+			navigation: { parent: 'internals.locations.page' },
+			content: {
+				sections: [{ id: 'gildersprout-market', title: 'Gildersprout Reach', blocks: [{ type: 'paragraph', content: [{ type: 'link', path: 'internals.locations.gildersproutReach.shopping', label: 'What Can You Buy Here?' }] }] }],
+				tableOfContents: [{ id: 'gildersprout-market', title: 'Gildersprout Reach' }]
+			}
+		}),
+		shopping: createInternalPage({
+			href: `${current.baseUrl}/gildersprout-reach/shopping/`,
+			title: `Gildersprout Reach Market - ${website.name.short}`,
+			subTitle: 'Marketplace & Goods',
+			description: 'A peaceful halfling marketplace nestled beneath the branches of Saint Lucian\'s Root. Merchants sell freshly prepared meals, imported rice, handcrafted goods, and religious souvenirs dedicated to Lucian Ducky.',
+			img: { href: '/icons/white/entity/anchor.svg', alt: 'A white anchor icon representing Gildersprout Reach Market.' },
+			navigation: { parent: 'internals.locations.gildersproutReach.page', label: 'Market & Goods' },
+			content: {
+				sections: [{ id: 'gildersprout-market-introduction', title: 'Gildersprout Reach Market', blocks: [{ type: 'paragraph', content: [{ type: 'text', text: 'A peaceful halfling marketplace nestled beneath the branches of Saint Lucian\'s Root. Merchants sell freshly prepared meals, imported rice, handcrafted goods, and religious souvenirs dedicated to Lucian Ducky.' }] }] }, ...gildersproutReachMarketSections],
+				tableOfContents: [{ id: 'gildersprout-market-introduction', title: 'Gildersprout Reach Market' }, ...gildersproutReachMarketSections.map(({ id, title }) => ({ id, title }))]
+			}
+		})
+		}
 } as const;
