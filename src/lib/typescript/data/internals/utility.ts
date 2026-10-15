@@ -82,5 +82,13 @@ export const utility = {
 		title: `${website.name.short} - ${current.diceRoller.name.normal}`,
 		subTitle: 'Roll your dice',
 		description: 'Roll standard or custom dice with adjustable count, faces, advantage, and disadvantage.'
+	}),
+
+	currencyConverter: createInternalPage({
+		href: current.currencyConverter.href,
+		img: current.currencyConverter.logos.simple,
+		title: `${website.name.short} - ${current.currencyConverter.name.normal}`,
+		subTitle: 'D&D Tools',
+		description: 'Convert between copper, silver, electrum, gold, and platinum pieces.'
 	})
 } as const;

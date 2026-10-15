@@ -9,17 +9,19 @@
 		caption,
 		columns,
 		rows,
-		showCaption = false
+		showCaption = false,
+		responsiveCards = false
 	}: {
 		caption: string;
 		columns: readonly PageContentTableColumn[];
 		rows: readonly PageContentTableRow[];
 		showCaption?: boolean;
+		responsiveCards?: boolean;
 	} = $props();
 </script>
 
 <div class="table-scroller">
-	<table class="trait-table">
+	<table class="trait-table" class:trait-table--responsive-cards={responsiveCards}>
 		<caption class={showCaption ? 'trait-table__caption--visible' : undefined}>{caption}</caption>
 		<thead>
 			<tr>
@@ -32,7 +34,7 @@
 			{#each rows as row}
 				<tr>
 					{#each columns as column, index}
-						<td class:table-row-header={index === 0}>
+						<td class:table-row-header={index === 0} data-label={column.label}>
 							<InlineContent content={row[column.key] ?? []} />
 						</td>
 					{/each}

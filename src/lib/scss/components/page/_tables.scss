@@ -66,3 +66,56 @@
 	}
 }
 
+@media (max-width: 600px) {
+	.trait-table--responsive-cards,
+	.trait-table--responsive-cards tbody,
+	.trait-table--responsive-cards tr,
+	.trait-table--responsive-cards th,
+	.trait-table--responsive-cards td {
+		display: block;
+	}
+
+	.trait-table--responsive-cards thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+	}
+
+	.trait-table--responsive-cards tbody {
+		display: grid;
+		gap: sizes.get(spacing, sm);
+	}
+
+	.trait-table--responsive-cards tbody tr {
+		width: 100%;
+		box-sizing: border-box;
+		padding: sizes.get(spacing, md);
+		border: 1px solid colors.get-dark(border, subtle);
+		border-radius: sizes.get(radius, sm);
+		background: colors.get-dark(background, primary);
+	}
+
+	.trait-table--responsive-cards tbody th {
+		width: auto;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		font-size: 1rem;
+		white-space: normal;
+	}
+
+	.trait-table--responsive-cards tbody td {
+		padding: .35rem 0 0;
+		border: 0;
+		background: transparent;
+	}
+
+	.trait-table--responsive-cards tbody td::before {
+		content: attr(data-label) ': ';
+		color: colors.get-dark(text, headings);
+		font-weight: 700;
+	}
+}
+

@@ -146,6 +146,7 @@ export const brinehookHarborShoppingSections: readonly PageContentSection[] =
 			{
 				type: 'table' as const,
 				caption: category.title,
+				responsiveCards: true,
 				columns: category.columns,
 				rows: category.rows
 			}
