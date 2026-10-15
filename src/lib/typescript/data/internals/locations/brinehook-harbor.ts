@@ -33,7 +33,13 @@ export const brinehookHarborShoppingCategories: readonly ShoppingCategory[] = [
 			row('Dried Fish', 'Suitable for long journeys', '3 SP'), row("Sailor's Stew", 'Meat, potatoes, and vegetables', '6 SP'),
 			row('Roasted Boar', 'A luxury meal', '1 GP'), row('Giant Crab Legs', 'Harbor specialty', '2 GP'),
 			row('Ship Ration (1 day)', 'Dried food for travel', '5 SP'), row('Apple Pie', 'Sweet pastry with cinnamon', '3 SP'),
-			row('Common Ale', 'A sturdy mug', '4 CP'), row('Dark Pirate Ale', 'Strongly brewed harbor beer', '2 SP'),
+			row('Common Ale', 'A sturdy mug', '4 CP'),
+			row(
+				"Smallfolk's Light Ale",
+				'A mild, low-alcohol ale brewed for smaller folk who want to enjoy a drink without getting drunk too quickly. Characters drinking Smallfolk\'s Light Ale have advantage on Constitution saving throws against becoming intoxicated from this drink.',
+				'3 CP'
+			),
+			row('Dark Pirate Ale', 'Strongly brewed harbor beer', '2 SP'),
 			row('Spiced Rum', 'Popular among sailors', '5 SP'), row('Dwarven Whisky', 'Exceptionally strong liquor', '1 GP'),
 			row('Sea King Wine', 'Exclusive imported wine', '8 GP')
 		]
