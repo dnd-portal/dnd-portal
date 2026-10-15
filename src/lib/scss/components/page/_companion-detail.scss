@@ -39,3 +39,6 @@
 @media (max-width: 900px) { .companion-detail__upper { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .companion-browser__toolbar { grid-template-columns: 1fr 1fr; }.companion-browser__filter-summary { grid-column: 1 / -1; } }
 @media (max-width: 620px) { .companion-detail__abilities { grid-template-columns: repeat(3, 1fr); }.companion-detail__panels { grid-template-columns: 1fr; }.companion-panel dl div { display: block; }.companion-panel dd { margin-top: 3px; text-align: left; }.companion-actions__divider { align-items: flex-start; }.companion-actions__divider h2::after { min-width: 2rem; }.companion-action { gap: sizes.get(spacing, sm); }.companion-action__icon { flex-basis: 2rem; }.companion-action__icon img { width: 1.65rem; height: 1.65rem; } }
+.companion-detail__behavior { max-width: 78ch; margin: 0; padding-left: 1.25rem; display: grid; gap: sizes.get(spacing, xs); list-style: decimal; }.companion-detail__behavior li { padding-left: .25rem; color: colors.get-dark(text, secondary); line-height: 1.55; }
+.companion-detail__behavior li::marker { color: #fff; }
+.companion-detail__behavior li { list-style: decimal; }
