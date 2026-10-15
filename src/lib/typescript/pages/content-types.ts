@@ -223,6 +223,7 @@ export type PageContentBlock =
 			readonly type: 'table';
 			readonly caption: string;
 			readonly showCaption?: boolean;
+			readonly responsiveCards?: boolean;
 			readonly columns: TraitTableColumnLabels | readonly PageContentTableColumn[];
 			readonly rows: readonly TraitTableRow[] | readonly PageContentTableRow[];
 	  }

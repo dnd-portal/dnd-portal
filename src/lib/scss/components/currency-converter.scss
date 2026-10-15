@@ -1,0 +1,41 @@
+@use '../core/colors' as colors;
+@use '../core/sizes' as sizes;
+
+.currency-converter { display: grid; gap: sizes.get(spacing, xl); }
+.currency-converter__panel, .currency-converter__reference { padding: sizes.get(spacing, lg); background: colors.get-dark(background, secondary); border: 1px solid colors.get-dark(border, subtle); border-radius: sizes.get(radius, md); }
+.currency-converter h2 { margin-top: 0; }
+.currency-converter__fields { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: sizes.get(spacing, md); margin-top: sizes.get(spacing, lg); }
+.currency-converter__card { display: grid; gap: sizes.get(spacing, xs); min-width: 0; padding: sizes.get(spacing, md); color: colors.get-dark(text, headings); font-weight: 700; background: colors.get-dark(background, primary); border: 1px solid colors.get-dark(border, subtle); border-radius: sizes.get(radius, sm); }
+.currency-converter__card-title { display: flex; align-items: baseline; justify-content: space-between; gap: sizes.get(spacing, xs); }
+.currency-converter label small { color: colors.get-dark(text, tertiary); }
+.currency-converter input { width: 100%; min-width: 0; box-sizing: border-box; padding: .7rem; border: 1px solid colors.get-dark(border, subtle); border-radius: sizes.get(radius, sm); background: colors.get-dark(background, secondary); color: colors.get-dark(text, primary); font: inherit; font-size: 1.1rem; }
+.currency-converter table { width: 100%; border-collapse: collapse; }
+.currency-converter th, .currency-converter td { padding: .7rem 1rem; border: 1px solid colors.get-dark(border, subtle); text-align: left; }
+.currency-converter th { color: colors.get-dark(text, headings); background: colors.get-dark(background, primary); }
+.currency-converter td { color: colors.get-dark(text, secondary); }
+@media (max-width: 900px) { .currency-converter__fields { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+	.currency-converter__panel, .currency-converter__reference { padding: sizes.get(spacing, md); }
+	.currency-converter__fields { grid-template-columns: 1fr; gap: sizes.get(spacing, sm); }
+	.currency-converter__card { padding: sizes.get(spacing, md); }
+	.currency-converter__card-title { font-size: 1rem; }
+	.currency-converter input { min-height: 3rem; font-size: 1.25rem; }
+	.currency-converter th, .currency-converter td { padding: .6rem; }
+
+	.currency-converter__reference table,
+	.currency-converter__reference tbody,
+	.currency-converter__reference tr,
+	.currency-converter__reference th,
+	.currency-converter__reference td {
+		display: block;
+	}
+
+	.currency-converter__reference thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+	.currency-converter__reference tbody { display: grid; gap: sizes.get(spacing, sm); }
+	.currency-converter__reference tr { padding: sizes.get(spacing, md); border: 1px solid colors.get-dark(border, subtle); border-radius: sizes.get(radius, sm); background: colors.get-dark(background, primary); }
+	.currency-converter__reference tbody th { padding: 0; border: 0; background: transparent; font-size: 1rem; }
+	.currency-converter__reference tbody td { display: inline; padding: 0; border: 0; background: transparent; color: colors.get-dark(text, secondary); }
+	.currency-converter__reference tbody td:nth-child(2)::before { content: '1 '; }
+	.currency-converter__reference tbody td:nth-child(2)::after { content: ' = '; }
+	.currency-converter__reference tbody td:nth-child(3) { color: colors.get-dark(text, headings); font-weight: 700; }
+}

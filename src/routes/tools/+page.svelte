@@ -2,7 +2,7 @@
 	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import PageHeader from '$lib/svelte/components/page/PageHeader.svelte';
 
-	const toolPaths = ['internals.utility.diceRoller', 'internals.utility.myCharacter'] as const;
+	const toolPaths = ['internals.utility.diceRoller', 'internals.utility.myCharacter', 'internals.utility.currencyConverter'] as const;
 	const tools = toolPaths.map((path) => ({ path, data: getRuntimeData(path) }));
 </script>
 

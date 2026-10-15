@@ -89,6 +89,7 @@
 				columns={block.columns as readonly import('$lib/typescript/data/_index_').PageContentTableColumn[]}
 				rows={block.rows as readonly import('$lib/typescript/data/_index_').PageContentTableRow[]}
 				showCaption={block.showCaption}
+				responsiveCards={block.responsiveCards}
 			/>
 		{:else}
 			<TraitTable

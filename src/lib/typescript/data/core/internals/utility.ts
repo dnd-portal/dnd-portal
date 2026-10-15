@@ -59,5 +59,16 @@ export const utility = {
 			}
 		},
 		href: '/dice-roller'
+	},
+
+	currencyConverter: {
+		name: { normal: 'Currency Converter', slug: 'currency-converter' },
+		logos: {
+			simple: {
+				href: '/icons/white/entity/magic-item.svg',
+				alt: 'A gold coin icon representing currency conversion.'
+			}
+		},
+		href: '/currency-converter'
 	}
 }
