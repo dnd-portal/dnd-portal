@@ -4,7 +4,11 @@
 */
 
 import type { LinkData, LinkPath } from '$lib/typescript/data/_index_';
-import { getRuntimeChildren, getRuntimeData } from '$lib/typescript/data/runtime';
+import {
+	getRuntimeChildren,
+	getRuntimeData,
+	getRuntimeNavigationChildren
+} from '$lib/typescript/data/runtime';
 
 import type {
 	SidebarDataType,
@@ -30,8 +34,10 @@ const sidebarSectionConfig = [
 			'internals.companions.page',
 			'internals.npcs.page',
 			'internals.rules.page',
-			'internals.monsters.page',
-			'internals.locations.page'
+			'internals.locations.page',
+		'internals.monsters.page',
+		'internals.magicItems.page',
+		'internals.organizations.page'
 		]
 	},
 	{
@@ -154,7 +160,17 @@ function sortNodes(nodes: readonly SidebarNode[]): readonly SidebarNode[] {
 }
 
 function discoverChildNodes(containerPath: string): readonly SidebarNode[] {
-	const children = getRuntimeChildren(containerPath).flatMap<SidebarNode>((childPath) => {
+	const expectedParentPath = `${containerPath}.page`;
+	const childPaths = [
+		...getRuntimeChildren(containerPath),
+		...getRuntimeNavigationChildren(containerPath)
+	].filter((path, index, paths) => paths.indexOf(path) === index)
+		.filter((path) => {
+			const navigationParent = getRuntimeData(path).navigation?.parent;
+
+			return !navigationParent || navigationParent === expectedParentPath;
+		});
+	const children = childPaths.flatMap<SidebarNode>((childPath) => {
 		const value = getRuntimeData(childPath);
 
 		return isNavigationHidden(value)

@@ -5,8 +5,10 @@ import { spells } from './spells/_index_';
 import { species } from './species/_index_';
 import { rules } from './rules/_index_';
 import { locations } from './locations/_index_';
+import { organizations } from './organizations';
 import { monsters } from './monsters/_index_';
 import { equipment } from './equipment';
+import { magicItems } from './magic-items';
 import { npcs } from './npcs';
 import { companions } from './companions';
 import { community } from './community/_index_';
@@ -28,9 +30,11 @@ export const internals = {
 	species,
 	rules,
 	equipment,
+	magicItems,
 	npcs,
 	companions,
 	locations,
+	organizations,
 	monsters,
 	community,
 

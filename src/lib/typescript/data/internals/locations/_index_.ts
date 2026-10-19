@@ -110,7 +110,7 @@ export const locations = {
 			label: 'Gildersprout Reach',
 			description: 'Gildersprout Reach',
 			img: { href: '/icons/white/entity/anchor.svg', alt: 'A white anchor icon representing Gildersprout Reach.' },
-			navigation: { parent: 'internals.locations.page' },
+		navigation: { parent: 'internals.locations.page' },
 			content: {
 				sections: [{ id: 'gildersprout-market', title: 'Gildersprout Reach', blocks: [{ type: 'paragraph', content: [{ type: 'link', path: 'internals.locations.gildersproutReach.shopping', label: 'What Can You Buy Here?' }] }] }],
 				tableOfContents: [{ id: 'gildersprout-market', title: 'Gildersprout Reach' }]
