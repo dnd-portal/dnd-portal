@@ -1,0 +1,14 @@
+<script lang="ts">
+	import type { MonsterEntry, MonsterAction } from '$lib/typescript/data/internals/monsters/rotwood-sovereign';
+	let { monster }: { monster: MonsterEntry } = $props();
+	const stats = $derived([['Armor Class', monster.armorClass], ['Hit Points', monster.hitPoints], ['Speed', monster.speed], ['Challenge Rating', monster.challengeRating], ['XP', monster.xp], ['Proficiency Bonus', monster.proficiencyBonus]]);
+</script>
+
+<div class="monster-detail">
+	<header class="monster-detail__header"><div class="monster-detail__hero"><div class="monster-detail__hero-content"><p>Homebrew Monster · {monster.world}</p><h1>{monster.name}</h1><h2>{monster.alternativeName}</h2><div class="monster-detail__badges"><span>{monster.size}</span><span>{monster.type}</span><span>{monster.alignment}</span><span>{monster.ruleset}</span><span>{monster.contentType}</span></div><p>{monster.description}</p></div><figure class="monster-detail__artwork"><img src={monster.artwork.src} alt={monster.artwork.alt} /></figure></div></header>
+	<section class="monster-detail__section"><h2>Core Statistics</h2><div class="monster-detail__stats">{#each stats as stat}<div><small>{stat[0]}</small><strong>{stat[1]}</strong></div>{/each}</div></section>
+	<section class="monster-detail__section"><h2>Ability Scores</h2><div class="monster-detail__abilities">{#each monster.abilities as ability}<div><strong>{ability.name}</strong><b>{ability.score}</b><small>{ability.modifier}</small></div>{/each}</div></section>
+	<section class="monster-detail__section"><h2>Defenses &amp; Senses</h2><dl class="monster-detail__facts"><div><dt>Saving Throws</dt><dd>{monster.savingThrows.join(', ')}</dd></div><div><dt>Skills</dt><dd>{monster.skills.join(', ')}</dd></div><div><dt>Damage Resistances</dt><dd>{monster.damageResistances}</dd></div><div><dt>Damage Vulnerabilities</dt><dd>{monster.damageVulnerabilities}</dd></div><div><dt>Condition Immunities</dt><dd>{monster.conditionImmunities}</dd></div><div><dt>Senses</dt><dd>{monster.senses}</dd></div><div><dt>Languages</dt><dd>{monster.languages}</dd></div></dl></section>
+	{#each [{ title: 'Traits', items: monster.traits }, { title: 'Actions', items: monster.actions }, { title: 'Legendary Actions', items: monster.legendaryActions }, { title: 'The Heart of Rot', items: monster.bossMechanic }] as section}<section class="monster-detail__section"><h2>{section.title}</h2>{#each section.items as item}<article class="monster-detail__feature"><h3>{item.name}{#if item.usage}<small>{item.usage}</small>{/if}</h3><p>{item.description}</p></article>{/each}</section>{/each}
+	<section class="monster-detail__section"><h2>Encounter Information</h2><dl class="monster-detail__facts">{#each monster.encounterInformation as fact}<div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>{/each}</dl></section>
+</div>
