@@ -21,7 +21,8 @@
 		display: block;
 		min-width: 0;
 		position: fixed;
-		inset-block: var(--navbar-height, #{sizes.get(navbar, height)}) 0;
+		inset-block-start: var(--navbar-height, #{sizes.get(navbar, height)});
+		inset-block-end: auto;
 		inset-inline-end: max(
 			var(--content-padding-inline),
 			calc(
@@ -31,13 +32,12 @@
 		);
 		width: sizes.get(content, toc-width);
 		height: auto;
-		max-height: none;
+		max-height: calc(100dvh - var(--navbar-height, #{sizes.get(navbar, height)}) - #{sizes.get(spacing, lg)});
 	}
 
 	body.navbar-hidden .page-layout__toc {
 		inset-block-start: 0;
-		height: 100dvh;
-		max-height: 100dvh;
+		max-height: calc(100dvh - #{sizes.get(spacing, lg)});
 	}
 
 	.page-layout__toc:has(.table-of-contents--closed) {
