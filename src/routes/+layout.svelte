@@ -24,7 +24,8 @@
 	import Analytics from '$lib/svelte/components/Analytics.svelte';
 
 	const page = buildPage();
-	let currentPage = $derived(resolveCurrentPage(appPage.url.pathname, appBase));
+	let routeData = $derived(appPage.data as { path?: string });
+	let currentPage = $derived(resolveCurrentPage(appPage.url.pathname, appBase, routeData.path));
 	let routeSeo = $derived((appPage.data as { seo?: SeoMetadataInput }).seo);
 	let seo = $derived(createSeoMetadata({
 		path: currentPage.path,

@@ -17,8 +17,7 @@ export const magicItemPages = Object.fromEntries(
 			description: `${item.name} is an Eldor homebrew magic item.`,
 			img: item.img,
 			navigation: {
-				parent: 'internals.homebrew.eldor.magicItems.page',
-				hidden: true
+				parent: 'internals.homebrew.eldor.magicItems.page'
 			},
 			tags: item.tags
 		})

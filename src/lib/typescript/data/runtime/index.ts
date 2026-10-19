@@ -54,4 +54,12 @@ export function getRuntimeChildren(path: string): readonly string[] {
 	return runtimeChildren[path] ?? [];
 }
 
+export function getRuntimeNavigationChildren(parentPath: string): readonly string[] {
+	const pagePath = parentPath.endsWith('.page') ? parentPath : `${parentPath}.page`;
+
+	return runtimeLinkEntries
+		.filter(([, , , , , , , , , , , , navigation]) => navigation?.parent === pagePath)
+		.map(([path]) => path);
+}
+
 export { runtimeLinks };

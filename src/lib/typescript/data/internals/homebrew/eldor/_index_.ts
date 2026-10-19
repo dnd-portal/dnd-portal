@@ -4,6 +4,10 @@ import {
 	magicItems
 } from '$lib/typescript/data/core/internals/homebrew/eldor/magic-items/_index_';
 import type { HomebrewCollectionMetadata } from '../types';
+import { rotwoodSovereign, rotwoodSovereignPage } from '$lib/typescript/data/internals/monsters/_index_';
+import { organizations } from '$lib/typescript/data/internals/organizations';
+import { locations as wikiLocations } from '$lib/typescript/data/internals/locations/_index_';
+import { companions as wikiCompanions } from '$lib/typescript/data/internals/companions';
 
 const icon = '/icons/white/homebrew/eldor-sigil.svg';
 const magicItemIcon = '/icons/white/entity/magic-item.svg';
@@ -37,7 +41,7 @@ export const eldor = {
 	magicItems: {
 		page: createInternalPage({
 			href: '/homebrew/eldor/magic-items/',
-			title: 'D&D Portal Wiki - Eldor Magic Items',
+			title: 'D&D Portal Wiki - Magic Items',
 			subTitle: 'Eldor homebrew',
 			label: 'Magic Items',
 			description: `${magicItems.length} custom magic items connected to Eldor. All Eldor homebrew content is protected by copyright.`,
@@ -45,5 +49,114 @@ export const eldor = {
 			tags: ['homebrew', 'eldor', 'magic items']
 		}),
 		...magicItemPages
+	},
+	locations: {
+		page: createInternalPage({
+			href: '/homebrew/eldor/locations/',
+			title: 'D&D Portal Wiki - Locations',
+			subTitle: 'Eldor locations',
+			label: 'Locations',
+			description: 'Locations connected to the world of Eldor.',
+			img: { href: '/icons/white/entity/location.svg', alt: 'A location icon representing Eldor locations.' },
+			navigation: { parent: 'internals.homebrew.eldor.page' },
+			tags: ['homebrew', 'eldor', 'locations'],
+			content: {
+				sections: [
+					{
+						id: 'eldor-locations',
+						title: 'Locations',
+						blocks: [
+							{
+								type: 'paragraph',
+								content: [
+					{ type: 'link', path: 'internals.homebrew.eldor.locations.brinehookHarbor', label: 'Brinehook Harbor' },
+									{ type: 'text', text: ' — a fortified harbor and trading center.' }
+								]
+							},
+							{
+								type: 'paragraph',
+								content: [
+					{ type: 'link', path: 'internals.homebrew.eldor.locations.gildersproutReach', label: 'Gildersprout Reach' },
+									{ type: 'text', text: ' — a peaceful halfling village beneath Saint Lucian\'s Root.' }
+								]
+							}
+						]
+					}
+				],
+				tableOfContents: [{ id: 'eldor-locations', title: 'Locations' }]
+			}
+		}),
+		brinehookHarbor: createInternalPage({
+			...wikiLocations.brinehookHarbor.page,
+			href: '/homebrew/eldor/locations/brinehook-harbor/',
+			navigation: { parent: 'internals.homebrew.eldor.locations.page' }
+		}),
+		gildersproutReach: createInternalPage({
+			...wikiLocations.gildersproutReach.page,
+			href: '/homebrew/eldor/locations/gildersprout-reach/',
+			navigation: { parent: 'internals.homebrew.eldor.locations.page' }
+		}),
+		brinehookHarborShopping: createInternalPage({
+			...wikiLocations.brinehookHarbor.shopping,
+			href: '/homebrew/eldor/locations/brinehook-harbor/shopping/',
+			navigation: { parent: 'internals.homebrew.eldor.locations.brinehookHarbor', label: 'Marketplace & Goods' }
+		}),
+		gildersproutReachShopping: createInternalPage({
+			...wikiLocations.gildersproutReach.shopping,
+			href: '/homebrew/eldor/locations/gildersprout-reach/shopping/',
+			navigation: { parent: 'internals.homebrew.eldor.locations.gildersproutReach', label: 'Market & Goods' }
+		})
+	},
+	monsters: {
+		page: createInternalPage({
+			href: '/homebrew/eldor/monsters/',
+			title: 'D&D Portal Wiki - Monsters',
+			subTitle: 'Eldor homebrew', label: 'Monsters',
+			description: 'Browse Eldor homebrew monsters and encounter-ready stat blocks.',
+			img: { href: '/icons/white/game/monster.svg', alt: 'Monster icon.' },
+			navigation: { parent: 'internals.homebrew.eldor.page' }, tags: ['homebrew', 'eldor', 'monsters']
+		}),
+		rotwoodSovereign: createInternalPage({
+			...rotwoodSovereignPage,
+			href: '/homebrew/eldor/monsters/the-rotwood-sovereign/',
+			navigation: { parent: 'internals.homebrew.eldor.monsters.page' }
+		}),
+		entries: [rotwoodSovereign]
+	},
+	companions: {
+		page: createInternalPage({
+			href: '/homebrew/eldor/companions/',
+			title: 'D&D Portal Wiki - Companions',
+			subTitle: 'Eldor homebrew',
+			label: 'Companions',
+			description: 'Homebrew companions connected to Eldor.',
+			img: { href: '/icons/white/entity/pet.svg', alt: 'Companion icon.' },
+			navigation: { parent: 'internals.homebrew.eldor.page' },
+			tags: ['homebrew', 'eldor', 'companions']
+		}),
+		puddleSlime: createInternalPage({
+		...wikiCompanions.puddleSlime,
+			href: '/homebrew/eldor/companions/puddle-slime/',
+			title: 'D&D Portal Wiki - Puddle Slime',
+			subTitle: 'Companion',
+			label: 'Puddle Slime',
+			description: 'A cheerful, water-loving ooze and utility companion.',
+			navigation: { parent: 'internals.homebrew.eldor.companions.page' },
+			tags: ['homebrew', 'eldor', 'companion']
+		})
+	},
+	organizations: {
+		page: createInternalPage({
+			href: '/homebrew/eldor/organizations/',
+			title: 'D&D Portal Wiki - Organizations', subTitle: 'Eldor homebrew', label: 'Organizations',
+			description: 'Organizations connected to Eldor.',
+			img: { href: '/icons/white/entity/organization.svg', alt: 'Organization icon.' },
+			navigation: { parent: 'internals.homebrew.eldor.page' }, tags: ['homebrew', 'eldor', 'organizations']
+		}),
+		glueCo: createInternalPage({
+			...organizations.glueCo,
+			href: '/homebrew/eldor/organizations/glueco/',
+			navigation: { parent: 'internals.homebrew.eldor.organizations.page' }
+		})
 	}
 } as const;

@@ -21,6 +21,18 @@
 	let isDesktop = $state(false);
 	let hasLoadedCollapsePreference = $state(false);
 	let expandedPaths = $state<ReadonlySet<string>>(new Set());
+	let collapsedPaths = $state<ReadonlySet<string>>(new Set());
+	let visibleChildCounts = $state<Record<string, number>>({});
+	const homebrewSidebarPaths = new Set([
+		'internals.companions.puddleSlime',
+		'internals.locations.brinehookHarbor.page',
+		'internals.locations.brinehookHarbor.shopping',
+		'internals.locations.gildersproutReach.page',
+		'internals.locations.gildersproutReach.shopping',
+		'internals.monsters.rotwoodSovereign',
+		'internals.organizations.page',
+		'internals.organizations.glueCo'
+	]);
 	let sidebarHidden = $derived(isDesktop && isCollapsed);
 	let sidebarAriaHidden = $derived(sidebarHidden || (!isDesktop && !mobileOpen));
 	const collapseStorageKey = 'dnd-portal-sidebar-collapsed';
@@ -113,6 +125,11 @@
 		return false;
 	}
 
+
+	function isHomebrew(node: SidebarNode): boolean {
+		return node.path.startsWith('internals.homebrew.') || homebrewSidebarPaths.has(node.path);
+	}
+
 	function getBaseClassSlug(pathname: string): string | null {
 		const match = pathname.match(/^\/classes\/([^/]+)(?:\/[^/]+)?\/?$/);
 
@@ -126,6 +143,10 @@
 	}
 
 	function isExpanded(node: SidebarNode): boolean {
+		if (collapsedPaths.has(node.path)) {
+			return false;
+		}
+
 		return (
 			expandedPaths.has(node.path) ||
 			(isCurrent(node) && node.children.length > 0) ||
@@ -135,14 +156,18 @@
 
 	function toggleNode(node: SidebarNode): void {
 		const nextExpandedPaths = new Set(expandedPaths);
+		const nextCollapsedPaths = new Set(collapsedPaths);
 
-		if (nextExpandedPaths.has(node.path)) {
+		if (isExpanded(node)) {
 			nextExpandedPaths.delete(node.path);
+			nextCollapsedPaths.add(node.path);
 		} else {
 			nextExpandedPaths.add(node.path);
+			nextCollapsedPaths.delete(node.path);
 		}
 
 		expandedPaths = nextExpandedPaths;
+		collapsedPaths = nextCollapsedPaths;
 	}
 
 	function handleMobileLinkClick(event: MouseEvent): void {
@@ -160,6 +185,17 @@
 	function toggleSidebarCollapse(): void {
 		isCollapsed = !isCollapsed;
 	}
+
+	function getVisibleChildren(node: SidebarNode): readonly SidebarNode[] {
+		return node.children.slice(0, visibleChildCounts[node.path] ?? 10);
+	}
+
+	function showMoreChildren(node: SidebarNode): void {
+		visibleChildCounts = {
+			...visibleChildCounts,
+			[node.path]: (visibleChildCounts[node.path] ?? 10) + 10
+		};
+	}
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -174,6 +210,7 @@
 		<div
 			class="sidebar__row"
 			class:sidebar__row--active={active}
+			class:sidebar__row--homebrew={isHomebrew(node)}
 			style={`--sidebar-depth: ${depth}`}
 		>
 			{#if hasChildren}
@@ -209,9 +246,16 @@
 
 		{#if hasChildren && childrenExpanded}
 			<ul id={childrenId} class="sidebar__list sidebar__list--nested">
-				{#each node.children as child (child.path)}
+				{#each getVisibleChildren(node) as child (child.path)}
 					{@render renderNode(child, depth + 1)}
 				{/each}
+				{#if getVisibleChildren(node).length < node.children.length}
+					<li class="sidebar__item sidebar__item--show-more">
+						<button class="sidebar__show-more" type="button" onclick={() => showMoreChildren(node)}>
+							Show more…
+						</button>
+					</li>
+				{/if}
 			</ul>
 		{/if}
 	</li>

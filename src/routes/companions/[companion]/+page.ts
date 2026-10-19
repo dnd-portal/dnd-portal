@@ -11,7 +11,7 @@ export function load({ params }) {
 					title: 'Puddle Slime',
 					description: 'Meet the Puddle Slime, a cheerful, water-loving ooze that makes a curious and surprisingly useful adventuring companion.',
 					image: {
-						href: '/images/companions/puddle-slime-og.jpg',
+						href: '/images/homebrew/companions/puddle-slime-og.jpg',
 						alt: 'A cute, translucent blue Puddle Slime resting in a sunlit forest pond.',
 						width: 1200,
 						height: 630

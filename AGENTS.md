@@ -28,6 +28,16 @@ Before making changes:
 - Do not invent missing requirements or silently assume behavior.
 - If something is unclear or unsupported by the repository, state that explicitly.
 
+## Homebrew Content: Dual Navigation Architecture
+
+Homebrew content intentionally appears in two independent sidebar contexts: once under the relevant Wiki Pages category and once under its Homebrew collection, such as Homebrew → Eldor. These duplicate entries are required and must not be removed or hidden.
+
+Both entries must render the same underlying content, but each navigation entry must have its own distinct URL. The sidebar active state is determined only by an exact match with the current route URL. Shared content IDs, slugs, titles, or data references must never be used as a substitute for navigation identity. Therefore exactly one of the two entries may be active at a time.
+
+Breadcrumbs must follow the route currently being visited. For example, The Mimic Stick is available at `/magic-items/the-mimic-stick/` and `/homebrew/eldor/magic-items/the-mimic-stick/`; the first uses the Wiki Pages → Magic Items hierarchy and the second uses Homebrew → Eldor → Magic Items. GlueCo follows the same rule at `/organizations/glueco/` and `/homebrew/eldor/organizations/glueco/`.
+
+Preserve the Homebrew underline styling, dropdown behavior, existing subitems, and both clickable navigation contexts. These rules explicitly include Companions (for example, Puddle Slime), Locations, Magic Items (for example, The Mimic Stick), Monsters, and Organizations (for example, GlueCo), plus all future Homebrew categories and content types that are listed in both contexts. Future changes to routing, sidebar generation, or breadcrumb resolution must preserve this architecture automatically rather than adding page-specific active-state fixes.
+
 ## Package Manager
 
 Use pnpm.

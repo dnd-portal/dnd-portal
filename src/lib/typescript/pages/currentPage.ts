@@ -198,9 +198,19 @@ export function resolveLinkPath(path: string): LinkPath | null {
 
 export function resolveCurrentPage(
 	pathname: string,
-	basePath = ''
+	basePath = '',
+	preferredPath?: string
 ): CurrentPageResolution {
 	const normalizedPathname = normalizeInternalHref(pathname, basePath);
+	if (preferredPath && pagePathSet.has(preferredPath)) {
+		const preferredData = getValue(preferredPath);
+		if (isPageData(preferredData) && normalizeInternalHref(preferredData.href) === normalizedPathname) {
+			return {
+				path: preferredPath as PagePath,
+				data: preferredData
+			};
+		}
+	}
 	const path = hrefToPagePath.get(normalizedPathname) ?? null;
 
 	if (!path) {
