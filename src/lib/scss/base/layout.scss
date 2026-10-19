@@ -50,6 +50,10 @@
     width: 100%;
     min-width: 0;
 
+    // Keep the footer above fixed in-page navigation and the sidebar toggle.
+    position: relative;
+    z-index: 1500;
+
     &__top {
         width: 100%;
         max-width: var(--content-footer-max-width);
