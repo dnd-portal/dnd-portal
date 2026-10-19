@@ -33,16 +33,44 @@ The site is built as a static SvelteKit application and is published to GitHub P
 ```text
 src/
   lib/
-    svelte/components/      Reusable Svelte components
-    scss/                   Global, layout, and component SCSS
-    typescript/data/        Central content, route, link, image, and metadata data
-    typescript/pages/       Page resolution, SEO, and page-building helpers
-  routes/                   SvelteKit routes and static prerender entries
-static/                     Public images, icons, robots.txt, and other static assets
-scripts/                    Local validation and pre-live audit scripts
-docs/                       Repository documentation
+    svelte/
+      components/           Reusable layout, navigation, browser, and detail components
+    scss/
+      components/           Component and page-area SCSS
+      ...                   Global tokens, layout, and shared styles
+    typescript/
+      data/
+        core/               Shared/core content data and reusable content definitions
+        internals/          Wiki pages, Homebrew collections, links, and runtime data
+        runtime/            Generated runtime link and navigation indexes
+      pages/                Route resolution, SEO, breadcrumbs, and page helpers
+      components/           Shared TypeScript helpers, including sidebar construction
+  routes/
+    [page]/                 Generic data-driven Wiki page route
+    classes/                Class overview and detail routes
+    spells/                 Spell overview and detail routes
+    companions/             Companion overview and detail routes
+    locations/              Location and shopping routes
+    magic-items/            Wiki-context magic item routes
+    monsters/               Wiki-context monster routes
+    organizations/          Wiki-context organization routes
+    homebrew/[collection]/  Homebrew collection routes and context-specific aliases
+    tools/                  Tools overview and individual tool routes
+    ...                     Other Wiki, FAQ, project, and utility routes
+static/
+  images/                   Public artwork grouped by content and Homebrew collection
+  icons/                    Shared white, color, entity, game, and Homebrew icons
+  branding/                 D&D Portal logos and branding assets
+scripts/                    Runtime generation, validation, and pre-live audit scripts
+docs/                       Repository architecture and deployment documentation
 .github/                    GitHub Actions, issue templates, and PR template
 ```
+
+Content is kept separate from presentation. A single content entry may be exposed
+through more than one navigation context, such as Wiki Pages and Homebrew → Eldor.
+Those contexts use distinct routes and breadcrumbs while rendering the same
+underlying content. Sidebar active states are matched against the current route,
+not against a shared content identifier.
 
 More detail is available in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
