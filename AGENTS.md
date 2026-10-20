@@ -16,6 +16,18 @@ The production website is hosted on GitHub Pages:
 https://dnd-portal.com/
 ```
 
+## Repository Location — Mandatory
+
+The primary development repository for this project is:
+
+`C:\Users\toonv\Development\dnd-wiki\dnd-wiki-main-release`
+
+Before making any code changes, agents must verify the working directory and Git repository root.
+
+Never modify the sibling `wiki` directory when working on this project.
+
+If the repository path does not match the expected project location, stop and request clarification.
+
 ## Working Principles
 
 Before making changes:
