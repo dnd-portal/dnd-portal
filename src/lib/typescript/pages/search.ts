@@ -536,11 +536,20 @@ export function searchWiki(
 		})
 		.filter((entry) => !hasQuery || entry.score > 0)
 		.sort((left, right) => {
+			if (hasQuery) {
+				const leftTitleScore = scoreField(getEntryFields(left).title, tokens, 1);
+				const rightTitleScore = scoreField(getEntryFields(right).title, tokens, 1);
+
+				if (rightTitleScore !== leftTitleScore) {
+					return rightTitleScore - leftTitleScore;
+				}
+			}
+
 			if (right.score !== left.score) {
 				return right.score - left.score;
 			}
 
-			return left.title.localeCompare(right.title);
+			return left.title.length - right.title.length || left.title.localeCompare(right.title);
 		});
 }
 

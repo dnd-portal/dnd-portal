@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { getRuntimeData } from '$lib/typescript/data/runtime';
 	import { siteMetadata } from '$lib/typescript/data/runtime/site-metadata';
+	import { searchWiki, type SearchResult } from '$lib/typescript/pages/search';
 	import type { NavbarDataType } from '$lib/typescript/components/_index_';
 
 	import Link from '$lib/svelte/components/Link.svelte';
@@ -19,6 +20,11 @@
 	let searchAction = $derived(getSearchAction(search.href));
 	let isNavbarHidden = $state(false);
 	let mobileSidebarOpen = $state(false);
+	let searchQuery = $state('');
+	let searchSuggestions = $derived(
+		searchQuery.trim().length >= 2 ? searchWiki(searchQuery).slice(0, 6) : []
+	);
+	let searchSuggestionsOpen = $state(false);
 
 	function getValidUrl(href: string): string {
 		if (!href.startsWith('/')) {
@@ -91,6 +97,14 @@
 	function toggleMobileSidebar(): void {
 		window.dispatchEvent(new CustomEvent('dnd-portal:toggle-mobile-sidebar'));
 	}
+
+	function getSuggestionHref(result: SearchResult): string {
+		return getValidUrl(result.href);
+	}
+
+	function closeSuggestions(): void {
+		window.setTimeout(() => (searchSuggestionsOpen = false), 120);
+	}
 </script>
 
 <header class="navbar" class:navbar--hidden={isNavbarHidden}>
@@ -122,6 +136,7 @@
 			action={searchAction}
 			method="GET"
 			role="search"
+			onfocusout={closeSuggestions}
 		>
 			<label class="navbar__search-label" for="navbar-search">
 				Search the Wiki
@@ -137,11 +152,26 @@
 				placeholder="Search rules, classes, species, monsters..."
 				autocomplete="off"
 				aria-label="Search the Wiki"
+				bind:value={searchQuery}
+				aria-autocomplete="list"
+				aria-controls="navbar-search-suggestions"
+				onfocus={() => (searchSuggestionsOpen = true)}
 			>
 
 			<button class="navbar__search-submit" type="submit">
 				Search
 			</button>
+
+			{#if searchSuggestionsOpen && searchSuggestions.length > 0}
+				<div id="navbar-search-suggestions" class="navbar__search-suggestions" role="listbox" aria-label="Search suggestions">
+					{#each searchSuggestions as result (result.id)}
+						<a class="navbar__search-suggestion" href={getSuggestionHref(result)} role="option" aria-selected="false">
+							<span class="navbar__search-suggestion-title">{result.title}</span>
+							<span class="navbar__search-suggestion-meta">{result.category} · {result.subtitle}</span>
+						</a>
+					{/each}
+				</div>
+			{/if}
 		</form>
 
 		<div class="navbar__actions" aria-label="Community and preferences">
