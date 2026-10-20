@@ -20,23 +20,21 @@ https://dnd-portal.com/
 
 The primary development repository for this project is:
 
-`C:\Users\toonv\Development\_dnd-portal\main`
+`C:\Users\toonv\Development\_dnd-portal\dnd-portal`
 
 The repository uses this local structure:
 
 ```text
 C:\Users\toonv\Development\_dnd-portal\
-├── main\
+├── dnd-portal\
 ├── worktrees\
 └── migration-backups\
 ```
 
-The `main` directory is an independent Git repository. The legacy repository and
-any retained legacy worktrees under `C:\Users\toonv\Development\dnd-wiki\` are
-preserved separately and must not be used for new development. The retained
-legacy linked worktree is currently at
-`C:\Users\toonv\Development\_dnd-portal\dnd-portal\worktrees\main-linked-legacy`
-until the later cleanup phase.
+The `dnd-portal` directory is the independent Git repository on the `main`
+branch. The legacy repository and any retained worktrees under
+`C:\Users\toonv\Development\dnd-wiki\` are preserved separately and must not
+be used for new development.
 
 Before making any code changes, agents must verify the working directory and Git repository root.
 
